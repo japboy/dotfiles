@@ -1,0 +1,6 @@
+[submodule "common/.vim/bundle/neobundle.vim"]
+	path = common/.vim/bundle/neobundle.vim
+	url = https://github.com/Shougo/neobundle.vim.git
+[submodule "common/opt/powerline"]
+	path = common/opt/powerline
+	url = https://github.com/Lokaltog/powerline.git

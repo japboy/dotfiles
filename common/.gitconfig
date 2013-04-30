@@ -1,0 +1,15 @@
+[color]
+	ui = true
+	autocrlf = input
+[diff]
+	tool = vim
+[difftool "vim"]
+	cmd = vim -d $LOCAL $REMOTE
+[merge]
+	ff = true
+	tool = vim
+[mergetool "vim"]
+	cmd = vim -d $LOCAL $MERGED $REMOTE
+	keepbackup = false
+[core]
+	excludesfile = ~/.gitignore
