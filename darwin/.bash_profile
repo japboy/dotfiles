@@ -172,7 +172,7 @@ export PATH="${PATH}:${EC2_HOME}/bin"
 
 
 # Load credential settings
-if [ -f "${HOME}/.bash_creds" ]
+if [ -f "${HOME}/.bash_extras" ]
 then
-    source "${HOME}/.bash_creds"
+    source "${HOME}/.bash_extras"
 fi

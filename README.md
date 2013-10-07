@@ -21,20 +21,17 @@ in `~/.dotfiles` then;
 bash ~/.dotfiles/bootstrap.sh sync
 ```
 
-### .bash_creds
+### .bash_extras
 
-You can create an addtional file named `.bash_creds` in your home directory. It
+You can create an addtional file named `.bash_extras` in your home directory. It
 will be loaded if there. This is intend to be used for some credentials like
 secret tokens etc.
 
-`.bash_creds` should be something like this:
+`.bash_extras` should be something like this:
 
 ```bash
 #
-# CREDENTIALS
-#
-# Load this credential variables from `.bash_profile` like
-# `source ${HOME}/.bash_creds`
+# EXTRAS
 
 
 ##
