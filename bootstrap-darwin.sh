@@ -127,7 +127,7 @@ fi
 
 # Xcode license agreement
 # TODO: Skip if already agreed
-xcodebuild -license
+sudo xcodebuild -license
 
 # Install Homebrew if not exists
 HOMEBREW="${HOME}/.homebrew"
