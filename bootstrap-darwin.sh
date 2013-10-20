@@ -174,7 +174,7 @@ BREWS=(
     'rmtrash'
     'ruby-build'
     'scons'
-    'vim --with-lua --with-mzscheme --with-perl --with-python --with-ruby'
+    'vim --with-lua --with-mzscheme --with-perl'
 )
 
 for BREW in "${BREWS[@]}"
