@@ -79,8 +79,8 @@ fi
 # Install ClamXav
 if [ ! -d /Applications/ClamXav.app ]
 then
-    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.3.6.dmg
-    hdiutil attach ClamXav_2.3.6.dmg
+    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.1.dmg
+    hdiutil attach ClamXav_2.6.1.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -88,8 +88,8 @@ fi
 # Install Asepsis
 if ! which asepsisctl &> /dev/null
 then
-    curl -L -O http://downloads.binaryage.com/Asepsis-1.3.dmg
-    hdiutil attach Asepsis-1.3.dmg
+    curl -L -O http://downloads.binaryage.com/Asepsis-1.3.2.dmg
+    hdiutil attach Asepsis-1.3.2.dmg
     sudo installer -pkg /Volumes/Asepsis/Asepsis.mpkg -target /
     hdiutil detach /Volumes/Asepsis
 fi
@@ -97,8 +97,8 @@ fi
 # Install TotalTerminal
 if [ ! -d /Applications/TotalTerminal.app ]
 then
-    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.3.dmg
-    hdiutil attach TotalTerminal-1.3.dmg
+    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.4.4.dmg
+    hdiutil attach TotalTerminal-1.4.4.dmg
     sudo installer -pkg /Volumes/TotalTerminal/TotalTerminal.pkg -target /
     hdiutil detach /Volumes/TotalTerminal
 fi
