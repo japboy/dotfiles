@@ -72,8 +72,8 @@ if [ ! -d /Applications/Utilities/XQuartz.app ]
 then
     curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.4.dmg
     hdiutil attach XQuartz-2.7.4.dmg
-    sudo installer -pkg /Volumes/XQuartz/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz
+    sudo installer -pkg /Volumes/XQuartz-2.7.4/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.7.4
 fi
 
 # Install ClamXav
