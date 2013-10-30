@@ -129,6 +129,12 @@ fi
 # TODO: Skip if already agreed
 sudo xcodebuild -license
 
+# Check if Command Line Tools are installed
+if [ ! -d $(xcode-select --print-path) ]
+then
+    xcode-select --install
+fi
+
 # Install Homebrew if not exists
 HOMEBREW="${HOME}/.homebrew"
 
