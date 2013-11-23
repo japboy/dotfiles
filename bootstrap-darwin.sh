@@ -132,6 +132,9 @@ then
     unzip QLStephen.qlgenerator.zip -d ${HOME}/Library/QuickLook/
 fi
 
+# Restart QuickLook
+qlmanage -r
+
 # Reset current working directory
 cd ${CWD}
 
