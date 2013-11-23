@@ -70,10 +70,10 @@ cd ${HOME}/Downloads
 # Install XQuartz
 if [ ! -d /Applications/Utilities/XQuartz.app ]
 then
-    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.4.dmg
-    hdiutil attach XQuartz-2.7.4.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.7.4/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.7.4
+    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.5.dmg
+    hdiutil attach XQuartz-2.7.5.dmg
+    sudo installer -pkg /Volumes/XQuartz-2.7.5/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.7.5
 fi
 
 # Install ClamXav
@@ -110,6 +110,26 @@ then
     hdiutil attach XtraFinder.dmg
     sudo installer -pkg /Volumes/XtraFinder/XtraFinder.pkg -target /
     hdiutil detach /Volumes/XtraFinder
+fi
+
+# Check if QuickLook directory exists
+if [ ! -d ${HOME}/Library/QuickLook ]
+then
+    mkdir -p ${HOME}/Library/QuickLook
+fi
+
+# Install QuickLook qlImageSize
+if [ ! -f ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
+then
+    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip && \
+    unzip qlImageSize.qlgenerator-10.8.zip -d ${HOME}/Library/QuickLook/
+fi
+
+# Install QuickLook qlImageSize
+if [ ! -f ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
+then
+    curl -L -O https://github.com/downloads/whomwah/qlstephen/QLStephen.qlgenerator.zip && \
+    unzip QLStephen.qlgenerator.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Reset current working directory
