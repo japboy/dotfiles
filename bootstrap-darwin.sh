@@ -119,14 +119,14 @@ then
 fi
 
 # Install QuickLook qlImageSize
-if [ ! -f ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
+if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
 then
     curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip && \
     unzip qlImageSize.qlgenerator-10.8.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Install QuickLook qlImageSize
-if [ ! -f ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
+if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
 then
     curl -L -O https://github.com/downloads/whomwah/qlstephen/QLStephen.qlgenerator.zip && \
     unzip QLStephen.qlgenerator.zip -d ${HOME}/Library/QuickLook/
