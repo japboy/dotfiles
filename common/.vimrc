@@ -18,6 +18,7 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'alpaca-tc/html5.vim'
 NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'aperezdc/vim-template'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'elzr/vim-json'
