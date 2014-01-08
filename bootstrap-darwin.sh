@@ -118,6 +118,15 @@ then
     hdiutil detach /Volumes/XtraFinder
 fi
 
+# Install TrueCrypt
+if [ ! -d /Applications/TrueCrypt.app ]
+then
+    curl -L -O http://www.truecrypt.org/download/TrueCrypt%207.1a%20Mac%20OS%20X.dmg
+    hdiutil attach TrueCrypt\ 7.1a\ Mac\ OS\ X.dmg
+    sudo installer -pkg /Volumes/TrueCrypt\ 7.1a/TrueCrypt\ 7.1a.mpkg -target /
+    hdiutil detach /Volumes/TrueCrypt\ 7.1a
+fi
+
 # Check if QuickLook directory exists
 if [ ! -d ${HOME}/Library/QuickLook ]
 then
@@ -148,18 +157,17 @@ cd ${CWD}
 echo "${TEXT_BOLD}Now setting up development environment...${TEXT_RESET}"
 
 # Check if Xcode is installed
-if [ ! -d /Applications/Xcode.app ] || ! xcrun -find gcc &> /dev/null
+if [ ! -d /Applications/Xcode.app ] || ! xcrun --find gcc &> /dev/null
 then
     echo "${TEXT_RED}Xcode not found. Aborted.${TEXT_RESET}"
     exit 1
 fi
 
-# Xcode license agreement
-# TODO: Skip if already agreed
-sudo xcodebuild -license
+# Setup Xcode
+xcodebuild -checkFirstLaunchStatus
 
 # Check if Command Line Tools are installed
-if [ ! -d $(xcode-select --print-path) ]
+if ! pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &> /dev/null
 then
     xcode-select --install
 fi
@@ -190,6 +198,7 @@ brew upgrade
 BREWS=(
     'autoconf'
     'automake'
+    'bison'
     'cmake'
     'gcc48'
     'gettext'
