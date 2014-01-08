@@ -29,7 +29,10 @@ echo "${TEXT_BOLD}Now starting Mac OS X optimisation...${TEXT_RESET}"
 sudo tmutil disablelocal
 
 # Enable `locate` command
-#sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+if ! sudo launchctl list | grep com.apple.locate &> /dev/null
+then
+    sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
+fi
 
 # Install LoginHook
 if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
@@ -60,6 +63,9 @@ then
     defaults write com.apple.screencapture disable-shadow -bool true
     killall SystemUIServer
 fi
+
+# Apply changes for Autofs
+sudo automount -vc
 
 
 echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
@@ -121,14 +127,14 @@ fi
 # Install QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
 then
-    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip && \
+    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip
     unzip qlImageSize.qlgenerator-10.8.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Install QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
 then
-    curl -L -O https://github.com/downloads/whomwah/qlstephen/QLStephen.qlgenerator.zip && \
+    curl -L -O https://github.com/downloads/whomwah/qlstephen/QLStephen.qlgenerator.zip
     unzip QLStephen.qlgenerator.zip -d ${HOME}/Library/QuickLook/
 fi
 
@@ -239,18 +245,18 @@ then
 
     export PATH="${PHPENV}/bin:${PATH}"
 
-    if [ ! -d ${PHPENV}/versions/5.4.10 ]
+    if [ ! -d ${PHPENV}/versions/5.5.7 ]
     then
         PHP_BUILD_CONFIGURE_OPTS="--with-jpeg-dir=$(brew --prefix libjpeg) \
                                   --with-png-dir=$(brew --prefix libpng) \
                                   --with-openssl=$(brew --prefix openssl) \
                                   --with-mcrypt=$(brew --prefix mcrypt) \
                                   --with-apxs2=/usr/sbin/apxs" \
-        php-build 5.4.10 ${PHPENV}/versions/5.4.10
+        php-build 5.5.7 ${PHPENV}/versions/5.5.7
     fi
 
     phpenv rehash
-    phpenv global 5.4.10
+    phpenv global system
 
     unset PHPENV
 fi
@@ -276,7 +282,7 @@ then
     pyenv install 2.7.5
 
     pyenv rehash
-    pyenv global 2.7.5
+    pyenv global system
 
     unset PYENV
 fi
@@ -297,15 +303,15 @@ then
 
     export PATH="${RBENV}/bin:${PATH}"
 
-    if [ ! -d ${RBENV}/versions/2.0.0-p195 ]
+    if [ ! -d ${RBENV}/versions/2.1.0 ]
     then
         CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
                         --with-readline-dir=$(brew --prefix readline)" \
-        ruby-build 2.0.0-p195 ${RBENV}/versions/2.0.0-p195
+        ruby-build 2.1.0 ${RBENV}/versions/2.1.0
     fi
 
     rbenv rehash
-    rbenv global 2.0.0-p195
+    rbenv global system
 
     unset RBENV
 fi
@@ -326,9 +332,9 @@ then
 
     export PATH="${NENV}/bin:${PATH}"
 
-    nenv install 0.10.10
+    nenv install 0.10.24
     nenv rehash
-    nenv global 0.10.10
+    nenv global 0.10.24
 
     unset NENV
 fi
