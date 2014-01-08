@@ -122,7 +122,7 @@ fi
 if [ ! -d /Applications/TrueCrypt.app ]
 then
     curl -L -O http://www.truecrypt.org/download/TrueCrypt%207.1a%20Mac%20OS%20X.dmg
-    hdiutil attach TrueCrypt\ 7.1a\ Mac\ OS\ X.dmg
+    hdiutil attach TrueCrypt%207.1a%20Mac%20OS%20X.dmg
     sudo installer -pkg /Volumes/TrueCrypt\ 7.1a/TrueCrypt\ 7.1a.mpkg -target /
     hdiutil detach /Volumes/TrueCrypt\ 7.1a
 fi
