@@ -179,7 +179,6 @@ then
 
     brew tap homebrew/versions
     brew tap homebrew/dupes
-    brew tap josegonzalez/homebrew-php
 fi
 
 unset HOMEBREW
@@ -202,7 +201,6 @@ BREWS=(
     'mcrypt'
     'mercurial'
     'openssl'
-    'php-build'
     'pkg-config'
     're2c'
     'readline'
@@ -245,15 +243,12 @@ then
 
     export PATH="${PHPENV}/bin:${PATH}"
 
-    if [ ! -d ${PHPENV}/versions/5.5.7 ]
-    then
-        PHP_BUILD_CONFIGURE_OPTS="--with-jpeg-dir=$(brew --prefix libjpeg) \
-                                  --with-png-dir=$(brew --prefix libpng) \
-                                  --with-openssl=$(brew --prefix openssl) \
-                                  --with-mcrypt=$(brew --prefix mcrypt) \
-                                  --with-apxs2=/usr/sbin/apxs" \
-        php-build 5.5.7 ${PHPENV}/versions/5.5.7
-    fi
+    CONFIGURE_OPTIONS="--with-jpeg-dir=$(brew --prefix libjpeg) \
+                       --with-png-dir=$(brew --prefix libpng) \
+                       --with-openssl=$(brew --prefix openssl) \
+                       --with-mcrypt=$(brew --prefix mcrypt) \
+                       --with-apxs2=/usr/sbin/apxs" \
+    phpenv install php-5.5.7
 
     phpenv rehash
     phpenv global system
