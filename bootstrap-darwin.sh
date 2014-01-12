@@ -199,6 +199,7 @@ BREWS=(
     'autoconf'
     'automake'
     'bison'
+    'ccache'
     'cmake'
     'gcc48'
     'gettext'

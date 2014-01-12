@@ -58,6 +58,9 @@ export PKG_CONFIG_PATH="/opt/X11/lib/pkgconfig"
 export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PKG_CONFIG_PATH="${HOME}/.homebrew/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
+# ccache
+export PATH="$(brew --prefix ccache)/libexec:${PATH}"
+
 # GCC
 export PATH="$(brew --prefix)/Cellar/gcc48/4.8.1/bin:${PATH}"
 
