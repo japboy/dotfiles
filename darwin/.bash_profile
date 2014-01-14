@@ -104,11 +104,14 @@ else
     alias rmdir='rmtrash'
 fi
 
-# Set Sublime Text 2 alias
-#alias subl="${HOME}/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-
 # OS X Wi-Fi utility
 alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport'
+
+# Sublime Text 2
+#alias subl="${HOME}/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
+
+# TrueCrypt
+alias truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
 
 
 ##
