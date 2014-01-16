@@ -203,3 +203,22 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd VimEnter * NERDTree
 autocmd VimEnter * wincmd w
 autocmd BufEnter * NERDTreeMirror
+
+
+""
+" Unite.vim
+" https://github.com/Shougo/unite.vim
+
+let g:unite_enable_start_insert = 1
+let g:unite_enable_ignore_case = 1
+let g:unite_enable_smart_case = 1
+
+nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> ,cg :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+nnoremap <silent> ,r  :<C-u>UniteResume search-buffer<CR>
+
+if executable('pt')
+  let g:unite_source_grep_command = 'pt'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+  let g:unite_source_grep_recursive_opt = ''
+endif
