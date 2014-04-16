@@ -196,12 +196,12 @@ brew update
 brew upgrade
 
 BREWS=(
+    'apple-gcc42'
     'autoconf'
     'automake'
     'bison'
     'ccache'
     'cmake'
-    'gcc48'
     'gettext'
     'git'
     'git-extras'
