@@ -167,16 +167,6 @@ export GISTY_DIR="${HOME}/Dropbox/Workspace/com.github.gist"
 export GISTY_SSL_VERIFY='NONE'
 
 
-##
-# Settings for Amazon EC2 API Tools
-# http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html#set-aws-credentials
-
-export JAVA_HOME="$(/usr/libexec/java_home)"
-export EC2_HOME="${HOME}/Developer/opt/ec2-api-tools-1.6.5.3"
-export EC2_URL='https://ec2.ap-northeast-1.amazonaws.com'
-export PATH="${PATH}:${EC2_HOME}/bin"
-
-
 # Load credential settings
 if [ -f "${HOME}/.bash_extras" ]
 then
