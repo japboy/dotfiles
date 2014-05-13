@@ -62,7 +62,7 @@ export PKG_CONFIG_PATH="${HOME}/.homebrew/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PATH="$(brew --prefix ccache)/libexec:${PATH}"
 
 # GCC
-export PATH="$(brew --prefix)/Cellar/gcc48/4.8.1/bin:${PATH}"
+export PATH="$(brew --prefix apple-gcc42)/bin:${PATH}"
 
 # phpenv
 # PATH should be overriden by rbenv
