@@ -85,8 +85,8 @@ fi
 # Install ClamXav
 if [ ! -d /Applications/ClamXav.app ]
 then
-    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.1.dmg
-    hdiutil attach ClamXav_2.6.1.dmg
+    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.3.dmg
+    hdiutil attach ClamXav_2.6.3.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -103,8 +103,8 @@ fi
 # Install TotalTerminal
 if [ ! -d /Applications/TotalTerminal.app ]
 then
-    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.4.6.dmg
-    hdiutil attach TotalTerminal-1.4.6.dmg
+    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.4.11.dmg
+    hdiutil attach TotalTerminal-1.4.11.dmg
     sudo installer -pkg /Volumes/TotalTerminal/TotalTerminal.pkg -target /
     hdiutil detach /Volumes/TotalTerminal
 fi
@@ -125,6 +125,24 @@ then
     hdiutil attach TrueCrypt%207.1a%20Mac%20OS%20X.dmg
     sudo installer -pkg /Volumes/TrueCrypt\ 7.1a/TrueCrypt\ 7.1a.mpkg -target /
     hdiutil detach /Volumes/TrueCrypt\ 7.1a
+fi
+
+# Install VirtualBox
+if [ ! -d /Applications/VirtualBox.app ]
+then
+    curl -L -O http://download.virtualbox.org/virtualbox/4.3.10/VirtualBox-4.3.10-93012-OSX.dmg
+    hdiutil attach VirtualBox-4.3.10-93012-OSX.dmg
+    sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
+    hdiutil detach /Volumes/VirtualBox
+fi
+
+# Install Vagrant
+if [ ! -d /Applications/Vagrant ]
+then
+    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.2.dmg
+    hdiutil attach vagrant_1.6.2.dmg
+    sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
+    hdiutil detach /Volumes/Vagrant
 fi
 
 # Check if QuickLook directory exists
