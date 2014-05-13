@@ -1,6 +1,14 @@
+[alias]
+	log = log --graph
+	merge =merge --no-ff
 [color]
+	branch = auto
+	diff = auto
+	status = auto
 	ui = true
+[core]
 	autocrlf = input
+	excludesfile = ~/.gitignore
 [diff]
 	tool = vim
 [difftool "vim"]
@@ -11,5 +19,3 @@
 [mergetool "vim"]
 	cmd = vim -d $LOCAL $MERGED $REMOTE
 	keepbackup = false
-[core]
-	excludesfile = ~/.gitignore
