@@ -38,6 +38,9 @@ export LSCOLORS=Exfxcxdxbxegedabagacad
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;37;41'
 
+# Disable to create `._` file in OS X
+export COPYFILE_DISABLE=true
+
 
 ##
 # Environment paths
