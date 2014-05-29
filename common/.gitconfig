@@ -1,6 +1,3 @@
-[alias]
-	log = log --graph
-	merge =merge --no-ff
 [color]
 	branch = auto
 	diff = auto
@@ -9,6 +6,12 @@
 [core]
 	autocrlf = input
 	excludesfile = ~/.gitignore
+[gc]
+	auto = 3000
+	autopacklimit = 20
+[transfer]
+	unpackLimit = 10
+	fsckObjects = true
 [diff]
 	tool = vim
 [difftool "vim"]
