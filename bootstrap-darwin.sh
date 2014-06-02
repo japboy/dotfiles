@@ -94,8 +94,8 @@ fi
 # Install Asepsis
 if ! which asepsisctl &> /dev/null
 then
-    curl -L -O http://downloads.binaryage.com/Asepsis-1.4.dmg
-    hdiutil attach Asepsis-1.4.dmg
+    curl -L -O http://downloads.binaryage.com/Asepsis-1.4.1.dmg
+    hdiutil attach Asepsis-1.4.1.dmg
     sudo installer -pkg /Volumes/Asepsis/Asepsis.mpkg -target /
     hdiutil detach /Volumes/Asepsis
 fi
@@ -130,8 +130,8 @@ fi
 # Install VirtualBox
 if [ ! -d /Applications/VirtualBox.app ]
 then
-    curl -L -O http://download.virtualbox.org/virtualbox/4.3.10/VirtualBox-4.3.10-93012-OSX.dmg
-    hdiutil attach VirtualBox-4.3.10-93012-OSX.dmg
+    curl -L -O http://download.virtualbox.org/virtualbox/4.3.12/VirtualBox-4.3.12-93733-OSX.dmg
+    hdiutil attach VirtualBox-4.3.12-93733-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
 fi
@@ -139,8 +139,8 @@ fi
 # Install Vagrant
 if [ ! -d /Applications/Vagrant ]
 then
-    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.2.dmg
-    hdiutil attach vagrant_1.6.2.dmg
+    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
+    hdiutil attach vagrant_1.6.3.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
 fi
