@@ -229,6 +229,7 @@ BREWS=(
     'mcrypt'
     'mercurial'
     'openssl'
+    'perl-build'
     'pkg-config'
     're2c'
     'readline'
@@ -253,6 +254,30 @@ done
 unset BREW BREWS
 
 brew cleanup
+
+# Install Perl through `plenv` if not exists
+if ! which plenv &> /dev/null
+then
+    PLENV="${HOME}/.plenv"
+
+    if [ ! -d ${PLENV} ]
+    then
+        git clone git://github.com/tokuhirom/plenv.git ${PLENV}
+    else
+        cd ${PLENV}
+        git pull
+        cd ${CWD}
+    fi
+
+    export PATH="${PLENV}/bin:${PATH}"
+
+    plenv install 5.18.0
+
+    plenv rehash
+    plenv global system
+
+    unset PLENV
+fi
 
 # Install PHP through `phpenv` if not exists
 # MUST be done before `rbenv` installation
