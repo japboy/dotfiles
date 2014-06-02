@@ -67,6 +67,10 @@ export PATH="$(brew --prefix ccache)/libexec:${PATH}"
 # GCC
 export PATH="$(brew --prefix apple-gcc42)/bin:${PATH}"
 
+# plenv
+export PATH="${HOME}/.plenv/bin:${PATH}"
+eval "$(plenv init -)"
+
 # phpenv
 # PATH should be overriden by rbenv
 export PATH="${HOME}/.phpenv/bin:${PATH}"
