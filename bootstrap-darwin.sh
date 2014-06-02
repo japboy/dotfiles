@@ -330,9 +330,27 @@ then
     pyenv install 2.7.5
 
     pyenv rehash
-    pyenv global system
+    pyenv global 2.7.5
 
-    unset PYENV
+    PIPS=(
+        'ansible'
+        'awscli'
+        'fabric'
+    )
+
+    for PIP in "${PIPS[@]}"
+    do
+        FORMULA=$(echo ${PIP} | cut -d ' ' -f 1)
+
+        if ! pip list | grep ${PIP} &> /dev/null
+        then
+            pip install ${PIP}
+        fi
+
+        unset FORMULA
+    done
+
+    unset PYENV PIPS
 fi
 
 # Install Ruby through `rbenv` if not exists
@@ -359,9 +377,26 @@ then
     fi
 
     rbenv rehash
-    rbenv global system
+    rbenv global 2.1.0
 
-    unset RBENV
+    GEMS=(
+        'bundler'
+        'gisty'
+    )
+
+    for GEM in "${GEMS[@]}"
+    do
+        FORMULA=$(echo ${GEM} | cut -d ' ' -f 1)
+
+        if ! gem list --local | grep ${GEM} &> /dev/null
+        then
+            gem install ${GEM}
+        fi
+
+        unset FORMULA
+    done
+
+    unset RBENV GEMS
 fi
 
 # Install Node.js through `nenv` if not exists
@@ -384,7 +419,24 @@ then
     nenv rehash
     nenv global 0.10.24
 
-    unset NENV
+    NPMS=(
+        'bower'
+        'grunt-init'
+    )
+
+    for NPM in "${NPMS[@]}"
+    do
+        FORMULA=$(echo ${NPM} | cut -d ' ' -f 1)
+
+        if ! npm list -g | grep ${NPM} &> /dev/null
+        then
+            npm install ${NPM}
+        fi
+
+        unset FORMULA
+    done
+
+    unset NENV NPMS
 fi
 
 # Setup default lagunage
