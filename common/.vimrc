@@ -16,12 +16,14 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 
 " Bundles
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc', { 'build': {
-  \ 'windows' : 'make -f make_mingw32.mak',
-  \ 'cygwin' : 'make -f make_cygwin.mak',
-  \ 'mac' : 'make -f make_mac.mak',
-  \ 'unix' : 'make -f make_unix.mak',
-}, }
+NeoBundle 'Shougo/vimproc', {
+  \ 'build' : {
+    \ 'windows' : 'make -f make_mingw32.mak',
+    \ 'cygwin' : 'make -f make_cygwin.mak',
+    \ 'mac' : 'make -f make_mac.mak',
+    \ 'unix' : 'make -f make_unix.mak',
+  \ },
+\ }
 NeoBundle 'alpaca-tc/html5.vim'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'aperezdc/vim-template'
