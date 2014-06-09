@@ -272,9 +272,8 @@ then
     export PATH="${PLENV}/bin:${PATH}"
 
     plenv install 5.18.0
-
-    plenv rehash
     plenv global system
+    plenv rehash
 
     unset PLENV
 fi
@@ -303,8 +302,8 @@ then
                        --with-apxs2=/usr/sbin/apxs" \
     phpenv install php-5.5.7
 
-    phpenv rehash
     phpenv global system
+    phpenv rehash
 
     unset PHPENV
 fi
@@ -329,8 +328,8 @@ then
     LDFLAGS="-L$(brew --prefix readline)/lib" \
     pyenv install 2.7.5
 
-    pyenv rehash
     pyenv global 2.7.5
+    pyenv rehash
 
     PIPS=(
         'ansible'
@@ -376,8 +375,8 @@ then
         ruby-build 2.1.0 ${RBENV}/versions/2.1.0
     fi
 
-    rbenv rehash
     rbenv global 2.1.0
+    rbenv rehash
 
     GEMS=(
         'bundler'
@@ -416,8 +415,8 @@ then
     export PATH="${NENV}/bin:${PATH}"
 
     nenv install 0.10.24
-    nenv rehash
     nenv global 0.10.24
+    nenv rehash
 
     NPMS=(
         'bower'
