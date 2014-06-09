@@ -11,7 +11,7 @@
 	autopacklimit = 20
 [transfer]
 	unpackLimit = 10
-	fsckObjects = true
+	fsckObjects = false
 [diff]
 	tool = vim
 [difftool "vim"]
