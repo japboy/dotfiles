@@ -324,13 +324,22 @@ then
 
     export PATH="${PYENV}/bin:${PATH}"
 
-    CFLAGS="-I$(brew --prefix readline)/include" \
-    LDFLAGS="-L$(brew --prefix readline)/lib" \
-    pyenv install 2.7.5
+    if ! pyenv install --list | grep 2.7.7 &> /dev/null
+    then
+        CFLAGS="-I$(brew --prefix readline)/include" \
+        LDFLAGS="-L$(brew --prefix readline)/lib" \
+        pyenv install 2.7.7 3.4.1
+    fi
 
-    pyenv global 2.7.5
+    pyenv global 2.7.7
     pyenv rehash
 
+    unset PYENV
+fi
+
+# Install PyPIs
+if which pip &> /dev/null
+then
     PIPS=(
         'ansible'
         'awscli'
@@ -349,7 +358,9 @@ then
         unset FORMULA
     done
 
-    unset PYENV PIPS
+    pyenv rehash
+
+    unset PIPS PIP
 fi
 
 # Install Ruby through `rbenv` if not exists
@@ -378,6 +389,11 @@ then
     rbenv global 2.1.0
     rbenv rehash
 
+    unset RBENV
+fi
+
+# Install RubyGems
+if which gem &> /dev/null
     GEMS=(
         'bundler'
         'gisty'
@@ -395,7 +411,9 @@ then
         unset FORMULA
     done
 
-    unset RBENV GEMS
+    rbenv rehash
+
+    unset GEMS
 fi
 
 # Install Node.js through `nenv` if not exists
@@ -418,6 +436,12 @@ then
     nenv global 0.10.24
     nenv rehash
 
+    unset NENV
+fi
+
+# Install NPMs
+if which npm &> /dev/null
+then
     NPMS=(
         'bower'
         'grunt-init'
@@ -435,7 +459,9 @@ then
         unset FORMULA
     done
 
-    unset NENV NPMS
+    nenv rehash
+
+    unset NPMS NPM
 fi
 
 # Setup default lagunage
