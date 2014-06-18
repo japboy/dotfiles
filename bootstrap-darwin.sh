@@ -270,8 +270,13 @@ then
     fi
 
     export PATH="${PLENV}/bin:${PATH}"
+    eval "$(plenv init -)"
 
-    plenv install 5.18.0
+    if ! plenv versions | grep 5.18.0 &> /dev/null
+    then
+        plenv install 5.18.0
+    fi
+
     plenv global system
     plenv rehash
 
@@ -294,13 +299,17 @@ then
     fi
 
     export PATH="${PHPENV}/bin:${PATH}"
+    eval "$(phpenv init -)"
 
-    CONFIGURE_OPTIONS="--with-jpeg-dir=$(brew --prefix libjpeg) \
-                       --with-png-dir=$(brew --prefix libpng) \
-                       --with-openssl=$(brew --prefix openssl) \
-                       --with-mcrypt=$(brew --prefix mcrypt) \
-                       --with-apxs2=/usr/sbin/apxs" \
-    phpenv install php-5.5.7
+    if ! phpenv versions | grep php-5.5.7 &> /dev/null
+    then
+        CONFIGURE_OPTIONS="--with-jpeg-dir=$(brew --prefix libjpeg) \
+                           --with-png-dir=$(brew --prefix libpng) \
+                           --with-openssl=$(brew --prefix openssl) \
+                           --with-mcrypt=$(brew --prefix mcrypt) \
+                           --with-apxs2=/usr/sbin/apxs" \
+        phpenv install php-5.5.7
+    fi
 
     phpenv global system
     phpenv rehash
@@ -323,8 +332,9 @@ then
     fi
 
     export PATH="${PYENV}/bin:${PATH}"
+    eval "$(pyenv init -)"
 
-    if ! pyenv install --list | grep 2.7.7 &> /dev/null
+    if ! pyenv versions | grep 2.7.7 &> /dev/null
     then
         CFLAGS="-I$(brew --prefix readline)/include" \
         LDFLAGS="-L$(brew --prefix readline)/lib" \
@@ -349,12 +359,7 @@ then
     for PIP in "${PIPS[@]}"
     do
         FORMULA=$(echo ${PIP} | cut -d ' ' -f 1)
-
-        if ! pip list | grep ${PIP} &> /dev/null
-        then
-            pip install ${PIP}
-        fi
-
+        pip install --upgrade ${FORMULA}
         unset FORMULA
     done
 
@@ -378,8 +383,9 @@ then
     fi
 
     export PATH="${RBENV}/bin:${PATH}"
+    eval "$(rbenv init -)"
 
-    if [ ! -d ${RBENV}/versions/2.1.0 ]
+    if ! rbenv versions | grep 2.1.0 &> /dev/null
     then
         CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
                         --with-readline-dir=$(brew --prefix readline)" \
@@ -394,6 +400,7 @@ fi
 
 # Install RubyGems
 if which gem &> /dev/null
+then
     GEMS=(
         'bundler'
         'gisty'
@@ -402,12 +409,7 @@ if which gem &> /dev/null
     for GEM in "${GEMS[@]}"
     do
         FORMULA=$(echo ${GEM} | cut -d ' ' -f 1)
-
-        if ! gem list --local | grep ${GEM} &> /dev/null
-        then
-            gem install ${GEM}
-        fi
-
+        gem install ${FORMULA}
         unset FORMULA
     done
 
@@ -431,8 +433,13 @@ then
     fi
 
     export PATH="${NENV}/bin:${PATH}"
+    eval "$(nenv init -)"
 
-    nenv install 0.10.24
+    if ! nenv versions | grep 0.10.24 &> /dev/null
+    then
+        nenv install 0.10.24
+    fi
+
     nenv global 0.10.24
     nenv rehash
 
@@ -450,12 +457,7 @@ then
     for NPM in "${NPMS[@]}"
     do
         FORMULA=$(echo ${NPM} | cut -d ' ' -f 1)
-
-        if ! npm list -g | grep ${NPM} &> /dev/null
-        then
-            npm install ${NPM}
-        fi
-
+        npm install ${FORMULA}
         unset FORMULA
     done
 
