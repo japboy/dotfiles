@@ -392,7 +392,7 @@ if ! rbenv versions | grep 2.1.2 &> /dev/null
 then
     CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
                     --with-readline-dir=$(brew --prefix readline)" \
-    ruby-build 2.1.2 ${RBENV}/versions/2.1.2
+    rbenv install 2.1.2
 fi
 
 rbenv global 2.1.2
@@ -451,6 +451,8 @@ if which npm &> /dev/null
 then
     NPMS=(
         'bower'
+        'coffee-script'
+        'grunt-cli'
         'grunt-init'
     )
 
