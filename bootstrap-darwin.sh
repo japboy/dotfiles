@@ -272,16 +272,16 @@ then
     export PATH="${PLENV}/bin:${PATH}"
     eval "$(plenv init -)"
 
-    if ! plenv versions | grep 5.18.0 &> /dev/null
-    then
-        plenv install 5.18.0
-    fi
-
-    plenv global system
-    plenv rehash
-
     unset PLENV
 fi
+
+if ! plenv versions | grep 5.21.0 &> /dev/null
+then
+    plenv install 5.21.0
+fi
+
+plenv global 5.21.0
+plenv rehash
 
 # Install PHP through `phpenv` if not exists
 # MUST be done before `rbenv` installation
@@ -301,21 +301,21 @@ then
     export PATH="${PHPENV}/bin:${PATH}"
     eval "$(phpenv init -)"
 
-    if ! phpenv versions | grep php-5.5.7 &> /dev/null
-    then
-        CONFIGURE_OPTIONS="--with-jpeg-dir=$(brew --prefix libjpeg) \
-                           --with-png-dir=$(brew --prefix libpng) \
-                           --with-openssl=$(brew --prefix openssl) \
-                           --with-mcrypt=$(brew --prefix mcrypt) \
-                           --with-apxs2=/usr/sbin/apxs" \
-        phpenv install php-5.5.7
-    fi
-
-    phpenv global system
-    phpenv rehash
-
     unset PHPENV
 fi
+
+if ! phpenv versions | grep php-5.5.7 &> /dev/null
+then
+    CONFIGURE_OPTIONS="--with-jpeg-dir=$(brew --prefix libjpeg) \
+                       --with-png-dir=$(brew --prefix libpng) \
+                       --with-openssl=$(brew --prefix openssl) \
+                       --with-mcrypt=$(brew --prefix mcrypt) \
+                       --with-apxs2=/usr/sbin/apxs" \
+    phpenv install php-5.5.7
+fi
+
+phpenv global system
+phpenv rehash
 
 # Install Python through `pyenv` if not exists
 if ! which pyenv &> /dev/null
@@ -334,18 +334,18 @@ then
     export PATH="${PYENV}/bin:${PATH}"
     eval "$(pyenv init -)"
 
-    if ! pyenv versions | grep 2.7.7 &> /dev/null
-    then
-        CFLAGS="-I$(brew --prefix readline)/include" \
-        LDFLAGS="-L$(brew --prefix readline)/lib" \
-        pyenv install 2.7.7 3.4.1
-    fi
-
-    pyenv global 2.7.7
-    pyenv rehash
-
     unset PYENV
 fi
+
+if ! pyenv versions | grep 2.7.5 &> /dev/null
+then
+    CFLAGS="-I$(brew --prefix readline)/include" \
+    LDFLAGS="-L$(brew --prefix readline)/lib" \
+    pyenv install 2.7.5 3.3.2
+fi
+
+pyenv global 2.7.5
+pyenv rehash
 
 # Install PyPIs
 if which pip &> /dev/null
@@ -385,18 +385,18 @@ then
     export PATH="${RBENV}/bin:${PATH}"
     eval "$(rbenv init -)"
 
-    if ! rbenv versions | grep 2.1.0 &> /dev/null
-    then
-        CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
-                        --with-readline-dir=$(brew --prefix readline)" \
-        ruby-build 2.1.0 ${RBENV}/versions/2.1.0
-    fi
-
-    rbenv global 2.1.0
-    rbenv rehash
-
     unset RBENV
 fi
+
+if ! rbenv versions | grep 2.1.2 &> /dev/null
+then
+    CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
+                    --with-readline-dir=$(brew --prefix readline)" \
+    ruby-build 2.1.2 ${RBENV}/versions/2.1.2
+fi
+
+rbenv global 2.1.2
+rbenv rehash
 
 # Install RubyGems
 if which gem &> /dev/null
@@ -435,16 +435,16 @@ then
     export PATH="${NENV}/bin:${PATH}"
     eval "$(nenv init -)"
 
-    if ! nenv versions | grep 0.10.24 &> /dev/null
-    then
-        nenv install 0.10.24
-    fi
-
-    nenv global 0.10.24
-    nenv rehash
-
     unset NENV
 fi
+
+if ! nenv versions | grep 0.10.29 &> /dev/null
+then
+    nenv install 0.10.29
+fi
+
+nenv global 0.10.29
+nenv rehash
 
 # Install NPMs
 if which npm &> /dev/null
