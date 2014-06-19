@@ -83,7 +83,7 @@ then
 fi
 
 # Install ClamXav
-if [ ! -d /Applications/ClamXav.app ]
+if [ ! -d /Applications/ClamXav.app ] && [ 'C02GH2A9DV7M' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
     curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.3.dmg
     hdiutil attach ClamXav_2.6.3.dmg
@@ -116,15 +116,6 @@ then
     hdiutil attach XtraFinder.dmg
     sudo installer -pkg /Volumes/XtraFinder/XtraFinder.pkg -target /
     hdiutil detach /Volumes/XtraFinder
-fi
-
-# Install TrueCrypt
-if [ ! -d /Applications/TrueCrypt.app ]
-then
-    curl -L -O http://www.truecrypt.org/download/TrueCrypt%207.1a%20Mac%20OS%20X.dmg
-    hdiutil attach TrueCrypt%207.1a%20Mac%20OS%20X.dmg
-    sudo installer -pkg /Volumes/TrueCrypt\ 7.1a/TrueCrypt\ 7.1a.mpkg -target /
-    hdiutil detach /Volumes/TrueCrypt\ 7.1a
 fi
 
 # Install VirtualBox
