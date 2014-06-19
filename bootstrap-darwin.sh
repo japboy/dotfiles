@@ -459,7 +459,7 @@ then
     for NPM in "${NPMS[@]}"
     do
         FORMULA=$(echo ${NPM} | cut -d ' ' -f 1)
-        npm install ${FORMULA}
+        npm install -g ${FORMULA}
         unset FORMULA
     done
 
