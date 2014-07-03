@@ -394,6 +394,7 @@ if which gem &> /dev/null
 then
     GEMS=(
         'bundler'
+        'foreman'
         'gisty'
     )
 
@@ -445,6 +446,7 @@ then
         'coffee-script'
         'grunt-cli'
         'grunt-init'
+        'hubot'
     )
 
     for NPM in "${NPMS[@]}"
