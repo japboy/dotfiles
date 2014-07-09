@@ -196,6 +196,7 @@ then
 
     brew tap homebrew/versions
     brew tap homebrew/dupes
+    brew tap homebrew/binary
 fi
 
 unset HOMEBREW
@@ -220,6 +221,7 @@ BREWS=(
     'mcrypt'
     'mercurial'
     'openssl'
+    'packer'
     'perl-build'
     'pkg-config'
     're2c'
