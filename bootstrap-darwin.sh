@@ -193,13 +193,26 @@ if [ ! -d ${HOMEBREW} ]
 then
     mkdir -p ${HOMEBREW}
     curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
-
-    brew tap homebrew/versions
-    brew tap homebrew/dupes
-    brew tap homebrew/binary
 fi
 
 unset HOMEBREW
+
+# Add Homebrew 3rd party repositories
+TAPS=(
+    'homebrew/binary'
+    'homebrew/dupes'
+    'homebrew/versions'
+)
+
+for TAP in "${TAPS[@]}"
+do
+    if ! brew tap | grep ${TAP} &> /dev/null
+    then
+        brew tap ${TAP}
+    fi
+done
+
+unset TAP TAPS
 
 # Install fundamental dependencies through Homebrew
 brew update
