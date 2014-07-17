@@ -73,22 +73,22 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 # Current directory to ~/Downloads
 cd ${HOME}/Downloads
 
-# Install XQuartz
-if [ ! -d /Applications/Utilities/XQuartz.app ]
-then
-    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.5.dmg
-    hdiutil attach XQuartz-2.7.5.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.7.5/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.7.5
-fi
-
 # Install ClamXav
 if [ ! -d /Applications/ClamXav.app ] && [ 'C02GH2A9DV7M' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.3.dmg
-    hdiutil attach ClamXav_2.6.3.dmg
+    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.4.dmg
+    hdiutil attach ClamXav_2.6.4.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
+fi
+
+# Install XQuartz
+if [ ! -d /Applications/Utilities/XQuartz.app ]
+then
+    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.6.dmg
+    hdiutil attach XQuartz-2.7.6.dmg
+    sudo installer -pkg /Volumes/XQuartz-2.7.6/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.7.6
 fi
 
 # Install Asepsis
@@ -121,8 +121,8 @@ fi
 # Install VirtualBox
 if [ ! -d /Applications/VirtualBox.app ]
 then
-    curl -L -O http://download.virtualbox.org/virtualbox/4.3.12/VirtualBox-4.3.12-93733-OSX.dmg
-    hdiutil attach VirtualBox-4.3.12-93733-OSX.dmg
+    curl -L -O http://download.virtualbox.org/virtualbox/4.3.14/VirtualBox-4.3.14-95030-OSX.dmg
+    hdiutil attach VirtualBox-4.3.14-95030-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
 fi
@@ -134,6 +134,24 @@ then
     hdiutil attach vagrant_1.6.3.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
+fi
+
+# Install Xamarin Studio
+if [ ! -d /Applications/Xamarin\ Studio.app ]
+then
+    curl -L -O http://download.xamarin.com/Installer/Mac/XamarinInstaller.dmg
+    hdiutil attach XamarinInstaller.dmg
+    open /Volumes/Xamarin\ Installer/Install\ Xamarin.app
+    hdiutil detach /Volumes/Xamarin\ Installer
+fi
+
+# Install Unity
+if [ ! -d /Applications/Unity ]
+then
+    curl -L -O http://netstorage.unity3d.com/unity/unity-4.5.2.dmg
+    hdiutil attach unity-4.5.2.dmg
+    sudo installer -pkg /Volumes/Unity\ Installer/Unity.pkg -target /
+    hdiutil detach /Volumes/Unity\ Installer
 fi
 
 # Check if QuickLook directory exists
