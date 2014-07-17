@@ -200,6 +200,7 @@ unset HOMEBREW
 # Add Homebrew 3rd party repositories
 TAPS=(
     'homebrew/binary'
+    'homebrew/completions'
     'homebrew/dupes'
     'homebrew/versions'
 )
@@ -225,6 +226,7 @@ BREWS=(
     'bison'
     'ccache'
     'cmake'
+    'gem-completion'
     'gettext'
     'git'
     'git-extras'
@@ -236,12 +238,14 @@ BREWS=(
     'openssl'
     'packer'
     'perl-build'
+    'pip-completion'
     'pkg-config'
     're2c'
     'readline'
     'rmtrash'
     'ruby-build'
     'scons'
+    'vagrant-completion'
     'vim --with-lua --with-mzscheme --with-perl'
 )
 
