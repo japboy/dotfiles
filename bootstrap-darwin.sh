@@ -484,6 +484,7 @@ then
         'grunt-cli'
         'grunt-init'
         'hubot'
+        'LiveScript'
     )
 
     for NPM in "${NPMS[@]}"
