@@ -483,6 +483,7 @@ then
         'coffee-script'
         'grunt-cli'
         'grunt-init'
+        'gulp'
         'hubot'
         'LiveScript'
     )
