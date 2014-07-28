@@ -246,6 +246,7 @@ BREWS=(
     'cmake'
     'gem-completion'
     'gettext'
+    'gibo'
     'git'
     'git-extras'
     'grc'
