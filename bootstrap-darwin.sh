@@ -94,8 +94,8 @@ fi
 # Install Asepsis
 if ! which asepsisctl &> /dev/null
 then
-    curl -L -O http://downloads.binaryage.com/Asepsis-1.4.1.dmg
-    hdiutil attach Asepsis-1.4.1.dmg
+    curl -L -O http://downloads.binaryage.com/Asepsis-1.5.dmg
+    hdiutil attach Asepsis-1.5.dmg
     sudo installer -pkg /Volumes/Asepsis/Asepsis.mpkg -target /
     hdiutil detach /Volumes/Asepsis
 fi
@@ -103,8 +103,8 @@ fi
 # Install TotalTerminal
 if [ ! -d /Applications/TotalTerminal.app ]
 then
-    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.4.11.dmg
-    hdiutil attach TotalTerminal-1.4.11.dmg
+    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.5.dmg
+    hdiutil attach TotalTerminal-1.5.dmg
     sudo installer -pkg /Volumes/TotalTerminal/TotalTerminal.pkg -target /
     hdiutil detach /Volumes/TotalTerminal
 fi
