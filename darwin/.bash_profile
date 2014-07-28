@@ -70,23 +70,28 @@ export PATH="$(brew --prefix apple-gcc42)/bin:${PATH}"
 # plenv
 export PATH="${HOME}/.plenv/bin:${PATH}"
 eval "$(plenv init -)"
+[ -f "${HOME}/.plenv/completions/plenv.bash" ] && source "${HOME}/.plenv/completions/plenv.bash"
 
 # phpenv
 # PATH should be overriden by rbenv
 export PATH="${HOME}/.phpenv/bin:${PATH}"
 eval "$(phpenv init -)"
+[ -f "${HOME}/.phpenv/completions/phpenv.bash" ] && source "${HOME}/.phpenv/completions/phpenv.bash"
 
 # pyenv
 export PATH="${HOME}/.pyenv/bin:${PATH}"
 eval "$(pyenv init -)"
+[ -f "${HOME}/.pyenv/completions/pyenv.bash" ] && source "${HOME}/.pyenv/completions/pyenv.bash"
 
 # rbenv
 export PATH="${HOME}/.rbenv/bin:${PATH}"
 eval "$(rbenv init -)"
+[ -f "${HOME}/.rbenv/completions/rbenv.bash" ] && source "${HOME}/.rbenv/completions/rbenv.bash"
 
 # nenv
 export PATH="${HOME}/.nenv/bin:${PATH}"
 eval "$(nenv init -)"
+[ -f "${HOME}/.nenv/completions/nenv.bash" ] && source "${HOME}/.nenv/completions/nenv.bash"
 
 
 ##
