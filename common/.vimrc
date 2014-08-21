@@ -27,6 +27,7 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'alpaca-tc/html5.vim'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'aperezdc/vim-template'
+NeoBundle 'chase/vim-ansible-yaml'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'elzr/vim-json'
@@ -51,7 +52,6 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tikhomirov/vim-glsl'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'wavded/vim-stylus'
 
 
