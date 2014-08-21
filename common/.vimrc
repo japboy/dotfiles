@@ -209,6 +209,7 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 " NERDTree
 " https://github.com/scrooloose/nerdtree
 
+let g:NERDTreeShowBookmarks=1
 autocmd VimEnter * NERDTree
 autocmd VimEnter * wincmd w
 autocmd BufEnter * NERDTreeMirror
