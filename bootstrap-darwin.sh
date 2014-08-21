@@ -83,12 +83,12 @@ then
 fi
 
 # Install XQuartz
-if [ ! -d /Applications/Utilities/XQuartz.app ]
+if [[ ! -d /Applications/Utilities/XQuartz.app || 'kMDItemVersion = "2.7.7"' != $(mdls -name kMDItemVersion /Applications/Utilities/XQuartz.app) ]]
 then
-    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.6.dmg
-    hdiutil attach XQuartz-2.7.6.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.7.6/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.7.6
+    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.7.dmg
+    hdiutil attach XQuartz-2.7.7.dmg
+    sudo installer -pkg /Volumes/XQuartz-2.7.7/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.7.7
 fi
 
 # Install Asepsis
@@ -101,7 +101,7 @@ then
 fi
 
 # Install TotalTerminal
-if [ ! -d /Applications/TotalTerminal.app ]
+if [[ ! -d /Applications/TotalTerminal.app || 'kMDItemVersion = "1.5"' != $(mdls -name kMDItemVersion /Applications/TotalTerminal.app) ]]
 then
     curl -L -O http://downloads.binaryage.com/TotalTerminal-1.5.dmg
     hdiutil attach TotalTerminal-1.5.dmg
@@ -110,7 +110,7 @@ then
 fi
 
 # Install XtraFinder
-if [ ! -d /Applications/XtraFinder.app ]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.22"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -L -O http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -119,7 +119,7 @@ then
 fi
 
 # Install VirtualBox
-if [ ! -d /Applications/VirtualBox.app ]
+if [[ ! -d /Applications/VirtualBox.app || '4.3.14r95030' != $(VBoxManage --version) ]]
 then
     curl -L -O http://download.virtualbox.org/virtualbox/4.3.14/VirtualBox-4.3.14-95030-OSX.dmg
     hdiutil attach VirtualBox-4.3.14-95030-OSX.dmg
@@ -128,7 +128,7 @@ then
 fi
 
 # Install Vagrant
-if [ ! -d /Applications/Vagrant ]
+if [[ ! -d /Applications/Vagrant || 'Vagrant 1.6.3' != $(vagrant --version) ]]
 then
     curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
     hdiutil attach vagrant_1.6.3.dmg
