@@ -238,7 +238,6 @@ brew update
 brew upgrade
 
 BREWS=(
-    'apple-gcc42'
     'autoconf'
     'automake'
     'bison'
