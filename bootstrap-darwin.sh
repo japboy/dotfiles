@@ -148,8 +148,8 @@ fi
 # Install Unity
 if [ ! -d /Applications/Unity ]
 then
-    curl -L -O http://netstorage.unity3d.com/unity/unity-4.5.2.dmg
-    hdiutil attach unity-4.5.2.dmg
+    curl -L -O http://netstorage.unity3d.com/unity/unity-4.5.4.dmg
+    hdiutil attach unity-4.5.4.dmg
     sudo installer -pkg /Volumes/Unity\ Installer/Unity.pkg -target /
     hdiutil detach /Volumes/Unity\ Installer
 fi
