@@ -153,6 +153,10 @@ if has("gui_running")
     set guifont=Monaco:h12
     set guifontwide=Hiragino_Maru_Gothic_Pro:h12
     set printfont=Monaco:h12:cDEFAULT
+  elseif has("gui_vimr")
+    set guifont=Sauc Code Powerline:h11
+    set guifontwide=Sauce Code Powerline:h11
+    set printfont=Monaco:h12:cDEFAULT
   elseif has("gui_win")
     set guifont=Terminal:h10:w5:cANSI
     set guifontwide=Terminal:h10:cSHIFTJIS
