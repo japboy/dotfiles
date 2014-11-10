@@ -303,12 +303,12 @@ then
     unset PLENV
 fi
 
-if ! plenv versions | grep 5.21.0 &> /dev/null
+if ! plenv versions | grep 5.21.5 &> /dev/null
 then
-    plenv install 5.21.0
+    plenv install 5.21.5
 fi
 
-plenv global 5.21.0
+plenv global 5.21.5
 plenv rehash
 
 # Install PHP through `phpenv` if not exists
@@ -365,14 +365,14 @@ then
     unset PYENV
 fi
 
-if ! pyenv versions | grep 2.7.5 &> /dev/null
+if ! pyenv versions | grep 2.7.8 &> /dev/null
 then
     CFLAGS="-I$(brew --prefix readline)/include" \
     LDFLAGS="-L$(brew --prefix readline)/lib" \
-    pyenv install 2.7.5 3.3.2
+    pyenv install 2.7.8 3.4.1
 fi
 
-pyenv global 2.7.5
+pyenv global 2.7.8
 pyenv rehash
 
 # Install PyPIs
@@ -416,14 +416,14 @@ then
     unset RBENV
 fi
 
-if ! rbenv versions | grep 2.1.2 &> /dev/null
+if ! rbenv versions | grep 2.1.3 &> /dev/null
 then
     CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
                     --with-readline-dir=$(brew --prefix readline)" \
-    rbenv install 2.1.2
+    rbenv install 2.1.3
 fi
 
-rbenv global 2.1.2
+rbenv global 2.1.3
 rbenv rehash
 
 # Install RubyGems
@@ -467,12 +467,12 @@ then
     unset NENV
 fi
 
-if ! nenv versions | grep 0.10.29 &> /dev/null
+if ! nenv versions | grep 0.10.33 &> /dev/null
 then
-    nenv install 0.10.29
+    nenv install 0.10.33
 fi
 
-nenv global 0.10.29
+nenv global 0.10.33
 nenv rehash
 
 # Install NPMs
