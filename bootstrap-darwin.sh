@@ -74,7 +74,7 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [ ! -d /Applications/ClamXav.app ] && [ 'C02GH2A9DV7M' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [ ! -d /Applications/ClamXav.app ] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
     curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.4.dmg
     hdiutil attach ClamXav_2.6.4.dmg
