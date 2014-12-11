@@ -37,6 +37,7 @@ fi
 # Install LoginHook
 if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
 then
+    chmod +x ${DOTFILES_DARWIN_PATH}/hook.sh
     sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/hook.sh
 fi
 
@@ -101,16 +102,16 @@ then
 fi
 
 # Install TotalTerminal
-if [[ ! -d /Applications/TotalTerminal.app || 'kMDItemVersion = "1.5"' != $(mdls -name kMDItemVersion /Applications/TotalTerminal.app) ]]
+if [[ ! -d /Applications/TotalTerminal.app || 'kMDItemVersion = "1.5.4"' != $(mdls -name kMDItemVersion /Applications/TotalTerminal.app) ]]
 then
-    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.5.dmg
-    hdiutil attach TotalTerminal-1.5.dmg
+    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.5.4.dmg
+    hdiutil attach TotalTerminal-1.5.4.dmg
     sudo installer -pkg /Volumes/TotalTerminal/TotalTerminal.pkg -target /
     hdiutil detach /Volumes/TotalTerminal
 fi
 
 # Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.23"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.24"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -L -O http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -119,25 +120,25 @@ then
 fi
 
 # Install VirtualBox
-if [[ ! -d /Applications/VirtualBox.app || '4.3.14r95030' != $(VBoxManage --version) ]]
+if [[ ! -d /Applications/VirtualBox.app || '4.3.20r96996' != $(VBoxManage --version) ]]
 then
-    curl -L -O http://download.virtualbox.org/virtualbox/4.3.14/VirtualBox-4.3.14-95030-OSX.dmg
-    hdiutil attach VirtualBox-4.3.14-95030-OSX.dmg
+    curl -L -O http://download.virtualbox.org/virtualbox/4.3.20/VirtualBox-4.3.20-96996-OSX.dmg
+    hdiutil attach VirtualBox-4.3.20-96996-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
 fi
 
 # Install Vagrant
-if [[ ! -d /Applications/Vagrant || 'Vagrant 1.6.3' != $(vagrant --version) ]]
+if [[ ! -d /Applications/Vagrant || 'Vagrant 1.7.0' != $(vagrant --version) ]]
 then
-    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3.dmg
-    hdiutil attach vagrant_1.6.3.dmg
+    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.0.dmg
+    hdiutil attach vagrant_1.7.0.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
 fi
 
 # Install Xamarin Studio
-if [ ! -d /Applications/Xamarin\ Studio.app ]
+if [[ ! -d /Applications/Xamarin\ Studio.app || 'kMDItemVersion = "5.5.4.15"' != $(mdls -name kMDItemVersion /Applications/Xamarin\ Studio.app) ]]
 then
     curl -L -O http://download.xamarin.com/Installer/Mac/XamarinInstaller.dmg
     hdiutil attach XamarinInstaller.dmg
@@ -146,9 +147,9 @@ then
 fi
 
 # Install Unity
-if [ ! -d /Applications/Unity ]
+if [[ ! -d /Applications/Unity || 'kMDItemVersion = "4.6.0f3"' != $(mdls -name kMDItemVersion /Applications/Unity/Unity.app) ]]
 then
-    curl -L -O http://netstorage.unity3d.com/unity/unity-4.5.4.dmg
+    curl -L -O http://download.unity3d.com/download_unity/unity-4.6.0.dmg
     hdiutil attach unity-4.5.4.dmg
     sudo installer -pkg /Volumes/Unity\ Installer/Unity.pkg -target /
     hdiutil detach /Volumes/Unity\ Installer
@@ -163,19 +164,20 @@ fi
 # Install QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
 then
-    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip
-    unzip qlImageSize.qlgenerator-10.8.zip -d ${HOME}/Library/QuickLook/
+    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator.zip
+    unzip qlImageSize.qlgenerator.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Install QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
 then
-    curl -L -O https://github.com/downloads/whomwah/qlstephen/QLStephen.qlgenerator.zip
-    unzip QLStephen.qlgenerator.zip -d ${HOME}/Library/QuickLook/
+    curl -L -O https://github.com/whomwah/qlstephen/releases/download/1.4.2/QLStephen.qlgenerator.1.4.2.zip
+    unzip QLStephen.qlgenerator.1.4.2.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Restart QuickLook
 qlmanage -r
+qlmanage -r cache
 
 # Reset current working directory
 cd ${CWD}
@@ -246,11 +248,13 @@ BREWS=(
     'gem-completion'
     'gettext'
     'gibo'
+    'giflib'
     'git'
     'git-extras'
     'grc'
     'libjpeg'
     'libpng'
+    'libtiff'
     'mcrypt'
     'mercurial'
     'openssl'
@@ -265,6 +269,7 @@ BREWS=(
     'scons'
     'vagrant-completion'
     'vim --with-lua --with-mzscheme --with-perl'
+    'webp'
 )
 
 for BREW in "${BREWS[@]}"
