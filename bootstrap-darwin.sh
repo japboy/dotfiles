@@ -147,7 +147,7 @@ then
 fi
 
 # Install Unity
-if [[ ! -d /Applications/Unity || 'kMDItemVersion = "4.6.0f3"' != $(mdls -name kMDItemVersion /Applications/Unity/Unity.app) ]]
+if [[ ! -d /Applications/Unity || 'kMDItemVersion = "Unity version 4.6.1f1"' != $(mdls -name kMDItemVersion /Applications/Unity/Unity.app) ]]
 then
     curl -L -O http://download.unity3d.com/download_unity/unity-4.6.0.dmg
     hdiutil attach unity-4.5.4.dmg
@@ -164,8 +164,8 @@ fi
 # Install QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
 then
-    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator.zip
-    unzip qlImageSize.qlgenerator.zip -d ${HOME}/Library/QuickLook/
+    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip
+    unzip qlImageSize.qlgenerator-10.8.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Install QuickLook qlImageSize
