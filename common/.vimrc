@@ -236,3 +236,11 @@ if executable('pt')
   let g:unite_source_grep_default_opts = '--nogroup --nocolor'
   let g:unite_source_grep_recursive_opt = ''
 endif
+
+
+""
+" vim-tempalte
+" https://github.com/aperezdc/vim-template
+
+let g:templates_no_builtin_templates = 1
+let g:templates_directory = ['~/.vim/templates']
