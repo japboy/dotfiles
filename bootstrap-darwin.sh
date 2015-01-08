@@ -77,8 +77,8 @@ cd ${HOME}/Downloads
 # Install ClamXav
 if [ ! -d /Applications/ClamXav.app ] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.6.4.dmg
-    hdiutil attach ClamXav_2.6.4.dmg
+    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.7.dmg
+    hdiutil attach ClamXav_2.7.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -111,7 +111,7 @@ then
 fi
 
 # Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.24"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.2"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -L -O http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -149,8 +149,8 @@ fi
 # Install Unity
 if [[ ! -d /Applications/Unity || 'kMDItemVersion = "Unity version 4.6.1f1"' != $(mdls -name kMDItemVersion /Applications/Unity/Unity.app) ]]
 then
-    curl -L -O http://download.unity3d.com/download_unity/unity-4.6.0.dmg
-    hdiutil attach unity-4.5.4.dmg
+    curl -L -O http://netstorage.unity3d.com/unity/unity-4.6.1.dmg
+    hdiutil attach unity-4.6.1.dmg
     sudo installer -pkg /Volumes/Unity\ Installer/Unity.pkg -target /
     hdiutil detach /Volumes/Unity\ Installer
 fi
