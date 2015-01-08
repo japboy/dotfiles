@@ -16,6 +16,7 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 
 " Bundles
 NeoBundleFetch 'Shougo/neobundle.vim'
+
 NeoBundle 'Shougo/vimproc', {
   \ 'build' : {
     \ 'windows' : 'make -f make_mingw32.mak',
@@ -24,6 +25,7 @@ NeoBundle 'Shougo/vimproc', {
     \ 'unix' : 'make -f make_unix.mak',
   \ },
 \ }
+
 NeoBundle 'alpaca-tc/html5.vim'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'aperezdc/vim-template'
@@ -36,6 +38,7 @@ NeoBundle 'groenewege/vim-less'
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'kongo2002/fsharp-vim'
+NeoBundle 'lambdatoast/elm.vim'
 NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'mintplant/vim-literate-coffeescript'
 NeoBundle 'nono/vim-handlebars'

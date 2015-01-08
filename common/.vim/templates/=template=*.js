@@ -1,9 +1,12 @@
-'use strict';
-
 /**
  * %FFILE%
- * Copyright (C) %YEAR% %USER% <%MAIL%>
  *
- * Distributed under terms of the %LICENSE% license.
+ * @author %USER% <%MAIL%>
+ * @copyright %YEAR% %USER%
+ * @license %LICENSE%
  */
+
+/* jshint es3: false, es5: false, esnext: true */
+'use strict';
+
 %HERE%
