@@ -43,10 +43,12 @@ NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'mintplant/vim-literate-coffeescript'
 NeoBundle 'nono/vim-handlebars'
 NeoBundle 'nvie/vim-flake8'
+NeoBundle 'OmniSharp/omnisharp-vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'rizzatti/dash.vim'
 NeoBundle 'rizzatti/funcoo.vim'
 NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
@@ -220,6 +222,19 @@ let g:NERDTreeShowBookmarks=1
 autocmd VimEnter * NERDTree
 autocmd VimEnter * wincmd w
 autocmd BufEnter * NERDTreeMirror
+
+
+""
+" syntastic
+" https://github.com/scrooloose/syntastic
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 
 ""
