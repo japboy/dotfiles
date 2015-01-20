@@ -268,7 +268,7 @@ BREWS=(
     'ruby-build'
     'scons'
     'vagrant-completion'
-    'vim --with-lua --with-mzscheme --with-perl'
+    'vim --with-client-server --with-lua --with-mzscheme --with-perl'
     'webp'
 )
 
