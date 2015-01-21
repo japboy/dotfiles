@@ -131,11 +131,12 @@ syntax enable
 colorscheme solarized
 
 let g:solarized_termcolors=256  " Enable Solarized colour theme
+let g:solarized_termtrans=0
 
 if has('gui_running')
-    set background=light
-else
     set background=dark
+else
+    set background=light
 endif
 
 " Highlight characters over 80 chars
