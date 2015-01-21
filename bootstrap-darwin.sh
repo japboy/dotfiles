@@ -137,15 +137,6 @@ then
     hdiutil detach /Volumes/Vagrant
 fi
 
-# Install Xamarin Studio
-if [[ ! -d /Applications/Xamarin\ Studio.app || 'kMDItemVersion = "5.5.4.15"' != $(mdls -name kMDItemVersion /Applications/Xamarin\ Studio.app) ]]
-then
-    curl -L -O http://download.xamarin.com/Installer/Mac/XamarinInstaller.dmg
-    hdiutil attach XamarinInstaller.dmg
-    open /Volumes/Xamarin\ Installer/Install\ Xamarin.app
-    hdiutil detach /Volumes/Xamarin\ Installer
-fi
-
 # Install Unity
 if [[ ! -d /Applications/Unity || 'kMDItemVersion = "Unity version 4.6.1f1"' != $(mdls -name kMDItemVersion /Applications/Unity/Unity.app) ]]
 then
