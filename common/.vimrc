@@ -17,13 +17,23 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 " Bundles
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundle 'Shougo/vimproc', {
-  \ 'build' : {
-    \ 'windows' : 'make -f make_mingw32.mak',
-    \ 'cygwin' : 'make -f make_cygwin.mak',
-    \ 'mac' : 'make -f make_mac.mak',
-    \ 'unix' : 'make -f make_unix.mak',
-  \ },
+NeoBundleLazy 'Shougo/vimproc', {
+\   'build' : {
+\     'windows' : 'make -f make_mingw32.mak',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make -f make_mac.mak',
+\     'unix' : 'make -f make_unix.mak',
+\   },
+\ }
+
+
+NeoBundleLazy 'OmniSharp/omnisharp-vim', {
+\   'autoload': { 'filetypes': [ 'cs' ] },
+\   'build': {
+\     'windows' : 'msbuild server/OmniSharp.sln',
+\     'mac': 'xbuild server/OmniSharp.sln',
+\     'unix': 'xbuild server/OmniSharp.sln',
+\   }
 \ }
 
 NeoBundle 'alpaca-tc/html5.vim'
@@ -43,18 +53,18 @@ NeoBundle 'leafgarland/typescript-vim'
 NeoBundle 'mintplant/vim-literate-coffeescript'
 NeoBundle 'nono/vim-handlebars'
 NeoBundle 'nvie/vim-flake8'
-NeoBundle 'OmniSharp/omnisharp-vim'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'rizzatti/dash.vim'
 NeoBundle 'rizzatti/funcoo.vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tikhomirov/vim-glsl'
+NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'wavded/vim-stylus'
@@ -179,39 +189,46 @@ set rtp+=~/.dotfiles/common/opt/powerline/powerline/bindings/vim
 
 
 ""
-" neocomplcache
-" https://github.com/Shougo/neocomplcache
+" neocomplete
+" https://github.com/Shougo/neocomplete.vim
+" https://github.com/OmniSharp/omnisharp-vim/wiki/Example-NeoComplete-Settings
 
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_min_syntax_length = 3
-" buffer file name pattern that locks neocomplcache. e.g. ku.vim or fuzzyfinder
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+let g:acp_enableAtStartup = 0
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
-" Define file-type dependent dictionaries.
-let g:neocomplcache_dictionary_filetype_lists = {
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
     \ 'default' : '',
     \ 'vimshell' : $HOME.'/.vimshell_hist',
     \ 'scheme' : $HOME.'/.gosh_completions'
-    \ }
+        \ }
 
-" Define keyword, for minor languages
-if !exists('g:neocomplcache_keyword_patterns')
-  let g:neocomplcache_keyword_patterns = {}
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
 endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-" AutoComplPop like behavior.
-let g:neocomplcache_enable_auto_select = 1
-
-" Enable omni completion. Not required if they are already set elsewhere in .vimrc
+" Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 
 
 ""
