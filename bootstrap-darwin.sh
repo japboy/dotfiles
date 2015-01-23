@@ -111,7 +111,7 @@ then
 fi
 
 # Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.2"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.3"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -L -O http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -129,10 +129,10 @@ then
 fi
 
 # Install Vagrant
-if [[ ! -d /Applications/Vagrant || 'Vagrant 1.7.0' != $(vagrant --version) ]]
+if [[ ! -d /Applications/Vagrant || 'Vagrant 1.7.2' != $(vagrant --version) ]]
 then
-    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.0.dmg
-    hdiutil attach vagrant_1.7.0.dmg
+    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg
+    hdiutil attach vagrant_1.7.2.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
 fi
@@ -153,10 +153,10 @@ then
 fi
 
 # Install QuickLook qlImageSize
-if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
+if [ ! -d /Library/QuickLook/qlImageSize.qlgenerator ]
 then
-    curl -L -O http://repo.whine.fr/qlImageSize.qlgenerator-10.8.zip
-    unzip qlImageSize.qlgenerator-10.8.zip -d ${HOME}/Library/QuickLook/
+    curl -L -O http://repo.whine.fr/qlImageSize.pkg
+    sudo installer -pkg ${HOME}/Downloads/qlImageSize.pkg -target /
 fi
 
 # Install QuickLook qlImageSize
