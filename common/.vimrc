@@ -56,7 +56,7 @@ NeoBundleLazy 'gkz/vim-ls', { 'autoload': { 'filetypes': [ 'ls' ] } }
 NeoBundleLazy 'groenewege/vim-less', { 'autoload': { 'filetypes': [ 'less' ] } }
 NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload': { 'filetypes': [ 'css' ] } }
 NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload': { 'filetypes': [ 'coffee' ] } }
-NeoBundleLazy 'kongo2002/fsharp-vim', { 'autoload': { 'filetypes': [ 'fs' ] } }
+NeoBundleLazy 'kongo2002/fsharp-vim', { 'autoload': { 'filetypes': [ 'fs', 'fsi', 'fsx' ] } }
 NeoBundleLazy 'lambdatoast/elm.vim', { 'autoload': { 'filetypes': [ 'elm' ] } }
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload': { 'filetypes': [ 'ts' ] } }
 NeoBundleLazy 'mintplant/vim-literate-coffeescript', { 'autoload': { 'filetypes': [ 'coffee' ] } }
