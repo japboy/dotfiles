@@ -75,10 +75,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [ ! -d /Applications/ClamXav.app ] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.7.3"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.7.dmg
-    hdiutil attach ClamXav_2.7.dmg
+    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.7.3.dmg
+    hdiutil attach ClamXav_2.7.3.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -129,7 +129,7 @@ then
 fi
 
 # Install Vagrant
-if [[ ! -d /Applications/Vagrant || 'Vagrant 1.7.2' != $(vagrant --version) ]]
+if [[ 'Vagrant 1.7.2' != $(vagrant --version) ]]
 then
     curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg
     hdiutil attach vagrant_1.7.2.dmg
