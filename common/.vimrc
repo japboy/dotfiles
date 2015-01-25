@@ -12,7 +12,7 @@ if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin('~/.vim/bundle/')
 
 " Bundles
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -26,14 +26,13 @@ NeoBundleLazy 'Shougo/vimproc', {
 \   },
 \ }
 
-
 NeoBundleLazy 'OmniSharp/omnisharp-vim', {
 \   'autoload': { 'filetypes': [ 'cs' ] },
 \   'build': {
 \     'windows' : 'msbuild server/OmniSharp.sln',
 \     'mac': 'xbuild server/OmniSharp.sln',
 \     'unix': 'xbuild server/OmniSharp.sln',
-\   }
+\   },
 \ }
 
 NeoBundle 'alpaca-tc/html5.vim'
@@ -69,6 +68,8 @@ NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'wavded/vim-stylus'
+
+call neobundle#end()
 
 
 ""
