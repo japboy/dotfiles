@@ -17,7 +17,7 @@ call neobundle#begin('~/.vim/bundle/')
 " Bundles
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-NeoBundleLazy 'Shougo/vimproc', {
+NeoBundle 'Shougo/vimproc', {
 \   'build' : {
 \     'windows' : 'make -f make_mingw32.mak',
 \     'cygwin' : 'make -f make_cygwin.mak',
@@ -35,27 +35,9 @@ NeoBundleLazy 'OmniSharp/omnisharp-vim', {
 \   },
 \ }
 
-NeoBundle 'alpaca-tc/html5.vim'
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'aperezdc/vim-template'
-NeoBundle 'chase/vim-ansible-yaml'
-NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'editorconfig/editorconfig-vim'
-NeoBundle 'elzr/vim-json'
-NeoBundle 'gkz/vim-ls'
-NeoBundle 'groenewege/vim-less'
-NeoBundle 'hail2u/vim-css3-syntax'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'kongo2002/fsharp-vim'
-NeoBundle 'lambdatoast/elm.vim'
-NeoBundle 'leafgarland/typescript-vim'
-NeoBundle 'mintplant/vim-literate-coffeescript'
-NeoBundle 'nono/vim-handlebars'
-NeoBundle 'nvie/vim-flake8'
-NeoBundle 'OrangeT/vim-csharp'
-NeoBundle 'pangloss/vim-javascript'
-NeoBundle 'rizzatti/dash.vim'
-NeoBundle 'rizzatti/funcoo.vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplete.vim'
@@ -63,11 +45,28 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
-NeoBundle 'tikhomirov/vim-glsl'
 NeoBundle 'tpope/vim-dispatch'
-NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'wavded/vim-stylus'
+
+NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload': { 'filetypes': [ 'html', 'htm' ] } }
+NeoBundleLazy 'chase/vim-ansible-yaml', { 'autoload': { 'filetypes': [ 'yaml', 'yml' ] } }
+NeoBundleLazy 'digitaltoad/vim-jade', { 'autoload': { 'filetypes': [ 'jade' ] } }
+NeoBundleLazy 'elzr/vim-json', { 'autoload': { 'filetypes': [ 'json' ] } }
+NeoBundleLazy 'gkz/vim-ls', { 'autoload': { 'filetypes': [ 'ls' ] } }
+NeoBundleLazy 'groenewege/vim-less', { 'autoload': { 'filetypes': [ 'less' ] } }
+NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload': { 'filetypes': [ 'css' ] } }
+NeoBundleLazy 'kchmck/vim-coffee-script', { 'autoload': { 'filetypes': [ 'coffee' ] } }
+NeoBundleLazy 'kongo2002/fsharp-vim', { 'autoload': { 'filetypes': [ 'fs' ] } }
+NeoBundleLazy 'lambdatoast/elm.vim', { 'autoload': { 'filetypes': [ 'elm' ] } }
+NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload': { 'filetypes': [ 'ts' ] } }
+NeoBundleLazy 'mintplant/vim-literate-coffeescript', { 'autoload': { 'filetypes': [ 'coffee' ] } }
+NeoBundleLazy 'nono/vim-handlebars', { 'autoload': { 'filetypes': [ 'hbs' ] } }
+NeoBundleLazy 'nvie/vim-flake8', { 'autoload': { 'filetypes': [ 'py' ] } }
+NeoBundleLazy 'OrangeT/vim-csharp', { 'autoload': { 'filetypes': [ 'cs' ] } }
+NeoBundleLazy 'pangloss/vim-javascript', { 'autoload': { 'filetypes': [ 'js' ] } }
+NeoBundleLazy 'tikhomirov/vim-glsl', { 'autoload': { 'filetypes': [ 'frag', 'vert' ] } }
+NeoBundleLazy 'tpope/vim-haml', { 'autoload': { 'filetypes': [ 'haml' ] } }
+NeoBundleLazy 'wavded/vim-stylus', { 'autoload': { 'filetypes': [ 'styl' ] } }
 
 call neobundle#end()
 
@@ -141,8 +140,9 @@ else
 endif
 
 " Highlight characters over 80 chars
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
+set colorcolumn=80
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"match OverLength /\%81v.\+/
 
 " Highlight current line
 augroup CursorLine
