@@ -27,7 +27,7 @@ NeoBundle 'Shougo/vimproc', {
 \ }
 
 NeoBundleLazy 'OmniSharp/omnisharp-vim', {
-\   'autoload': { 'filetypes': [ 'cs' ] },
+\   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
 \   'build': {
 \     'windows' : 'msbuild server/OmniSharp.sln',
 \     'mac': 'xbuild server/OmniSharp.sln',
@@ -60,9 +60,10 @@ NeoBundleLazy 'kongo2002/fsharp-vim', { 'autoload': { 'filetypes': [ 'fs', 'fsi'
 NeoBundleLazy 'lambdatoast/elm.vim', { 'autoload': { 'filetypes': [ 'elm' ] } }
 NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload': { 'filetypes': [ 'ts' ] } }
 NeoBundleLazy 'mintplant/vim-literate-coffeescript', { 'autoload': { 'filetypes': [ 'coffee' ] } }
+NeoBundleLazy 'mxw/vim-jsx', { 'autoload': { 'filetypes': [ 'js' ] } }
 NeoBundleLazy 'nono/vim-handlebars', { 'autoload': { 'filetypes': [ 'hbs' ] } }
 NeoBundleLazy 'nvie/vim-flake8', { 'autoload': { 'filetypes': [ 'py' ] } }
-NeoBundleLazy 'OrangeT/vim-csharp', { 'autoload': { 'filetypes': [ 'cs' ] } }
+NeoBundleLazy 'OrangeT/vim-csharp', { 'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] } }
 NeoBundleLazy 'pangloss/vim-javascript', { 'autoload': { 'filetypes': [ 'js' ] } }
 NeoBundleLazy 'tikhomirov/vim-glsl', { 'autoload': { 'filetypes': [ 'frag', 'vert' ] } }
 NeoBundleLazy 'tpope/vim-haml', { 'autoload': { 'filetypes': [ 'haml' ] } }
