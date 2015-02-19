@@ -378,6 +378,7 @@ then
         'ansible'
         'awscli'
         'fabric'
+        'flake8'
     )
 
     for PIP in "${PIPS[@]}"
@@ -463,25 +464,22 @@ then
     unset NENV
 fi
 
-if ! nenv versions | grep 0.10.33 &> /dev/null
+if ! nenv versions | grep 0.12.0 &> /dev/null
 then
-    nenv install 0.10.33
+    nenv install 0.12.0
 fi
 
-nenv global 0.10.33
+nenv global 0.12.0
 nenv rehash
 
 # Install NPMs
 if which npm &> /dev/null
 then
     NPMS=(
-        'bower'
-        'coffee-script'
         'grunt-cli'
-        'grunt-init'
         'gulp'
         'hubot'
-        'LiveScript'
+        'wzrd'
     )
 
     for NPM in "${NPMS[@]}"
