@@ -26,29 +26,24 @@ NeoBundle 'Shougo/vimproc', {
 \   },
 \ }
 
-NeoBundleLazy 'OmniSharp/omnisharp-vim', {
-\   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
-\   'build': {
-\     'windows' : 'msbuild server/OmniSharp.sln',
-\     'mac': 'xbuild server/OmniSharp.sln',
-\     'unix': 'xbuild server/OmniSharp.sln',
-\   },
-\ }
-
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'aperezdc/vim-template'
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimshell'
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'tpope/vim-surround'
 
-NeoBundleLazy 'alpaca-tc/html5.vim', { 'autoload': { 'filetypes': [ 'html', 'htm' ] } }
+NeoBundleLazy 'Shougo/unite.vim' , { 'autoload' : { 'commands' : [ 'Unite' ] } }
+
+NeoBundleLazy 'Shougo/vimshell', {
+\   'autoload' : { 'commands' : [ 'VimShellBufferDir' ] },
+\   'depends': [ 'Shougo/vimproc' ],
+\ }
+
 NeoBundleLazy 'chase/vim-ansible-yaml', { 'autoload': { 'filetypes': [ 'yaml', 'yml' ] } }
 NeoBundleLazy 'digitaltoad/vim-jade', { 'autoload': { 'filetypes': [ 'jade' ] } }
 NeoBundleLazy 'elzr/vim-json', { 'autoload': { 'filetypes': [ 'json' ] } }
@@ -62,12 +57,21 @@ NeoBundleLazy 'leafgarland/typescript-vim', { 'autoload': { 'filetypes': [ 'ts' 
 NeoBundleLazy 'mintplant/vim-literate-coffeescript', { 'autoload': { 'filetypes': [ 'coffee' ] } }
 NeoBundleLazy 'mxw/vim-jsx', { 'autoload': { 'filetypes': [ 'js' ] } }
 NeoBundleLazy 'nono/vim-handlebars', { 'autoload': { 'filetypes': [ 'hbs' ] } }
-NeoBundleLazy 'nvie/vim-flake8', { 'autoload': { 'filetypes': [ 'py' ] } }
 NeoBundleLazy 'OrangeT/vim-csharp', { 'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] } }
+NeoBundleLazy 'othree/html5.vim', { 'autoload': { 'filetypes': [ 'html', 'htm' ] } }
 NeoBundleLazy 'pangloss/vim-javascript', { 'autoload': { 'filetypes': [ 'js' ] } }
 NeoBundleLazy 'tikhomirov/vim-glsl', { 'autoload': { 'filetypes': [ 'frag', 'vert' ] } }
 NeoBundleLazy 'tpope/vim-haml', { 'autoload': { 'filetypes': [ 'haml' ] } }
 NeoBundleLazy 'wavded/vim-stylus', { 'autoload': { 'filetypes': [ 'styl' ] } }
+
+NeoBundleLazy 'OmniSharp/omnisharp-vim', {
+\   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
+\   'build': {
+\     'windows' : 'msbuild server/OmniSharp.sln',
+\     'mac': 'xbuild server/OmniSharp.sln',
+\     'unix': 'xbuild server/OmniSharp.sln',
+\   },
+\ }
 
 call neobundle#end()
 
@@ -205,10 +209,10 @@ let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
 let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
+\   'default' : '',
+\   'vimshell' : $HOME.'/.vimshell_hist',
+\   'scheme' : $HOME.'/.gosh_completions',
+\ }
 
 " Define keyword.
 if !exists('g:neocomplete#keyword_patterns')
@@ -262,19 +266,24 @@ let g:syntastic_check_on_wq = 0
 " Unite.vim
 " https://github.com/Shougo/unite.vim
 
-let g:unite_enable_start_insert = 1
-let g:unite_enable_ignore_case = 1
-let g:unite_enable_smart_case = 1
+let s:bundle = neobundle#get('unite.vim')
+function! s:bundle.hooks.on_source(bundle)
 
-nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
-nnoremap <silent> ,cg :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
-nnoremap <silent> ,r  :<C-u>UniteResume search-buffer<CR>
+    let g:unite_enable_start_insert = 1
+    let g:unite_enable_ignore_case = 1
+    let g:unite_enable_smart_case = 1
 
-if executable('pt')
-  let g:unite_source_grep_command = 'pt'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor'
-  let g:unite_source_grep_recursive_opt = ''
-endif
+    nnoremap <silent> ,g  :<C-u>Unite grep:. -buffer-name=search-buffer<CR>
+    nnoremap <silent> ,cg :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+    nnoremap <silent> ,r  :<C-u>UniteResume search-buffer<CR>
+
+    if executable('pt')
+      let g:unite_source_grep_command = 'pt'
+      let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+      let g:unite_source_grep_recursive_opt = ''
+    endif
+
+endfunction
 
 
 ""
