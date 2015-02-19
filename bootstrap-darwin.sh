@@ -435,10 +435,18 @@ then
     for GEM in "${GEMS[@]}"
     do
         FORMULA=$(echo ${GEM} | cut -d ' ' -f 1)
-        gem install ${FORMULA}
+
+        if ! gem list --local | grep ${FORMULA} &> /dev/null
+        then
+            gem install ${FORMULA}
+        else
+            gem update ${FORMULA}
+        fi
+
         unset FORMULA
     done
 
+    gem cleanup
     rbenv rehash
 
     unset GEMS
@@ -485,7 +493,14 @@ then
     for NPM in "${NPMS[@]}"
     do
         FORMULA=$(echo ${NPM} | cut -d ' ' -f 1)
-        npm install -g ${FORMULA}
+
+        if ! npm list -g | grep ${FORMULA} &> /dev/null
+        then
+            npm install -g ${FORMULA}
+        else
+            npm update -g ${FORMULA}
+        fi
+
         unset FORMULA
     done
 
