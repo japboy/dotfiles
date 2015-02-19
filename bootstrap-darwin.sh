@@ -383,9 +383,7 @@ then
 
     for PIP in "${PIPS[@]}"
     do
-        FORMULA=$(echo ${PIP} | cut -d ' ' -f 1)
-        pip install --upgrade ${FORMULA}
-        unset FORMULA
+        pip install --upgrade ${PIP}
     done
 
     pyenv rehash
@@ -430,20 +428,17 @@ then
         'bundler'
         'foreman'
         'gisty'
+        'mdl'
     )
 
     for GEM in "${GEMS[@]}"
     do
-        FORMULA=$(echo ${GEM} | cut -d ' ' -f 1)
-
-        if ! gem list --local | grep ${FORMULA} &> /dev/null
+        if ! gem list --local | grep ${GEM} &> /dev/null
         then
-            gem install ${FORMULA}
+            gem install ${GEM}
         else
-            gem update ${FORMULA}
+            gem update ${GEM}
         fi
-
-        unset FORMULA
     done
 
     gem cleanup
@@ -484,24 +479,26 @@ nenv rehash
 if which npm &> /dev/null
 then
     NPMS=(
+        'coffee-script'
+        'coffeelint'
+        'csslint'
         'grunt-cli'
         'gulp'
         'hubot'
+        'js-yaml'
+        'jshint'
+        'jsonlint'
         'wzrd'
     )
 
     for NPM in "${NPMS[@]}"
     do
-        FORMULA=$(echo ${NPM} | cut -d ' ' -f 1)
-
-        if ! npm list -g | grep ${FORMULA} &> /dev/null
+        if ! npm list -g | grep ${NPM} &> /dev/null
         then
-            npm install -g ${FORMULA}
+            npm install -g ${NPM}
         else
-            npm update -g ${FORMULA}
+            npm update -g ${NPM}
         fi
-
-        unset FORMULA
     done
 
     nenv rehash
