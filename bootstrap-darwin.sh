@@ -482,11 +482,11 @@ then
         'coffee-script'
         'coffeelint'
         'csslint'
+        'eslint'
         'grunt-cli'
         'gulp'
         'hubot'
         'js-yaml'
-        'jshint'
         'jsonlint'
         'wzrd'
     )
