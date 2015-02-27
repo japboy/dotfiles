@@ -36,6 +36,7 @@
   "rules": {
     "strict": [ 2, "global" ],
     "no-unused-vars": [ 1, {"vars": "all", "args": "after-used"} ],
+    "quotes": [ 1, "single", "avoid-escape" ],
     "max-len": [ 1, 80, 2 ]
   }
 }
