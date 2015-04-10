@@ -455,6 +455,7 @@ then
     if [ ! -d ${NDENV} ]
     then
         git clone git://github.com/riywo/ndenv.git ${NDENV}
+        git clone git://github.com/riywo/node-build.git ${NDENV}/plugins/node-build
     else
         cd ${NDENV}
         git pull
