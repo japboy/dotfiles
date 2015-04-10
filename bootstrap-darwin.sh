@@ -447,33 +447,33 @@ then
     unset GEMS
 fi
 
-# Install Node.js through `nenv` if not exists
-if ! which nenv &> /dev/null
+# Install Node.js through `ndenv` if not exists
+if ! which ndenv &> /dev/null
 then
-    NENV="${HOME}/.nenv"
+    NDENV="${HOME}/.ndenv"
 
-    if [ ! -d ${NENV} ]
+    if [ ! -d ${NDENV} ]
     then
-        git clone git://github.com/ryuone/nenv.git ${NENV}
+        git clone git://github.com/riywo/ndenv.git ${NDENV}
     else
-        cd ${NENV}
+        cd ${NDENV}
         git pull
         cd ${CWD}
     fi
 
-    export PATH="${NENV}/bin:${PATH}"
-    eval "$(nenv init -)"
+    export PATH="${NDENV}/bin:${PATH}"
+    eval "$(ndenv init -)"
 
-    unset NENV
+    unset NDENV
 fi
 
-if ! nenv versions | grep 0.12.0 &> /dev/null
+if ! ndenv versions | grep 0.12.0 &> /dev/null
 then
-    nenv install 0.12.0
+    ndenv install 0.12.0
 fi
 
-nenv global 0.12.0
-nenv rehash
+ndenv global 0.12.0
+ndenv rehash
 
 # Install NPMs
 if which npm &> /dev/null
@@ -483,12 +483,13 @@ then
         'coffeelint'
         'csslint'
         'eslint'
+        'generator-hubot'
         'grunt-cli'
         'gulp'
-        'hubot'
         'js-yaml'
         'jsonlint'
         'wzrd'
+        'yo'
     )
 
     for NPM in "${NPMS[@]}"
@@ -501,7 +502,7 @@ then
         fi
     done
 
-    nenv rehash
+    ndenv rehash
 
     unset NPMS NPM
 fi

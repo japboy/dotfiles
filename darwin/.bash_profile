@@ -88,10 +88,10 @@ export PATH="${HOME}/.rbenv/bin:${PATH}"
 eval "$(rbenv init -)"
 [ -f "${HOME}/.rbenv/completions/rbenv.bash" ] && source "${HOME}/.rbenv/completions/rbenv.bash"
 
-# nenv
-export PATH="${HOME}/.nenv/bin:${PATH}"
-eval "$(nenv init -)"
-[ -f "${HOME}/.nenv/completions/nenv.bash" ] && source "${HOME}/.nenv/completions/nenv.bash"
+# ndenv
+export PATH="${HOME}/.ndenv/bin:${PATH}"
+eval "$(ndenv init -)"
+[ -f "${HOME}/.ndenv/completions/ndenv.bash" ] && source "${HOME}/.ndenv/completions/ndenv.bash"
 
 
 ##
