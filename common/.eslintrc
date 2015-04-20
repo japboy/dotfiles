@@ -22,6 +22,12 @@
     "globalReturn": true,
     "jsx": true
   },
+  {
+    "parser": "babel-eslint",
+    "rules": {
+      "strict": 0
+    }
+  },
   "env": {
     "browser": true,
     "node": true,

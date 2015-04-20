@@ -480,6 +480,7 @@ ndenv rehash
 if which npm &> /dev/null
 then
     NPMS=(
+        'babel-eslint'
         'coffee-script'
         'coffeelint'
         'csslint'
@@ -489,6 +490,7 @@ then
         'gulp'
         'js-yaml'
         'jsonlint'
+        'LiveScript'
         'wzrd'
         'yo'
     )
