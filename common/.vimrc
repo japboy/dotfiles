@@ -103,7 +103,7 @@ set listchars=tab:..,trail:~
 
 set foldmethod=syntax
 
-set clipboard=unnamed   " Enable to share clipboard with GVim & OS
+set clipboard=unnamed,autoselect   " Enable to share clipboard with GVim & OS
 
 set laststatus=2
 set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true':'false').']\ ff=['.&ff.']'}
@@ -127,6 +127,21 @@ set printmbfont=r:Hiragino_Maru_Gothic_Pro
 set backspace=indent,eol,start
 
 set ambiwidth=double
+
+set scrolloff=5         " Set scroll top position to line 5
+
+
+""
+" My shorthands
+
+nnoremap <ESC><ESC> :nohlsearch<CR>
+
+nmap n nzz
+nmap N Nzz
+nmap * *zz
+nmap # #zz
+nmap g* g*zz
+nmap g# g#zz
 
 
 ""
