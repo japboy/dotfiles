@@ -134,7 +134,7 @@ set scrolloff=5         " Set scroll top position to line 5
 ""
 " My shorthands
 
-nnoremap <ESC><ESC> :nohlsearch<CR>
+"nnoremap <ESC><ESC> :nohlsearch<CR>
 
 nmap n nzz
 nmap N Nzz
