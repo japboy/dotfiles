@@ -75,10 +75,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.7.3"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.7.5"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -L -O http://www.clamxav.com/downloads/ClamXav_2.7.3.dmg
-    hdiutil attach ClamXav_2.7.3.dmg
+    curl -L -O https://www.clamxav.com/downloads/ClamXav_2.7.5.dmg
+    hdiutil attach ClamXav_2.7.5.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -95,8 +95,8 @@ fi
 # Install Asepsis
 if ! which asepsisctl &> /dev/null
 then
-    curl -L -O http://downloads.binaryage.com/Asepsis-1.5.dmg
-    hdiutil attach Asepsis-1.5.dmg
+    curl -L -O http://downloads.binaryage.com/Asepsis-1.5.1.dmg
+    hdiutil attach Asepsis-1.5.1.dmg
     sudo installer -pkg /Volumes/Asepsis/Asepsis.mpkg -target /
     hdiutil detach /Volumes/Asepsis
 fi
@@ -480,6 +480,7 @@ ndenv rehash
 if which npm &> /dev/null
 then
     NPMS=(
+        'LiveScript'
         'babel-eslint'
         'coffee-script'
         'coffeelint'
@@ -490,7 +491,7 @@ then
         'gulp'
         'js-yaml'
         'jsonlint'
-        'LiveScript'
+        'mocha'
         'wzrd'
         'yo'
     )
