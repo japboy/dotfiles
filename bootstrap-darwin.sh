@@ -481,7 +481,6 @@ if which npm &> /dev/null
 then
     NPMS=(
         'LiveScript'
-        'babel-eslint'
         'coffee-script'
         'coffeelint'
         'csslint'
