@@ -3,6 +3,7 @@
     "arrowFunctions": true,
     "binaryLiterals": true,
     "blockBindings": true,
+    "classes": true,
     "defaultParams": true,
     "destructuring": true,
     "forOf": true,
@@ -23,12 +24,6 @@
     "globalReturn": true,
     "jsx": true
   },
-  {
-    "parser": "babel-eslint",
-    "rules": {
-      "strict": 0
-    }
-  },
   "env": {
     "browser": true,
     "node": true,
@@ -43,8 +38,8 @@
   "rules": {
     "curly": [ 1, "multi-line" ],
     "yoda": "always",
-    "strict": [ 2, "global" ],
-    "no-unused-vars": [ 1, { "vars": "all", "args": "after-used" } ],
+    "strict": 2,
+    "no-unused-vars": [ 1, { "vars": "local", "args": "none" } ],
     "quotes": [ 1, "single", "avoid-escape" ],
     "max-len": [ 1, 100, 2 ]
   }
