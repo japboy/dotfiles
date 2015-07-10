@@ -123,7 +123,10 @@ alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A
 #alias subl="${HOME}/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
 
 # TrueCrypt
-alias truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
+#alias truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
+
+# Copy my global IP to clipboard
+alias myip='curl http://checkip.amazonaws.com/ | pbcopy'
 
 
 ##
