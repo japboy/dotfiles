@@ -120,30 +120,21 @@ then
 fi
 
 # Install VirtualBox
-if [[ ! -d /Applications/VirtualBox.app || '4.3.20r96996' != $(VBoxManage --version) ]]
+if [[ ! -d /Applications/VirtualBox.app || '5.0.0r101573' != $(VBoxManage --version) ]]
 then
-    curl -L -O http://download.virtualbox.org/virtualbox/4.3.20/VirtualBox-4.3.20-96996-OSX.dmg
-    hdiutil attach VirtualBox-4.3.20-96996-OSX.dmg
+    curl -L -O http://download.virtualbox.org/virtualbox/5.0.0/VirtualBox-5.0.0-101573-OSX.dmg
+    hdiutil attach VirtualBox-5.0.0-101573-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
 fi
 
 # Install Vagrant
-if [[ 'Vagrant 1.7.2' != $(vagrant --version) ]]
+if [[ 'Vagrant 1.7.3' != $(vagrant --version) ]]
 then
-    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2.dmg
-    hdiutil attach vagrant_1.7.2.dmg
+    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.3.dmg
+    hdiutil attach vagrant_1.7.3.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
-fi
-
-# Install Unity
-if [[ ! -d /Applications/Unity || 'kMDItemVersion = "Unity version 4.6.1f1"' != $(mdls -name kMDItemVersion /Applications/Unity/Unity.app) ]]
-then
-    curl -L -O http://netstorage.unity3d.com/unity/unity-4.6.1.dmg
-    hdiutil attach unity-4.6.1.dmg
-    sudo installer -pkg /Volumes/Unity\ Installer/Unity.pkg -target /
-    hdiutil detach /Volumes/Unity\ Installer
 fi
 
 # Check if QuickLook directory exists
