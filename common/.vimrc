@@ -277,7 +277,7 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_coffee_coffeelint_args = '--csv --file .coffeelintrc'
+let g:syntastic_coffee_coffeelint_args = '--reporter csv --file .coffeelintrc'
 
 
 ""
