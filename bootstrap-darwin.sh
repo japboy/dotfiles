@@ -120,19 +120,19 @@ then
 fi
 
 # Install VirtualBox
-if [[ ! -d /Applications/VirtualBox.app || '5.0.0r101573' != $(VBoxManage --version) ]]
+if [[ ! -d /Applications/VirtualBox.app || '5.0.4r102546' != $(VBoxManage --version) ]]
 then
-    curl -L -O http://download.virtualbox.org/virtualbox/5.0.0/VirtualBox-5.0.0-101573-OSX.dmg
-    hdiutil attach VirtualBox-5.0.0-101573-OSX.dmg
+    curl -L -O http://download.virtualbox.org/virtualbox/5.0.4/VirtualBox-5.0.4-102546-OSX.dmg
+    hdiutil attach VirtualBox-5.0.4-102546-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
 fi
 
 # Install Vagrant
-if [[ 'Vagrant 1.7.3' != $(vagrant --version) ]]
+if [[ 'Vagrant 1.7.4' != $(vagrant --version) ]]
 then
-    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.3.dmg
-    hdiutil attach vagrant_1.7.3.dmg
+    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.4.dmg
+    hdiutil attach vagrant_1.7.4.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
 fi
@@ -459,12 +459,12 @@ then
     unset NDENV
 fi
 
-if ! ndenv versions | grep 0.12.0 &> /dev/null
+if ! ndenv versions | grep v4.0.0 &> /dev/null
 then
-    ndenv install 0.12.0
+    ndenv install v4.0.0
 fi
 
-ndenv global 0.12.0
+ndenv global v4.0.0
 ndenv rehash
 
 # Install NPMs
