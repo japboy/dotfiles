@@ -75,10 +75,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.7.5"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.5"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -L -O https://www.clamxav.com/downloads/ClamXav_2.7.5.dmg
-    hdiutil attach ClamXav_2.7.5.dmg
+    curl -L -O https://www.clamxav.com/downloads/ClamXav_2.8.5.dmg
+    hdiutil attach ClamXav_2.8.5.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -244,6 +244,7 @@ BREWS=(
     'perl-build'
     'pip-completion'
     'pkg-config'
+    'purescript'
     're2c'
     'readline'
     'rmtrash'
@@ -459,12 +460,12 @@ then
     unset NDENV
 fi
 
-if ! ndenv versions | grep v4.0.0 &> /dev/null
+if ! ndenv versions | grep v4.1.1 &> /dev/null
 then
-    ndenv install v4.0.0
+    ndenv install v4.1.1
 fi
 
-ndenv global v4.0.0
+ndenv global v4.1.1
 ndenv rehash
 
 # Install NPMs
@@ -482,6 +483,7 @@ then
         'js-yaml'
         'jsonlint'
         'mocha'
+        'pulp'
         'wzrd'
         'yo'
     )
