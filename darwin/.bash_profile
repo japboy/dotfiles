@@ -119,14 +119,11 @@ fi
 # OS X Wi-Fi utility
 alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport'
 
-# Sublime Text 2
-#alias subl="${HOME}/Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl"
-
-# TrueCrypt
-#alias truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
-
 # Copy my global IP to clipboard
 alias myip='curl http://checkip.amazonaws.com/ | pbcopy'
+
+# Visual Studio Code alias
+code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
 
 
 ##
