@@ -67,6 +67,9 @@ export PATH="$(brew --prefix ccache)/libexec:${PATH}"
 # GCC
 export PATH="$(brew --prefix apple-gcc42)/bin:${PATH}"
 
+# Fsharp
+export MONO_GAC_PREFIX="$(brew --prefix)"
+
 # plenv
 export PATH="${HOME}/.plenv/bin:${PATH}"
 eval "$(plenv init -)"
