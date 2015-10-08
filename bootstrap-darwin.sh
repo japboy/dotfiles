@@ -275,52 +275,44 @@ unset BREW BREWS
 brew cleanup
 
 # Install Perl through `plenv` if not exists
+PLENV="${HOME}/.plenv"
+PLVER='5.23.3'
+
 if ! which plenv &> /dev/null
 then
-    PLENV="${HOME}/.plenv"
-
-    if [ ! -d ${PLENV} ]
-    then
-        git clone git://github.com/tokuhirom/plenv.git ${PLENV}
-    else
-        cd ${PLENV}
-        git pull
-        cd ${CWD}
-    fi
-
+    [ ! -d ${PLENV} ] && git clone git://github.com/tokuhirom/plenv.git ${PLENV}
     export PATH="${PLENV}/bin:${PATH}"
     eval "$(plenv init -)"
-
-    unset PLENV
+else
+    cd ${PLENV}
+    git pull
+    cd ${CWD}
 fi
 
-if ! plenv versions | grep 5.21.5 &> /dev/null
+if ! plenv versions | grep ${PLVER} &> /dev/null
 then
-    plenv install 5.21.5
+    plenv install ${PLVER}
 fi
 
-plenv global 5.21.5
+plenv global ${PLVER}
 plenv rehash
+
+unset PLENV PLVER
 
 # Install PHP through `phpenv` if not exists
 # MUST be done before `rbenv` installation
+PHPENV="${HOME}/.phpenv"
+PHPVER='system'
+
 if ! which phpenv &> /dev/null
 then
-    PHPENV="${HOME}/.phpenv"
-
-    if [ ! -d ${PHPENV} ]
-    then
-        git clone git://github.com/phpenv/phpenv.git ${PHPENV}
-    else
-        cd ${PHPENV}
-        git pull
-        cd ${CWD}
-    fi
-
+    [ ! -d ${PHPENV} ] && git clone git://github.com/phpenv/phpenv.git ${PHPENV}
     export PATH="${PHPENV}/bin:${PATH}"
     eval "$(phpenv init -)"
-
-    unset PHPENV
+else
+    cd ${PHPENV}
+    git pull
+    cd ${CWD}
 fi
 
 if ! phpenv versions | grep php-5.5.7 &> /dev/null
@@ -333,38 +325,37 @@ then
     phpenv install php-5.5.7
 fi
 
-phpenv global system
+phpenv global ${PHPVER}
 phpenv rehash
 
+unset PHPENV PHPVER
+
 # Install Python through `pyenv` if not exists
+PYENV="${HOME}/.pyenv"
+PYVER='3.5.0'
+
 if ! which pyenv &> /dev/null
 then
-    PYENV="${HOME}/.pyenv"
-
-    if [ ! -d ${PYENV} ]
-    then
-        git clone git://github.com/yyuu/pyenv.git ${PYENV}
-    else
-        cd ${PYENV}
-        git pull
-        cd ${CWD}
-    fi
-
+    [ ! -d ${PYENV} ] && git clone git://github.com/yyuu/pyenv.git ${PYENV}
     export PATH="${PYENV}/bin:${PATH}"
     eval "$(pyenv init -)"
-
-    unset PYENV
+else
+    cd ${PYENV}
+    git pull
+    cd ${CWD}
 fi
 
-if ! pyenv versions | grep 2.7.8 &> /dev/null
+if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
     CFLAGS="-I$(brew --prefix readline)/include" \
     LDFLAGS="-L$(brew --prefix readline)/lib" \
-    pyenv install 2.7.8 3.4.1
+    pyenv install ${PYVER}
 fi
 
-pyenv global 2.7.8
+pyenv global ${PYVER}
 pyenv rehash
+
+unset PYENV PYVER
 
 # Install PyPIs
 if which pip &> /dev/null
@@ -387,34 +378,31 @@ then
 fi
 
 # Install Ruby through `rbenv` if not exists
+RBENV="${HOME}/.rbenv"
+RBVER='2.2.3'
+
 if ! which rbenv &> /dev/null
 then
-    RBENV="${HOME}/.rbenv"
-
-    if [ ! -d ${RBENV} ]
-    then
-        git clone git://github.com/sstephenson/rbenv.git ${RBENV}
-    else
-        cd ${RBENV}
-        git pull
-        cd ${CWD}
-    fi
-
+    [ ! -d ${RBENV} ] && git clone git://github.com/sstephenson/rbenv.git ${RBENV}
     export PATH="${RBENV}/bin:${PATH}"
     eval "$(rbenv init -)"
-
-    unset RBENV
+else
+    cd ${RBENV}
+    git pull
+    cd ${CWD}
 fi
 
-if ! rbenv versions | grep 2.1.3 &> /dev/null
+if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
     CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
                     --with-readline-dir=$(brew --prefix readline)" \
-    rbenv install 2.1.3
+    rbenv install ${RBVER}
 fi
 
-rbenv global 2.1.3
+rbenv global ${RBVER}
 rbenv rehash
+
+unset RBENV RBVER
 
 # Install RubyGems
 if which gem &> /dev/null
@@ -443,33 +431,35 @@ then
 fi
 
 # Install Node.js through `ndenv` if not exists
+NDENV="${HOME}/.ndenv"
+NDVER='v4.1.1'
+
 if ! which ndenv &> /dev/null
 then
-    NDENV="${HOME}/.ndenv"
-
     if [ ! -d ${NDENV} ]
     then
         git clone git://github.com/riywo/ndenv.git ${NDENV}
         git clone git://github.com/riywo/node-build.git ${NDENV}/plugins/node-build
-    else
-        cd ${NDENV}
-        git pull
-        cd ${CWD}
     fi
-
     export PATH="${NDENV}/bin:${PATH}"
     eval "$(ndenv init -)"
-
-    unset NDENV
+else
+    cd ${NDENV}
+    git pull
+    cd ${NDENV}/plugins/node-build
+    git pull
+    cd ${CWD}
 fi
 
-if ! ndenv versions | grep v4.1.1 &> /dev/null
+if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
-    ndenv install v4.1.1
+    ndenv install ${NDVER}
 fi
 
-ndenv global v4.1.1
+ndenv global ${NDVER}
 ndenv rehash
+
+unset NDENV NDVER
 
 # Install NPMs
 if which npm &> /dev/null
