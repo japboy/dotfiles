@@ -254,7 +254,7 @@ BREWS=(
     'ruby-build'
     'scons'
     'vagrant-completion'
-    'vim --with-client-server --with-lua --with-mzscheme --with-perl'
+    'vim --disable-nls --override-system-vi --enable-interp=lua,mzscheme,tcl,perl,python,python3,ruby'
     'webp'
 )
 
