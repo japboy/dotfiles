@@ -77,25 +77,25 @@ cd ${HOME}/Downloads
 # Install ClamXav
 if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.5"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -L -O https://www.clamxav.com/downloads/ClamXav_2.8.5.dmg
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.5.dmg
     hdiutil attach ClamXav_2.8.5.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
 
 # Install XQuartz
-if [[ ! -d /Applications/Utilities/XQuartz.app || 'kMDItemVersion = "2.7.7"' != $(mdls -name kMDItemVersion /Applications/Utilities/XQuartz.app) ]]
+if [[ ! -d /Applications/Utilities/XQuartz.app || 'kMDItemVersion = "2.7.8"' != $(mdls -name kMDItemVersion /Applications/Utilities/XQuartz.app) ]]
 then
-    curl -L -O http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.7.dmg
-    hdiutil attach XQuartz-2.7.7.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.7.7/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.7.7
+    curl -LO http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.8.dmg
+    hdiutil attach XQuartz-2.7.8.dmg
+    sudo installer -pkg /Volumes/XQuartz-2.7.8/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.7.8
 fi
 
 # Install Asepsis
 if ! which asepsisctl &> /dev/null
 then
-    curl -L -O http://downloads.binaryage.com/Asepsis-1.5.2.dmg
+    curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
     hdiutil attach Asepsis-1.5.2.dmg
     sudo installer -pkg /Volumes/Asepsis/Asepsis.mpkg -target /
     hdiutil detach /Volumes/Asepsis
@@ -104,7 +104,7 @@ fi
 # Install TotalTerminal
 if [[ ! -d /Applications/TotalTerminal.app || 'kMDItemVersion = "1.5.4"' != $(mdls -name kMDItemVersion /Applications/TotalTerminal.app) ]]
 then
-    curl -L -O http://downloads.binaryage.com/TotalTerminal-1.5.4.dmg
+    curl -LO http://downloads.binaryage.com/TotalTerminal-1.5.4.dmg
     hdiutil attach TotalTerminal-1.5.4.dmg
     sudo installer -pkg /Volumes/TotalTerminal/TotalTerminal.pkg -target /
     hdiutil detach /Volumes/TotalTerminal
@@ -113,7 +113,7 @@ fi
 # Install XtraFinder
 if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.5"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
-    curl -L -O http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
+    curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
     sudo installer -pkg /Volumes/XtraFinder/XtraFinder.pkg -target /
     hdiutil detach /Volumes/XtraFinder
@@ -122,7 +122,7 @@ fi
 # Install VirtualBox
 if [[ ! -d /Applications/VirtualBox.app || '5.0.6r103037' != $(VBoxManage --version) ]]
 then
-    curl -L -O http://download.virtualbox.org/virtualbox/5.0.6/VirtualBox-5.0.6-103037-OSX.dmg
+    curl -LO http://download.virtualbox.org/virtualbox/5.0.6/VirtualBox-5.0.6-103037-OSX.dmg
     hdiutil attach VirtualBox-5.0.6-103037-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
@@ -131,7 +131,7 @@ fi
 # Install Vagrant
 if [[ 'Vagrant 1.7.4' != $(vagrant --version) ]]
 then
-    curl -L -O https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.4.dmg
+    curl -LO https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.4.dmg
     hdiutil attach vagrant_1.7.4.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
@@ -146,14 +146,14 @@ fi
 # Install QuickLook qlImageSize
 if [ ! -d /Library/QuickLook/qlImageSize.qlgenerator ]
 then
-    curl -L -O http://repo.whine.fr/qlImageSize.pkg
+    curl -LO http://repo.whine.fr/qlImageSize.pkg
     sudo installer -pkg ${HOME}/Downloads/qlImageSize.pkg -target /
 fi
 
 # Install QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
 then
-    curl -L -O https://github.com/whomwah/qlstephen/releases/download/1.4.2/QLStephen.qlgenerator.1.4.2.zip
+    curl -LO https://github.com/whomwah/qlstephen/releases/download/1.4.2/QLStephen.qlgenerator.1.4.2.zip
     unzip QLStephen.qlgenerator.1.4.2.zip -d ${HOME}/Library/QuickLook/
 fi
 
@@ -239,6 +239,7 @@ BREWS=(
     'libjpeg'
     'libpng'
     'libtiff'
+    'lua --with-completion'
     'mcrypt'
     'mercurial'
     'mono'
@@ -332,7 +333,7 @@ unset PHPENV PHPVER
 
 # Install Python through `pyenv` if not exists
 PYENV="${HOME}/.pyenv"
-PYVER='3.5.0'
+PYVER='2.7.10'
 
 if ! which pyenv &> /dev/null
 then
