@@ -269,7 +269,7 @@ BREWS=(
     'ruby-build'
     'scons'
     'vagrant-completion'
-    'vim --disable-nls --override-system-vi --enable-interp=lua,mzscheme,tcl,perl,python,python3,ruby'
+    'vim --disable-nls --override-system-vi --with-lua --with-luajit --with-mzscheme --with-python=${HOME}/.pyenv/shims/python --with-tcl'
     'webp'
 )
 
