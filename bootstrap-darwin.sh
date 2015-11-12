@@ -75,10 +75,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.5"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.7"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.5.dmg
-    hdiutil attach ClamXav_2.8.5.dmg
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.7.dmg
+    hdiutil attach ClamXav_2.8.7.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -111,7 +111,7 @@ then
 fi
 
 # Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.5"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.6"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -135,6 +135,20 @@ then
     hdiutil attach vagrant_1.7.4.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
+fi
+
+# Install AppCleaner
+if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.1.1"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
+then
+    curl -LO http://www.freemacsoft.net/downloads/AppCleaner_3.1.1.zip
+    unzip -fo -d ~/Applications/ ./AppCleaner_3.1.1.zip
+fi
+
+# Install f.lux
+if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "36.5"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
+then
+    curl -LO https://justgetflux.com/mac/Flux.zip
+    unzip -fo -d ~/Applications/ ./Flux.zip
 fi
 
 # Check if QuickLook directory exists

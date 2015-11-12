@@ -52,7 +52,7 @@ Requirements
 
 ### Mac OS X
 
-* Mac OS X 10.9 (Mavericks)
+* Mac OS X 10.10 (Yosemite)
 * [Xcode](http://itunes.apple.com/en/app/xcode/id497799835)
 * [Command Line Tools](http://developer.apple.com/xcode/) (if you prefer to not installing entire Xcode SDK)
 
