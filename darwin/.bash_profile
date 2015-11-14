@@ -143,10 +143,7 @@ export EDITOR='vim'
 # Generic Colouriser
 # `brew install grc` first!
 
-if [ -f "$(brew --prefix)/etc/grc.bashrc" ]
-then
-    source "$(brew --prefix)/etc/grc.bashrc"
-fi
+[ -f "$(brew --prefix)/etc/grc.bashrc" ] && source "$(brew --prefix)/etc/grc.bashrc"
 
 
 ##
@@ -165,13 +162,9 @@ fi
 
 
 ##
-# gibo completion
+# gibo
 # https://github.com/simonwhitaker/gitignore-boilerplates
-
-if [ -f "$(brew --prefix)/etc/bash_completion.d/gibo-completion.bash" ]
-then
-    source "$(brew --prefix)/etc/bash_completion.d/gibo-completion.bash"
-fi
+[ -f "$(brew --prefix)/etc/bash_completion.d/gibo-completion.bash" ] && source "$(brew --prefix)/etc/bash_completion.d/gibo-completion.bash"
 
 
 ##
@@ -182,8 +175,22 @@ export GISTY_DIR="${HOME}/Dropbox/Workspace/com.github.gist"
 export GISTY_SSL_VERIFY='NONE'
 
 
-# Load credential settings
-if [ -f "${HOME}/.bash_extras" ]
-then
-    source "${HOME}/.bash_extras"
-fi
+##
+# Bash completions
+# https://github.com/Homebrew/homebrew-completions
+
+# Python Package Index completion
+[ -f "$(brew --prefix)/etc/bash_completion.d/pip" ] && "$(brew --prefix)/etc/bash_completion.d/pip"
+
+# RubyGems completion
+[ -f "$(brew --prefix)/etc/bash_completion.d/gem" ] && "$(brew --prefix)/etc/bash_completion.d/gem"
+
+# Vagrant completion
+[ -f "$(brew --prefix)/etc/bash_completion.d/vagrant" ] && "$(brew --prefix)/etc/bash_completion.d/vagrant"
+
+# Docker completion
+[ -f "$(brew --prefix)/etc/bash_completion.d/docker" ] && "$(brew --prefix)/etc/bash_completion.d/docker"
+
+
+# Load extra settings
+[ -f "${HOME}/.bash_extras" ] && source "${HOME}/.bash_extras"

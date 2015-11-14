@@ -241,6 +241,7 @@ BREWS=(
     'bison'
     'ccache'
     'cmake'
+    'docker-completion'
     'fsharp'
     'gem-completion'
     'gettext'
