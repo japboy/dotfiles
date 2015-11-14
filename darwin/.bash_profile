@@ -180,16 +180,16 @@ export GISTY_SSL_VERIFY='NONE'
 # https://github.com/Homebrew/homebrew-completions
 
 # Python Package Index completion
-[ -f "$(brew --prefix)/etc/bash_completion.d/pip" ] && "$(brew --prefix)/etc/bash_completion.d/pip"
+[ -f "$(brew --prefix)/etc/bash_completion.d/pip" ] && source "$(brew --prefix)/etc/bash_completion.d/pip"
 
 # RubyGems completion
-[ -f "$(brew --prefix)/etc/bash_completion.d/gem" ] && "$(brew --prefix)/etc/bash_completion.d/gem"
+[ -f "$(brew --prefix)/etc/bash_completion.d/gem" ] && source "$(brew --prefix)/etc/bash_completion.d/gem"
 
 # Vagrant completion
-[ -f "$(brew --prefix)/etc/bash_completion.d/vagrant" ] && "$(brew --prefix)/etc/bash_completion.d/vagrant"
+[ -f "$(brew --prefix)/etc/bash_completion.d/vagrant" ] && source "$(brew --prefix)/etc/bash_completion.d/vagrant"
 
 # Docker completion
-[ -f "$(brew --prefix)/etc/bash_completion.d/docker" ] && "$(brew --prefix)/etc/bash_completion.d/docker"
+[ -f "$(brew --prefix)/etc/bash_completion.d/docker" ] && source "$(brew --prefix)/etc/bash_completion.d/docker"
 
 
 # Load extra settings
