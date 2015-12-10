@@ -75,10 +75,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.7"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.8"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.7.dmg
-    hdiutil attach ClamXav_2.8.7.dmg
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.8.dmg
+    hdiutil attach ClamXav_2.8.8.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -101,17 +101,8 @@ then
     hdiutil detach /Volumes/Asepsis
 fi
 
-# Install TotalTerminal
-if [[ ! -d /Applications/TotalTerminal.app || 'kMDItemVersion = "1.5.4"' != $(mdls -name kMDItemVersion /Applications/TotalTerminal.app) ]]
-then
-    curl -LO http://downloads.binaryage.com/TotalTerminal-1.5.4.dmg
-    hdiutil attach TotalTerminal-1.5.4.dmg
-    sudo installer -pkg /Volumes/TotalTerminal/TotalTerminal.pkg -target /
-    hdiutil detach /Volumes/TotalTerminal
-fi
-
 # Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.6"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.8"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -137,11 +128,18 @@ then
     hdiutil detach /Volumes/Vagrant
 fi
 
-# Install AppCleaner
-if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.1.1"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
+# Install iTerm2
+if [[ ! -d ~/Applications/iTerm.app || 'kMDItemVersion = "2.1.4"' != $(mdls -name kMDItemVersion ~/Applications/iTerm.app) ]]
 then
-    curl -LO http://www.freemacsoft.net/downloads/AppCleaner_3.1.1.zip
-    unzip -fo -d ~/Applications/ ./AppCleaner_3.1.1.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-2_1_4.zip
+    unzip -fo -d ~/Applications/ ./iTerm2-2_1_4.zip
+fi
+
+# Install AppCleaner
+if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.2.1"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
+then
+    curl -LO http://www.freemacsoft.net/downloads/AppCleaner_3.2.1.zip
+    unzip -fo -d ~/Applications/ ./AppCleaner_3.2.1.zip
 fi
 
 # Install f.lux
@@ -448,7 +446,7 @@ fi
 
 # Install Node.js through `ndenv` if not exists
 NDENV="${HOME}/.ndenv"
-NDVER='v4.1.1'
+NDVER='v4.2.3'
 
 if ! which ndenv &> /dev/null
 then
@@ -481,19 +479,14 @@ unset NDENV NDVER
 if which npm &> /dev/null
 then
     NPMS=(
-        'LiveScript'
         'coffee-script'
         'coffeelint'
         'csslint'
         'eslint'
-        'generator-hubot'
         'grunt-cli'
         'gulp'
         'js-yaml'
         'jsonlint'
-        'mocha'
-        'pulp'
-        'wzrd'
         'yo'
     )
 
