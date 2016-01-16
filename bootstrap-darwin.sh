@@ -97,7 +97,7 @@ if ! which asepsisctl &> /dev/null
 then
     curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
     hdiutil attach Asepsis-1.5.2.dmg
-    sudo installer -pkg /Volumes/Asepsis/Asepsis.mpkg -target /
+    sudo installer -pkg /Volumes/Asepsis/Asepsis.pkg -target /
     hdiutil detach /Volumes/Asepsis
 fi
 
