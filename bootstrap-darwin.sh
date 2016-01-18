@@ -505,6 +505,12 @@ then
     unset NPMS NPM
 fi
 
+# Create `Applications` directory under the home directory if it doesn't exist
+[ ! -d "${HOME}/Applications" ] && mkdir ${HOME}/Applications
+
+# Create `Developer` directory if it doesn't exist
+[ ! -d "${HOME}/Developer" ] && mkdir -p ${HOME}/Developer/bin ${HOME}/Developer/share/man
+
 # Setup default lagunage
 #sudo languagesetup
 
