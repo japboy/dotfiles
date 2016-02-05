@@ -143,7 +143,7 @@ then
 fi
 
 # Install f.lux
-if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "36.8"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
+if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "36.6"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
 then
     curl -LO https://justgetflux.com/mac/Flux.zip
     unzip -fo -d ~/Applications/ ./Flux.zip
@@ -373,10 +373,10 @@ unset PYENV PYVER
 if which pip &> /dev/null
 then
     PIPS=(
-        'ansible'
         'awscli'
         'fabric'
         'flake8'
+        'sphinx'
     )
 
     for PIP in "${PIPS[@]}"
