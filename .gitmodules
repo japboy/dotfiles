@@ -1,6 +1,3 @@
-[submodule "common/opt/powerline"]
-	path = common/opt/powerline
-	url = https://github.com/Lokaltog/powerline.git
 [submodule "common/opt/solarized"]
 	path = common/opt/solarized
 	url = https://github.com/altercation/solarized.git
