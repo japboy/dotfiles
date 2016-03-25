@@ -61,6 +61,9 @@ export PKG_CONFIG_PATH="/opt/X11/lib/pkgconfig"
 export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PKG_CONFIG_PATH="${HOME}/.homebrew/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
+# XDG Base Directory
+export XDG_CONFIG_HOME=${HOME}/.config
+
 # ccache
 export PATH="$(brew --prefix ccache)/libexec:${PATH}"
 

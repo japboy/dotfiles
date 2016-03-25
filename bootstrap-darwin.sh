@@ -217,6 +217,7 @@ TAPS=(
     'homebrew/completions'
     'homebrew/dupes'
     'homebrew/versions'
+    'neovim/neovim'
 )
 
 for TAP in "${TAPS[@]}"
@@ -255,6 +256,7 @@ BREWS=(
     'mcrypt'
     'mercurial'
     'mono'
+    'neovim'
     'openssl'
     'packer'
     'perl-build'
@@ -266,7 +268,6 @@ BREWS=(
     'ruby-build'
     'scons'
     'vagrant-completion'
-    'vim --disable-nls --override-system-vi --with-lua --with-luajit --with-mzscheme --with-python=${HOME}/.pyenv/shims/python --with-tcl'
     'webp'
 )
 
