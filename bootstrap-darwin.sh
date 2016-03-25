@@ -111,10 +111,10 @@ then
 fi
 
 # Install VirtualBox
-if [[ ! -d /Applications/VirtualBox.app || '5.0.6r103037' != $(VBoxManage --version) ]]
+if [[ ! -d /Applications/VirtualBox.app || '5.0.16r105871' != $(VBoxManage --version) ]]
 then
-    curl -LO http://download.virtualbox.org/virtualbox/5.0.6/VirtualBox-5.0.6-103037-OSX.dmg
-    hdiutil attach VirtualBox-5.0.6-103037-OSX.dmg
+    curl -LO http://download.virtualbox.org/virtualbox/5.0.16/VirtualBox-5.0.16-105871-OSX.dmg
+    hdiutil attach VirtualBox-5.0.16-105871-OSX.dmg
     sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
     hdiutil detach /Volumes/VirtualBox
 fi
@@ -122,8 +122,8 @@ fi
 # Install Vagrant
 if [[ 'Vagrant 1.7.4' != $(vagrant --version) ]]
 then
-    curl -LO https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.4.dmg
-    hdiutil attach vagrant_1.7.4.dmg
+    curl -LO https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1.dmg
+    hdiutil attach vagrant_1.8.1.dmg
     sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
     hdiutil detach /Volumes/Vagrant
 fi
@@ -136,10 +136,10 @@ then
 fi
 
 # Install AppCleaner
-if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.2.1"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
+if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.3"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
 then
-    curl -LO http://www.freemacsoft.net/downloads/AppCleaner_3.2.1.zip
-    unzip -fo -d ~/Applications/ ./AppCleaner_3.2.1.zip
+    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.3.zip
+    unzip -fo -d ~/Applications/ ./AppCleaner_3.3.zip
 fi
 
 # Install f.lux
@@ -344,7 +344,7 @@ unset PHPENV PHPVER
 
 # Install Python through `pyenv` if not exists
 PYENV="${HOME}/.pyenv"
-PYVER='2.7.10'
+PYVER='2.7.11'
 
 if ! which pyenv &> /dev/null
 then
@@ -377,6 +377,7 @@ then
         'fabric'
         'flake8'
         'sphinx'
+        'virtualenv'
     )
 
     for PIP in "${PIPS[@]}"
@@ -391,7 +392,7 @@ fi
 
 # Install Ruby through `rbenv` if not exists
 RBENV="${HOME}/.rbenv"
-RBVER='2.2.3'
+RBVER='2.3.0'
 
 if ! which rbenv &> /dev/null
 then
@@ -444,7 +445,7 @@ fi
 
 # Install Node.js through `ndenv` if not exists
 NDENV="${HOME}/.ndenv"
-NDVER='v4.2.3'
+NDVER='v4.4.0'
 
 if ! which ndenv &> /dev/null
 then
