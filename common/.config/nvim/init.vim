@@ -17,26 +17,24 @@ endif
 let s:dein_dir = expand('~/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-if !isdirectory(s:dein_repo_dir)
-  execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
 endif
-execute 'set runtimepath^=' . s:dein_repo_dir
 
-call dein#begin(s:dein_dir)
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
-let s:dein_toml = '$XDG_CONFIG_HOME/nvim/dein.toml'
-let s:dein_lazy_toml = '$XDG_CONFIG_HOME/nvim/dein_lazy.toml'
+  let s:dein_toml = '$XDG_CONFIG_HOME/nvim/dein.toml'
+  let s:dein_lazy_toml = '$XDG_CONFIG_HOME/nvim/dein_lazy.toml'
 
-if dein#load_cache([expand('<sfile>', s:dein_toml, s:dein_lazy_toml)])
   call dein#load_toml(s:dein_toml, {'lazy': 0})
   call dein#load_toml(s:dein_lazy_toml, {'lazy': 1})
-  call dein#save_cache()
-endif
 
-call dein#end()
-
-if dein#check_install(['vimproc'])
-  call dein#install(['vimproc'])
+  call dein#end()
+  call dein#save_state()
 endif
 
 if dein#check_install()
@@ -71,7 +69,7 @@ set listchars=tab:..,trail:~
 
 set foldmethod=syntax
 
-set clipboard=unnamed,autoselect   " Enable to share clipboard with GVim & OS
+"set clipboard=unnamed,autoselect   " Enable to share clipboard with GVim & OS
 
 set laststatus=2
 set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true':'false').']\ ff=['.&ff.']'}
@@ -97,6 +95,10 @@ set backspace=indent,eol,start
 set ambiwidth=double
 
 set scrolloff=5         " Set scroll top position to line 5
+
+" Let NeoVim choose Python runtime wisely
+let g:python_host_prog = expand('~/.pyenv/shims/python')
+let g:python3_host_prog = expand('~/.pyenv/versions/3.5.1/bin/python')
 
 
 ""

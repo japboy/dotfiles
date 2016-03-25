@@ -378,6 +378,7 @@ then
         'awscli'
         'fabric'
         'flake8'
+        'neovim'
         'sphinx'
         'virtualenv'
     )
@@ -480,6 +481,7 @@ unset NDENV NDVER
 if which npm &> /dev/null
 then
     NPMS=(
+        'npm'
         'coffee-script'
         'coffeelint'
         'csslint'
