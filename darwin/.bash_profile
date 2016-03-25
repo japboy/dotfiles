@@ -128,9 +128,6 @@ alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A
 # Copy my global IP to clipboard
 alias myip='curl http://checkip.amazonaws.com/ | pbcopy'
 
-# Visual Studio Code alias
-code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCode" --args $* ;}
-
 
 ##
 # Editor settings
