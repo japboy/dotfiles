@@ -374,6 +374,7 @@ unset PYENV PYVER
 if which pip &> /dev/null
 then
     PIPS=(
+        'pip'
         'awscli'
         'fabric'
         'flake8'
