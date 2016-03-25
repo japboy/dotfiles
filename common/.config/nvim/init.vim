@@ -27,8 +27,8 @@ endif
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
 
-  let s:dein_toml = '$XDG_CONFIG_HOME/nvim/dein.toml'
-  let s:dein_lazy_toml = '$XDG_CONFIG_HOME/nvim/dein_lazy.toml'
+  let s:dein_toml = expand('$XDG_CONFIG_HOME/nvim/dein.toml')
+  let s:dein_lazy_toml = expand('$XDG_CONFIG_HOME/nvim/dein_lazy.toml')
 
   call dein#load_toml(s:dein_toml, {'lazy': 0})
   call dein#load_toml(s:dein_lazy_toml, {'lazy': 1})
@@ -68,8 +68,6 @@ set list                " Display unprintable characters (eol, tab, etc)
 set listchars=tab:..,trail:~
 
 set foldmethod=syntax
-
-"set clipboard=unnamed,autoselect   " Enable to share clipboard with GVim & OS
 
 set laststatus=2
 set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true':'false').']\ ff=['.&ff.']'}

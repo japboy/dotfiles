@@ -34,3 +34,6 @@ repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
