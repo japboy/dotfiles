@@ -175,13 +175,6 @@ endif
 
 
 ""
-" Powerline
-" https://github.com/Lokaltog/powerline
-
-set rtp+=~/.dotfiles/common/opt/powerline/powerline/bindings/vim
-
-
-""
 " deoplete & autocomplete
 " https://github.com/Shougo/deoplete.nvim
 
