@@ -84,13 +84,13 @@ function link {
                 then
                     rm ${CHILD_DEST}
                     echo "Symlink removed ${CHILD_DEST}"
-                    ln -s ${TARGET} ${CHILD_DEST}
+                    ln -s ${CHILD_TARGET} ${CHILD_DEST}
                     echo "Symlink created ${CHILD_DEST}"
-                elif [ -f ${CHILD_DEST} ]
+                elif [ -f ${CHILD_DEST} ] || [ -d ${CHILD_DEST} ]
                 then
                     mv ${CHILD_DEST} ${CHILD_DEST}.orig
                     echo "File/Directory renamed to ${CHILD_DEST}.orig"
-                    ln -s ${TARGET} ${CHILD_DEST}
+                    ln -s ${CHILD_TARGET} ${CHILD_DEST}
                     echo "Symlink created ${CHILD_DEST}"
                 fi
 
