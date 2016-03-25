@@ -23,7 +23,7 @@ indent_style = space
 indent_size = 2
 
 ; HTML
-[*.html]
+[*.{html,htm}]
 indent_style = space
 indent_size = 2
 
@@ -41,6 +41,16 @@ indent_size = 4
 [*.py]
 indent_style = space
 indent_size = 4
+
+; TOML
+[*.toml]
+indent_style = space
+indent_size = 2
+
+; YAML
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
 
 ; File specific
 ; .gitignore
