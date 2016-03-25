@@ -115,9 +115,6 @@ nmap g# g#zz
 ""
 " Color scheme & highlight
 
-syntax enable
-colorscheme solarized
-
 let g:solarized_termcolors=256  " Enable Solarized colour theme
 let g:solarized_termtrans=1
 
@@ -126,6 +123,9 @@ if has('gui_running')
 else
     set background=dark
 endif
+
+syntax enable
+"colorscheme solarized
 
 " Highlight characters over 80 chars
 set colorcolumn=80
@@ -219,3 +219,10 @@ let g:syntastic_coffee_coffeelint_args = '--reporter csv --file .coffeelintrc'
 
 let g:templates_no_builtin_templates = 1
 let g:templates_directory = ['~/.vim/templates']
+
+
+""
+" vim-airline
+" https://github.com/vim-airline/vim-airline
+
+let g:airline_powerline_fonts=0

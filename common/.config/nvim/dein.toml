@@ -12,6 +12,9 @@ repo = 'Shougo/vimproc'
   unix    = 'gmake'
 
 [[plugins]]
+repo = 'altercation/vim-colors-solarized'
+
+[[plugins]]
 repo = 'aperezdc/vim-template'
 
 [[plugins]]
@@ -34,6 +37,3 @@ repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
-
-[[plugins]]
-repo = 'vim-airline/vim-airline-themes'
