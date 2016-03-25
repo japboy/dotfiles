@@ -58,52 +58,51 @@ function link {
         exit 1
     fi
 
-    for TARGET in ${DOTTARGETS_PATH}/${DIR}/.[^.]*
+    for SRC in ${DOTFILES_PATH}/${DIR}/.[^.]*
     do
-        DEST="${HOME}/$(basename ${TARGET})"
+        DEST="${HOME}/$(basename ${SRC})"
 
         if [ -L ${DEST} ]
         then
             rm ${DEST}
             echo "Symlink removed ${DEST}"
-            ln -s ${TARGET} ${DEST}
+            ln -s ${SRC} ${DEST}
             echo "Symlink created ${DEST}"
         elif [ -f ${DEST} ]
         then
             mv ${DEST} ${DEST}.orig
-            echo "File/Directory renamed to ${DEST}.orig"
-            ln -s ${TARGET} ${DEST}
+            echo "File renamed to ${DEST}.orig"
+            ln -s ${SRC} ${DEST}
             echo "Symlink created ${DEST}"
         elif [ -d ${DEST} ]
         then
-            for CHILD_TARGET in ${DEST}/.[^.]*
+            for CHILD_SRC in ${SRC}/*
             do
-                CHILD_DEST="${DEST}/$(basename ${CHILD_TARGET})"
+                CHILD_DEST="${DEST}/$(basename ${CHILD_SRC})"
 
                 if [ -L ${CHILD_DEST} ]
                 then
                     rm ${CHILD_DEST}
                     echo "Symlink removed ${CHILD_DEST}"
-                    ln -s ${CHILD_TARGET} ${CHILD_DEST}
-                    echo "Symlink created ${CHILD_DEST}"
                 elif [ -f ${CHILD_DEST} ] || [ -d ${CHILD_DEST} ]
                 then
                     mv ${CHILD_DEST} ${CHILD_DEST}.orig
                     echo "File/Directory renamed to ${CHILD_DEST}.orig"
-                    ln -s ${CHILD_TARGET} ${CHILD_DEST}
-                    echo "Symlink created ${CHILD_DEST}"
                 fi
+
+                ln -s ${CHILD_SRC} ${CHILD_DEST}
+                echo "Symlink created ${CHILD_DEST}"
 
                 unset CHILD_DEST
             done
-            unset CHILD_TARGET
+            unset CHILD_SRC
         fi
 
         unset DEST
     done
 
     update
-    unset DIR TARGET
+    unset DIR SRC
 }
 
 
