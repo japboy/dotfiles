@@ -135,6 +135,13 @@ then
     hdiutil detach /Volumes/Vagrant
 fi
 
+# Install Docker Toolbox
+if [[ 'Docker version 1.9.1, build a34a1d5' != $(docker --version) ]]
+then
+    curl -LO https://github.com/docker/toolbox/releases/download/v1.9.1j/DockerToolbox-1.9.1j.pkg
+    sudo installer -pkg DockerToolbox-1.9.1j.pkg -target /
+fi
+
 # Install iTerm2
 if [[ ! -d ~/Applications/iTerm.app || 'kMDItemVersion = "2.1.4"' != $(mdls -name kMDItemVersion ~/Applications/iTerm.app) ]]
 then
