@@ -37,8 +37,15 @@ fi
 # Install LoginHook
 if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
 then
-    chmod +x ${DOTFILES_DARWIN_PATH}/hook.sh
-    sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/hook.sh
+    chmod +x ${DOTFILES_DARWIN_PATH}/loginhook.sh
+    sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/loginhook.sh
+fi
+
+# Install LogoutHook
+if ! sudo defaults read com.apple.loginwindow LogoutHook &> /dev/null
+then
+    chmod +x ${DOTFILES_DARWIN_PATH}/logouthook.sh
+    sudo defaults write com.apple.loginwindow LogoutHook ${DOTFILES_DARWIN_PATH}/logouthook.sh
 fi
 
 # Disable `.DS_Store` on network drives

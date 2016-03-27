@@ -6,24 +6,29 @@
 # LoginHook runs under the super user privilege!
 #
 # To add this LoginHook script:
-# chmod +x /path/to/hook.sh
-# sudo defaults write com.apple.loginwindow LoginHook /path/to/hook.sh
+# chmod +x /path/to/loginhook.sh
+# sudo defaults write com.apple.loginwindow LoginHook /path/to/loginhook.sh
 #
 # To confirm added:
 # sudo defaults read com.apple.loginwindow LoginHook
 #
 # To remove it:
 # sudo defaults delete com.apple.loginwindow LoginHook
-
-
-logger "LoginHook: Starting for ${1}"
+#
+# Reference:
+# https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CustomLogin.html
 
 
 ##
 # Variables
 
+CWD=$(pwd)
 USER=${1}
 eval HOMELOC=~${USER}
+
+
+# Start
+logger "LoginHook: Starting for ${USER}"
 
 
 ##
@@ -76,33 +81,43 @@ DEST_PATHS=(
 
 mkdir -p ${RAMDISK_CACHE_PATH}
 
-for (( I=0; I < ${#DEST_PATHS[@]}; ++I ))
+for (( IDX=0; IDX < ${#DEST_PATHS[@]}; ++IDX ))
 do
-    mkdir -p ${DEST_PATHS[${I}]}
+    mkdir -p ${DEST_PATHS[${IDX}]}
 
     # Check if UA cache directory is symbolic linked to the ram disk
-    if [ ! -d ${SRC_PATHS[${I}]} ] || [ ! -L ${SRC_PATHS[${I}]} ]
+    if [ ! -d ${SRC_PATHS[${IDX}]} ] || [ ! -L ${SRC_PATHS[${IDX}]} ]
     then
-        rm -rf ${SRC_PATHS[${I}]}
-        sudo -u ${USER} ln -s ${DEST_PATHS[${I}]} ${SRC_PATHS[${I}]}
+        rm -rf ${SRC_PATHS[${IDX}]}
+        sudo -u ${USER} ln -s ${DEST_PATHS[${IDX}]} ${SRC_PATHS[${IDX}]}
     fi
 done
 
-chmod -R u=rwX,g=rwX,o=rwX ${RAMDISK_CACHE_PATH}
+chmod -R u=rwX,g=rX,o=rX ${RAMDISK_CACHE_PATH}
+chown -R ${USER}:staff ${RAMDISK_CACHE_PATH}
 
 
 ##
-# Other optimisations
+# Disable built-in keyboarddd (only for specific machine)
 
-# Disable built-in keyboard
 if [ 'C02GH2A9DV7M' == $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
     kextunload /System/Library/Extensions/AppleUSBTopCase.kext/Contents/PlugIns/AppleUSBTCKeyboard.kext
 fi
 
 
+##
+# Launch CoreOS instance through Vagrant if it exists
+
+if [ -x /usr/local/bin/vagrant ] && [ -d ${HOMELOC}/.coreos-vagrant ]
+then
+    su - ${USER} -c 'cd ~/.coreos-vagrant && /usr/local/bin/vagrant up'
+fi
+
+
 # Done
 unset \
+    CWD \
     USER \
     HOMELOC \
     RD_SIZE \
