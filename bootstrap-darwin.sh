@@ -142,6 +142,13 @@ then
     unzip -fo -d ~/Applications/ ./iTerm2-2_1_4.zip
 fi
 
+# Install Atom
+if [[ ! -d ~/Applications/Atom.app || 'kMDItemVersion = "1.6.0"' != $(mdls -name kMDItemVersion ~/Applications/Atom.app) ]]
+then
+    curl -LO https://atom-installer.github.com/v1.6.0/atom-mac.zip
+    unzip -o -d ~/Applications/ ./atom-mac.zip
+fi
+
 # Install AppCleaner
 if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.3"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
 then

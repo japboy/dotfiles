@@ -128,15 +128,18 @@ alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A
 # Copy my global IP to clipboard
 alias myip='curl http://checkip.amazonaws.com/ | pbcopy'
 
+# Use NeoVim as Vim
+alias vim='nvim'
+
 
 ##
 # Editor settings
 
 # Set default text editor and also for Git
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Set alternate text editor
-#export ALTERNATE_EDITOR='subl -w'
+export ALTERNATE_EDITOR='atom'
 
 
 ##
