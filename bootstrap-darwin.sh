@@ -139,7 +139,7 @@ fi
 if [[ ! -d ~/Applications/iTerm.app || 'kMDItemVersion = "2.1.4"' != $(mdls -name kMDItemVersion ~/Applications/iTerm.app) ]]
 then
     curl -LO https://iterm2.com/downloads/stable/iTerm2-2_1_4.zip
-    unzip -fo -d ~/Applications/ ./iTerm2-2_1_4.zip
+    unzip -o -d ~/Applications/ ./iTerm2-2_1_4.zip
 fi
 
 # Install Atom
@@ -153,14 +153,14 @@ fi
 if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.3"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
 then
     curl -LO https://freemacsoft.net/downloads/AppCleaner_3.3.zip
-    unzip -fo -d ~/Applications/ ./AppCleaner_3.3.zip
+    unzip -o -d ~/Applications/ ./AppCleaner_3.3.zip
 fi
 
 # Install f.lux
 if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "36.6"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
 then
     curl -LO https://justgetflux.com/mac/Flux.zip
-    unzip -fo -d ~/Applications/ ./Flux.zip
+    unzip -o -d ~/Applications/ ./Flux.zip
 fi
 
 # Check if QuickLook directory exists
