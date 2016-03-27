@@ -107,11 +107,16 @@ fi
 
 
 ##
-# Launch CoreOS instance through Vagrant if it exists
+# Halt CoreOS instance through Vagrant if it exists
 
 if [ -x /usr/local/bin/vagrant ] && [ -d ${HOMELOC}/.coreos-vagrant ]
 then
-    su - ${USER} -c 'cd ~/.coreos-vagrant && /usr/local/bin/vagrant up'
+    su - ${USER} <<__SCRIPT__
+export PATH="/usr/local/bin:${PATH}"
+cd ~/.coreos-vagrant
+[[ 'running' == $(vagrant status | awk '/core-[0-9]{2}/ {print $2}') ]] && exit 0
+vagrant up
+__SCRIPT__
 fi
 
 
