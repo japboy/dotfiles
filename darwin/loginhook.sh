@@ -112,10 +112,8 @@ fi
 if [ -x /usr/local/bin/vagrant ] && [ -d ${HOMELOC}/.coreos-vagrant ]
 then
     su - ${USER} <<__SCRIPT__
-export PATH="/usr/local/bin:${PATH}"
-cd ~/.coreos-vagrant
-[[ 'running' == $(vagrant status | awk '/core-[0-9]{2}/ {print $2}') ]] && exit 0
-vagrant up
+cd ${HOMELOC}/.coreos-vagrant && [[ 'running' == $(/usr/local/bin/vagrant status | awk '/core-[0-9]{2}/ {print $2}') ]] && exit 0
+cd ${HOMELOC}/.coreos-vagrant && exec /usr/local/bin/vagrant up
 __SCRIPT__
 fi
 

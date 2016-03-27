@@ -37,10 +37,8 @@ logger "LogoutHook: Starting for ${USER}"
 if [ -x /usr/local/bin/vagrant ] && [ -d ${HOMELOC}/.coreos-vagrant ]
 then
     su - ${USER} <<__SCRIPT__
-export PATH="/usr/local/bin:${PATH}"
-cd ~/.coreos-vagrant
-[[ 'poweroff' == $(vagrant status | awk '/core-[0-9]{2}/ {print $2}') ]] && exit 0
-vagrant halt
+cd ${HOMELOC}/.coreos-vagrant && [[ 'poweroff' == $(/usr/local/bin/vagrant status | awk '/core-[0-9]{2}/ {print $2}') ]] && exit 0
+cd ${HOMELOC}/.coreos-vagrant && exec /usr/local/bin/vagrant halt
 __SCRIPT__
 fi
 
