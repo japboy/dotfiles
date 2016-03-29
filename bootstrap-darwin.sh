@@ -22,8 +22,35 @@ DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
 ##
 # Main process
 
+echo "${TEXT_BOLD}Now installing login & logout hook scripts...${TEXT_RESET}"
 
-echo "${TEXT_BOLD}Now starting Mac OS X optimisation...${TEXT_RESET}"
+# Install LoginHook
+#if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
+#then
+#    chmod +x ${DOTFILES_DARWIN_PATH}/loginhook.sh
+#    sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/loginhook.sh
+#fi
+
+# Install LogoutHook
+#if ! sudo defaults read com.apple.loginwindow LogoutHook &> /dev/null
+#then
+#    chmod +x ${DOTFILES_DARWIN_PATH}/logouthook.sh
+#    sudo defaults write com.apple.loginwindow LogoutHook ${DOTFILES_DARWIN_PATH}/logouthook.sh
+#fi
+
+# Install login scripts using LaunchAgents
+if ! [ -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
+then
+    ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
+    launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
+fi
+if ! [ -L ${HOME}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist ]
+then
+    ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist ${HOME}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist
+    launchctl load ${HOME}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist
+fi
+
+echo "${TEXT_BOLD}Now customizing default configuration...${TEXT_RESET}"
 
 # Turn off local Time Machine snapshots
 sudo tmutil disablelocal
@@ -32,20 +59,6 @@ sudo tmutil disablelocal
 if ! sudo launchctl list | grep com.apple.locate &> /dev/null
 then
     sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.locate.plist
-fi
-
-# Install LoginHook
-if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
-then
-    chmod +x ${DOTFILES_DARWIN_PATH}/loginhook.sh
-    sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/loginhook.sh
-fi
-
-# Install LogoutHook
-if ! sudo defaults read com.apple.loginwindow LogoutHook &> /dev/null
-then
-    chmod +x ${DOTFILES_DARWIN_PATH}/logouthook.sh
-    sudo defaults write com.apple.loginwindow LogoutHook ${DOTFILES_DARWIN_PATH}/logouthook.sh
 fi
 
 # Disable `.DS_Store` on network drives

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# MAC OS X LOGOUT HOOK
+# MAC OS X LOGOUT HOOK (DEPRECATED)
 #
 # LogoutHook runs under the super user privilege!
 #
@@ -28,19 +28,7 @@ eval HOMELOC=~${USER}
 
 
 # Start
-logger "LogoutHook: Starting for ${USER}"
-
-
-##
-# Halt CoreOS instance through Vagrant if it exists
-
-if [ -x /usr/local/bin/vagrant ] && [ -d ${HOMELOC}/.coreos-vagrant ]
-then
-    su - ${USER} <<__SCRIPT__
-cd ${HOMELOC}/.coreos-vagrant && [[ 'poweroff' == $(/usr/local/bin/vagrant status | awk '/core-[0-9]{2}/ {print $2}') ]] && exit 0
-cd ${HOMELOC}/.coreos-vagrant && exec /usr/local/bin/vagrant halt
-__SCRIPT__
-fi
+logger -i -t LogoutHook "LogoutHook: Starting for ${USER}"
 
 
 # Done

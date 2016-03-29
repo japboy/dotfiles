@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.github.japboy.ramdisk</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/sh</string>
+      <string>-c</string>
+      <string><![CDATA[
+        RD_MOUNTPOINT=/Volumes/ramdisk
+        [ -d ${RD_MOUNTPOINT} ] && exit 0
+        RD_SIZE=262144  # 128 MB!!
+        RD_IMAGE=$(hdid -nomount ram://${RD_SIZE})
+
+        mkdir -p ${RD_MOUNTPOINT}
+        newfs_hfs -v ramdisk ${RD_IMAGE}
+        mount -t hfs ${RD_IMAGE} ${RD_MOUNTPOINT}
+
+        RAMDISK_CACHE_PATH="${RD_MOUNTPOINT}/Caches"
+        SRC_PATHS=(
+          "${HOMELOC}/Library/Caches/com.apple.Safari"
+          "${HOMELOC}/Library/Caches/com.google.Chrome"
+          "${HOMELOC}/Library/Caches/com.google.Chrome.canary"
+          "${HOMELOC}/Library/Caches/com.operasoftware.Opera"
+          "${HOMELOC}/Library/Caches/org.mozilla.firefox"
+          "${HOMELOC}/Library/Caches/Chromium"
+          "${HOMELOC}/Library/Caches/Firefox"
+          "${HOMELOC}/Library/Caches/Google"
+          "${HOMELOC}/Library/Caches/Opera"
+        )
+        DEST_PATHS=(
+          "${RAMDISK_CACHE_PATH}/com.apple.Safari"
+          "${RAMDISK_CACHE_PATH}/com.google.Chrome"
+          "${RAMDISK_CACHE_PATH}/com.google.Chrome.canary"
+          "${RAMDISK_CACHE_PATH}/com.operasoftware.Opera/"
+          "${RAMDISK_CACHE_PATH}/org.mozilla.firefox"
+          "${RAMDISK_CACHE_PATH}/Chromium"
+          "${RAMDISK_CACHE_PATH}/Firefox"
+          "${RAMDISK_CACHE_PATH}/Google"
+          "${RAMDISK_CACHE_PATH}/Opera"
+        )
+
+        mkdir -p ${RAMDISK_CACHE_PATH}
+
+        for (( IDX=0; IDX < ${#DEST_PATHS[@]}; ++IDX ))
+        do
+          mkdir -p ${DEST_PATHS[${IDX}]}
+          # Check if UA cache directory is symbolic linked to the ram disk
+          if [ ! -d ${SRC_PATHS[${IDX}]} ] || [ ! -L ${SRC_PATHS[${IDX}]} ]
+          then
+            rm -rf ${SRC_PATHS[${IDX}]}
+            ln -s ${DEST_PATHS[${IDX}]} ${SRC_PATHS[${IDX}]}
+          fi
+        done
+      ]]></string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+  </dict>
+</plist>
