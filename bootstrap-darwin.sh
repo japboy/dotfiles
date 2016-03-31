@@ -168,7 +168,7 @@ then
     DOCKER_COMPOSE_VERSION=$(docker-compose --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
     DOCKER_MACHINE_VERSION=$(docker-machine --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
     curl -L https://raw.githubusercontent.com/docker/docker/v${DOCKER_VERSION}/contrib/completion/bash/docker > ${DEST}/docker
-    curl -L https://raw.githubusercontent.com/docker/compose/v${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose > ${DEST}/docker-compose
+    curl -L https://raw.githubusercontent.com/docker/compose/${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose > ${DEST}/docker-compose
     curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine.bash > ${DEST}/docker-machine
     curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine-wrapper.bash > ${DEST}/docker-machine-wrapper
     curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine-prompt.bash > ${DEST}/docker-machine-prompt
