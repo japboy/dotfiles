@@ -191,9 +191,6 @@ export GISTY_SSL_VERIFY='NONE'
 # Vagrant completion
 [ -f "$(brew --prefix)/etc/bash_completion.d/vagrant" ] && source "$(brew --prefix)/etc/bash_completion.d/vagrant"
 
-# Docker completion
-[ -f "$(brew --prefix)/etc/bash_completion.d/docker" ] && source "$(brew --prefix)/etc/bash_completion.d/docker"
-
 
 # Load extra settings
 [ -f "${HOME}/.bash_extras" ] && source "${HOME}/.bash_extras"

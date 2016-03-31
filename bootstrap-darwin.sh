@@ -113,7 +113,7 @@ then
 fi
 
 # Install Asepsis
-if ! which asepsisctl &> /dev/null
+if ! which asepsisctl &> /dev/null || [ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]
 then
     curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
     hdiutil attach Asepsis-1.5.2.dmg
@@ -131,7 +131,7 @@ then
 fi
 
 # Install VirtualBox
-if [[ ! -d /Applications/VirtualBox.app || '5.0.16r105871' != $(VBoxManage --version) ]]
+if ! which VBoxManage &>/dev/null || [ '5.0.16r105871' != $(VBoxManage --version) ]
 then
     curl -LO http://download.virtualbox.org/virtualbox/5.0.16/VirtualBox-5.0.16-105871-OSX.dmg
     hdiutil attach VirtualBox-5.0.16-105871-OSX.dmg
@@ -140,7 +140,7 @@ then
 fi
 
 # Install Vagrant
-if [[ 'Vagrant 1.7.4' != $(vagrant --version) ]]
+if ! which vagrant &>/dev/null || [ 'Vagrant 1.8.1' != $(vagrant --version) ]
 then
     curl -LO https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1.dmg
     hdiutil attach vagrant_1.8.1.dmg
@@ -149,10 +149,10 @@ then
 fi
 
 # Install Docker Toolbox
-if [[ 'Docker version 1.9.1, build a34a1d5' != $(docker --version) ]]
+if ! which docker &>/dev/null || [ 'Docker version 1.10.3' != $(docker --version) ]
 then
-    curl -LO https://github.com/docker/toolbox/releases/download/v1.9.1j/DockerToolbox-1.9.1j.pkg
-    sudo installer -pkg DockerToolbox-1.9.1j.pkg -target /
+    curl -LO https://github.com/docker/toolbox/releases/download/v1.10.3/DockerToolbox-1.10.3.pkg
+    sudo installer -pkg DockerToolbox-1.10.3.pkg -target /
 fi
 
 # Install iTerm2
@@ -163,9 +163,9 @@ then
 fi
 
 # Install Atom
-if [[ ! -d ~/Applications/Atom.app || 'kMDItemVersion = "1.6.0"' != $(mdls -name kMDItemVersion ~/Applications/Atom.app) ]]
+if [[ ! -d ~/Applications/Atom.app || 'kMDItemVersion = "1.6.1"' != $(mdls -name kMDItemVersion ~/Applications/Atom.app) ]]
 then
-    curl -LO https://atom-installer.github.com/v1.6.0/atom-mac.zip
+    curl -LO https://atom-installer.github.com/v1.6.1/atom-mac.zip
     unzip -o -d ~/Applications/ ./atom-mac.zip
 fi
 
@@ -274,7 +274,6 @@ BREWS=(
     'bison'
     'ccache'
     'cmake'
-    'docker-completion'
     'gem-completion'
     'gettext'
     'gibo'
