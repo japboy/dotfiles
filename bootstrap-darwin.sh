@@ -88,6 +88,12 @@ fi
 # Apply changes for Autofs
 sudo automount -vc
 
+# Create `Applications` directory under the home directory if it doesn't exist
+[ ! -d "${HOME}/Applications" ] && mkdir ${HOME}/Applications
+
+# Create `Developer` directory if it doesn't exist
+[ ! -d "${HOME}/Developer" ] && mkdir -p ${HOME}/Developer/bin ${HOME}/Developer/etc ${HOME}/Developer/share/man
+
 
 echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 
@@ -153,6 +159,20 @@ if ! which docker &>/dev/null || [ 'Docker version 1.10.3' != $(docker --version
 then
     curl -LO https://github.com/docker/toolbox/releases/download/v1.10.3/DockerToolbox-1.10.3.pkg
     sudo installer -pkg DockerToolbox-1.10.3.pkg -target /
+fi
+if [ ! -f ${HOME}/Developer/etc/bash_completion.d/docker ]
+then
+    DEST=${HOME}/Developer/etc/bash_completion.d
+    mkdir -p ${DEST}
+    DOCKER_VERSION=$(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
+    DOCKER_COMPOSE_VERSION=$(docker-compose --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
+    DOCKER_MACHINE_VERSION=$(docker-machine --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
+    curl -L https://raw.githubusercontent.com/docker/docker/v${DOCKER_VERSION}/contrib/completion/bash/docker > ${DEST}/docker
+    curl -L https://raw.githubusercontent.com/docker/compose/v${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose > ${DEST}/docker-compose
+    curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine.bash > ${DEST}/docker-machine
+    curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine-wrapper.bash > ${DEST}/docker-machine-wrapper
+    curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine-prompt.bash > ${DEST}/docker-machine-prompt
+    unset DEST DOCKER_VERSION DOCKER_COMPOSE_VERSION DOCKER_MACHINE_VERSION
 fi
 
 # Install iTerm2
@@ -542,12 +562,6 @@ then
 
     unset NPMS NPM
 fi
-
-# Create `Applications` directory under the home directory if it doesn't exist
-[ ! -d "${HOME}/Applications" ] && mkdir ${HOME}/Applications
-
-# Create `Developer` directory if it doesn't exist
-[ ! -d "${HOME}/Developer" ] && mkdir -p ${HOME}/Developer/bin ${HOME}/Developer/share/man
 
 # Setup default lagunage
 #sudo languagesetup
