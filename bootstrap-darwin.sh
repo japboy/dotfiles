@@ -119,7 +119,7 @@ then
 fi
 
 # Install Asepsis
-if ! which asepsisctl &> /dev/null || [ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]
+if ! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]]
 then
     curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
     hdiutil attach Asepsis-1.5.2.dmg
@@ -137,7 +137,7 @@ then
 fi
 
 # Install VirtualBox
-if ! which VBoxManage &>/dev/null || [ '5.0.16r105871' != $(VBoxManage --version) ]
+if ! which VBoxManage &> /dev/null || [[ '5.0.16r105871' != $(VBoxManage --version) ]]
 then
     curl -LO http://download.virtualbox.org/virtualbox/5.0.16/VirtualBox-5.0.16-105871-OSX.dmg
     hdiutil attach VirtualBox-5.0.16-105871-OSX.dmg
@@ -146,7 +146,7 @@ then
 fi
 
 # Install Vagrant
-if ! which vagrant &>/dev/null || [ 'Vagrant 1.8.1' != $(vagrant --version) ]
+if ! which vagrant &> /dev/null || [[ 'Vagrant 1.8.1' != $(vagrant --version) ]]
 then
     curl -LO https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1.dmg
     hdiutil attach vagrant_1.8.1.dmg
@@ -155,7 +155,7 @@ then
 fi
 
 # Install Docker Toolbox
-if ! which docker &>/dev/null || [ 'Docker version 1.10.3' != $(docker --version) ]
+if ! which docker &> /dev/null || [[ 'Docker version 1.10.3, build 20f81dd' != $(docker --version) ]]
 then
     curl -LO https://github.com/docker/toolbox/releases/download/v1.10.3/DockerToolbox-1.10.3.pkg
     sudo installer -pkg DockerToolbox-1.10.3.pkg -target /
