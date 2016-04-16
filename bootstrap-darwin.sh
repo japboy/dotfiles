@@ -155,10 +155,10 @@ then
 fi
 
 # Install Docker Toolbox
-if ! which docker &> /dev/null || [[ 'Docker version 1.10.3, build 20f81dd' != $(docker --version) ]]
+if ! which docker &> /dev/null || [[ '1.11.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
-    curl -LO https://github.com/docker/toolbox/releases/download/v1.10.3/DockerToolbox-1.10.3.pkg
-    sudo installer -pkg DockerToolbox-1.10.3.pkg -target /
+    curl -LO https://github.com/docker/toolbox/releases/download/v1.11.0/DockerToolbox-1.11.0.pkg
+    sudo installer -pkg DockerToolbox-1.11.1.pkg -target /
 fi
 if [ ! -f ${HOME}/Developer/etc/bash_completion.d/docker ]
 then
@@ -183,9 +183,9 @@ then
 fi
 
 # Install Atom
-if [[ ! -d ~/Applications/Atom.app || 'kMDItemVersion = "1.6.1"' != $(mdls -name kMDItemVersion ~/Applications/Atom.app) ]]
+if [[ ! -d ~/Applications/Atom.app || 'kMDItemVersion = "1.6.2"' != $(mdls -name kMDItemVersion ~/Applications/Atom.app) ]]
 then
-    curl -LO https://atom-installer.github.com/v1.6.1/atom-mac.zip
+    curl -LO https://atom-installer.github.com/v1.6.2/atom-mac.zip
     unzip -o -d ~/Applications/ ./atom-mac.zip
 fi
 
