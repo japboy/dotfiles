@@ -96,10 +96,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.9.1"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.9.2"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.9.1.dmg
-    hdiutil attach ClamXav_2.8.9.1.dmg
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.9.2.dmg
+    hdiutil attach ClamXav_2.8.9.2.dmg
     cp -R /Volumes/ClamXav/ClamXav.app /Applications/
     hdiutil detach /Volumes/ClamXav
 fi
@@ -153,7 +153,7 @@ fi
 if ! which docker &> /dev/null || [[ '1.11.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://github.com/docker/toolbox/releases/download/v1.11.0/DockerToolbox-1.11.0.pkg
-    sudo installer -pkg DockerToolbox-1.11.1.pkg -target /
+    sudo installer -pkg DockerToolbox-1.11.0.pkg -target /
 fi
 if [ ! -f ${HOME}/Developer/etc/bash_completion.d/docker ]
 then
