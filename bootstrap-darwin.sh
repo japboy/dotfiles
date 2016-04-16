@@ -44,11 +44,6 @@ then
     ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
     launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
 fi
-if ! [ -L ${HOME}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist ]
-then
-    ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist ${HOME}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist
-    launchctl load ${HOME}/Library/LaunchAgents/com.github.coreos.coreos-vagrant.plist
-fi
 
 echo "${TEXT_BOLD}Now customizing default configuration...${TEXT_RESET}"
 
