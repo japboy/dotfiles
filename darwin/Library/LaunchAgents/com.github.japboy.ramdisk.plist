@@ -20,15 +20,15 @@
 
         RAMDISK_CACHE_PATH="${RD_MOUNTPOINT}/Caches"
         SRC_PATHS=(
-          "${HOMELOC}/Library/Caches/com.apple.Safari"
-          "${HOMELOC}/Library/Caches/com.google.Chrome"
-          "${HOMELOC}/Library/Caches/com.google.Chrome.canary"
-          "${HOMELOC}/Library/Caches/com.operasoftware.Opera"
-          "${HOMELOC}/Library/Caches/org.mozilla.firefox"
-          "${HOMELOC}/Library/Caches/Chromium"
-          "${HOMELOC}/Library/Caches/Firefox"
-          "${HOMELOC}/Library/Caches/Google"
-          "${HOMELOC}/Library/Caches/Opera"
+          "${HOME}/Library/Caches/com.apple.Safari"
+          "${HOME}/Library/Caches/com.google.Chrome"
+          "${HOME}/Library/Caches/com.google.Chrome.canary"
+          "${HOME}/Library/Caches/com.operasoftware.Opera"
+          "${HOME}/Library/Caches/org.mozilla.firefox"
+          "${HOME}/Library/Caches/Chromium"
+          "${HOME}/Library/Caches/Firefox"
+          "${HOME}/Library/Caches/Google"
+          "${HOME}/Library/Caches/Opera"
         )
         DEST_PATHS=(
           "${RAMDISK_CACHE_PATH}/com.apple.Safari"
