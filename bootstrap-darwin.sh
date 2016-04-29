@@ -160,7 +160,7 @@ then
 fi
 
 # Install Atom
-if [[ ! -d ~/Applications/Atom.app || 'kMDItemVersion = "1.7.2"' != $(mdls -name kMDItemVersion ~/Applications/Atom.app) ]]
+if ! which atom &> /dev/null || [[ '1.7.2' != $(atom --version | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://atom-installer.github.com/v1.7.2/atom-mac.zip
     unzip -o -d ~/Applications/ ./atom-mac.zip
