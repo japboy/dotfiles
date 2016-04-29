@@ -131,24 +131,6 @@ then
     hdiutil detach /Volumes/XtraFinder
 fi
 
-# Install VirtualBox
-if ! which VBoxManage &> /dev/null || [[ '5.0.16r105871' != $(VBoxManage --version) ]]
-then
-    curl -LO http://download.virtualbox.org/virtualbox/5.0.16/VirtualBox-5.0.16-105871-OSX.dmg
-    hdiutil attach VirtualBox-5.0.16-105871-OSX.dmg
-    sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
-    hdiutil detach /Volumes/VirtualBox
-fi
-
-# Install Vagrant
-if ! which vagrant &> /dev/null || [[ 'Vagrant 1.8.1' != $(vagrant --version) ]]
-then
-    curl -LO https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1.dmg
-    hdiutil attach vagrant_1.8.1.dmg
-    sudo installer -pkg /Volumes/Vagrant/Vagrant.pkg -target /
-    hdiutil detach /Volumes/Vagrant
-fi
-
 # Install Docker Toolbox
 if ! which docker &> /dev/null || [[ '1.11.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
