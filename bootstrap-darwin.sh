@@ -316,20 +316,32 @@ unset BREW BREWS
 
 brew cleanup
 
-# Install Perl through `plenv` if not exists
-PLENV="${HOME}/.plenv"
-PLVER='5.23.3'
+# Install `anyenv` for **env
+ANYENV="${HOME}/.anyenv"
 
-if ! which plenv &> /dev/null
+if ! which anyenv &> /dev/null
 then
-    [ ! -d ${PLENV} ] && git clone git://github.com/tokuhirom/plenv.git ${PLENV}
-    export PATH="${PLENV}/bin:${PATH}"
-    eval "$(plenv init -)"
+    if [ ! -d ${ANYENV} ]
+    then
+        git clone https://github.com/riywo/anyenv ${ANYENV}
+        git clone https://github.com/znz/anyenv-update.git ${ANYENV}/plugins/anyenv-update
+    fi
+    export PATH="${ANYENV}/bin:${PATH}"
+    eval "$(anyenv init -)"
+    anyenv install plenv
+    anyenv install phpenv
+    anyenv install pyenv
+    anyenv install rbenv
+    anyenv install ndenv
+    exec ${SHELL} -l
 else
-    cd ${PLENV}
-    git pull
-    cd ${CWD}
+    anyenv update
 fi
+
+unset ANYENV
+
+# Install Perl through `plenv` if not exists
+PLVER='5.23.3'
 
 if ! plenv versions | grep ${PLVER} &> /dev/null
 then
@@ -339,23 +351,10 @@ fi
 plenv global ${PLVER}
 plenv rehash
 
-unset PLENV PLVER
+unset PLVER
 
 # Install PHP through `phpenv` if not exists
-# MUST be done before `rbenv` installation
-PHPENV="${HOME}/.phpenv"
 PHPVER='system'
-
-if ! which phpenv &> /dev/null
-then
-    [ ! -d ${PHPENV} ] && git clone git://github.com/phpenv/phpenv.git ${PHPENV}
-    export PATH="${PHPENV}/bin:${PATH}"
-    eval "$(phpenv init -)"
-else
-    cd ${PHPENV}
-    git pull
-    cd ${CWD}
-fi
 
 if ! phpenv versions | grep php-5.5.7 &> /dev/null
 then
@@ -370,22 +369,10 @@ fi
 phpenv global ${PHPVER}
 phpenv rehash
 
-unset PHPENV PHPVER
+unset PHPVER
 
 # Install Python through `pyenv` if not exists
-PYENV="${HOME}/.pyenv"
-PYVER='2.7.11'
-
-if ! which pyenv &> /dev/null
-then
-    [ ! -d ${PYENV} ] && git clone git://github.com/yyuu/pyenv.git ${PYENV}
-    export PATH="${PYENV}/bin:${PATH}"
-    eval "$(pyenv init -)"
-else
-    cd ${PYENV}
-    git pull
-    cd ${CWD}
-fi
+PYVER='2.7.12'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -397,7 +384,7 @@ fi
 pyenv global ${PYVER}
 pyenv rehash
 
-unset PYENV PYVER
+unset PYVER
 
 # Install PyPIs
 if which pip &> /dev/null
@@ -423,19 +410,7 @@ then
 fi
 
 # Install Ruby through `rbenv` if not exists
-RBENV="${HOME}/.rbenv"
-RBVER='2.3.0'
-
-if ! which rbenv &> /dev/null
-then
-    [ ! -d ${RBENV} ] && git clone git://github.com/sstephenson/rbenv.git ${RBENV}
-    export PATH="${RBENV}/bin:${PATH}"
-    eval "$(rbenv init -)"
-else
-    cd ${RBENV}
-    git pull
-    cd ${CWD}
-fi
+RBVER='2.3.1'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
@@ -447,7 +422,7 @@ fi
 rbenv global ${RBVER}
 rbenv rehash
 
-unset RBENV RBVER
+unset RBVER
 
 # Install RubyGems
 if which gem &> /dev/null
@@ -476,25 +451,7 @@ then
 fi
 
 # Install Node.js through `ndenv` if not exists
-NDENV="${HOME}/.ndenv"
-NDVER='v4.4.0'
-
-if ! which ndenv &> /dev/null
-then
-    if [ ! -d ${NDENV} ]
-    then
-        git clone git://github.com/riywo/ndenv.git ${NDENV}
-        git clone git://github.com/riywo/node-build.git ${NDENV}/plugins/node-build
-    fi
-    export PATH="${NDENV}/bin:${PATH}"
-    eval "$(ndenv init -)"
-else
-    cd ${NDENV}
-    git pull
-    cd ${NDENV}/plugins/node-build
-    git pull
-    cd ${CWD}
-fi
+NDVER='v6.4.0'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
@@ -504,24 +461,13 @@ fi
 ndenv global ${NDVER}
 ndenv rehash
 
-unset NDENV NDVER
+unset NDVER
 
 # Install NPMs
 if which npm &> /dev/null
 then
     NPMS=(
         'npm'
-        'coffee-script'
-        'coffeelint'
-        'csslint'
-        'eslint'
-        'eslint-config-standard'
-        'eslint-plugin-promise'
-        'eslint-plugin-standard'
-        'grunt-cli'
-        'gulp'
-        'js-yaml'
-        'jsonlint'
         'yo'
     )
 
@@ -538,6 +484,15 @@ then
     ndenv rehash
 
     unset NPMS NPM
+fi
+
+# Install .NET Core
+if ! which dotnet &> /dev/null || [[ '1.0.0-preview2-003121' != $(dotnet --version) ]]
+then
+    cd ${HOME}/Downloads
+    curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003121.pkg https://go.microsoft.com/fwlink/?LinkID=809124
+    sudo installer -pkg ./dotnet-dev-osx-x64.1.0.0-preview2-003121.pkg -target /
+    cd ${CWD}
 fi
 
 # Setup default lagunage

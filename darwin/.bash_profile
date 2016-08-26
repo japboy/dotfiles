@@ -73,31 +73,10 @@ export PATH="$(brew --prefix apple-gcc42)/bin:${PATH}"
 # Fsharp
 export MONO_GAC_PREFIX="$(brew --prefix)"
 
-# plenv
-export PATH="${HOME}/.plenv/bin:${PATH}"
-eval "$(plenv init -)"
-[ -f "${HOME}/.plenv/completions/plenv.bash" ] && source "${HOME}/.plenv/completions/plenv.bash"
-
-# phpenv
-# PATH should be overriden by rbenv
-export PATH="${HOME}/.phpenv/bin:${PATH}"
-eval "$(phpenv init -)"
-[ -f "${HOME}/.phpenv/completions/phpenv.bash" ] && source "${HOME}/.phpenv/completions/phpenv.bash"
-
-# pyenv
-export PATH="${HOME}/.pyenv/bin:${PATH}"
-eval "$(pyenv init -)"
-[ -f "${HOME}/.pyenv/completions/pyenv.bash" ] && source "${HOME}/.pyenv/completions/pyenv.bash"
-
-# rbenv
-export PATH="${HOME}/.rbenv/bin:${PATH}"
-eval "$(rbenv init -)"
-[ -f "${HOME}/.rbenv/completions/rbenv.bash" ] && source "${HOME}/.rbenv/completions/rbenv.bash"
-
-# ndenv
-export PATH="${HOME}/.ndenv/bin:${PATH}"
-eval "$(ndenv init -)"
-[ -f "${HOME}/.ndenv/completions/ndenv.bash" ] && source "${HOME}/.ndenv/completions/ndenv.bash"
+# anyenv
+export PATH="${HOME}/.anyenv/bin:${PATH}"
+eval "$(anyenv init -)"
+[ -f "${HOME}/.anyenv/completions/anyenv.bash" ] && source "${HOME}/.anyenv/completions/anyenv.bash"
 
 
 ##
