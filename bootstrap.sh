@@ -8,7 +8,7 @@
 #
 # Install and update without Git
 # curl -L https://github.com/japboy/dotfiles/archive/master.tar.gz | tar zxvf - -C ~/.dotfiles
-# bash ~/.dotfile/bootstrap.sh sync
+# bash ~/.dotfiles/bootstrap.sh sync
 
 
 ##
