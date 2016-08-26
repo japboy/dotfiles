@@ -96,12 +96,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.8.9.2"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.9.2"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.8.9.2.dmg
-    hdiutil attach ClamXav_2.8.9.2.dmg
-    cp -R /Volumes/ClamXav/ClamXav.app /Applications/
-    hdiutil detach /Volumes/ClamXav
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.9.2_2478.zip
+    unzip -o -d /Applications/ ./ClamXav_2.9.2_2478.zip
 fi
 
 # Install XQuartz
@@ -123,7 +121,7 @@ then
 fi
 
 # Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.8"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.9"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -131,11 +129,13 @@ then
     hdiutil detach /Volumes/XtraFinder
 fi
 
-# Install Docker Toolbox
-if ! which docker &> /dev/null || [[ '1.11.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+# Install Native Docker
+if ! which docker &> /dev/null || [[ '1.12.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
-    curl -LO https://github.com/docker/toolbox/releases/download/v1.11.0/DockerToolbox-1.11.0.pkg
-    sudo installer -pkg DockerToolbox-1.11.0.pkg -target /
+    curl -LO https://download.docker.com/mac/stable/Docker.dmg
+    hdiutil attach Docker.dmg
+    cp -R /Volumes/Docker/Docker.app /Applications/
+    hdiutil detach /Volumes/Docker
 fi
 if [ ! -f ${HOME}/Developer/etc/bash_completion.d/docker ]
 then
@@ -153,17 +153,17 @@ then
 fi
 
 # Install iTerm2
-if [[ ! -d ~/Applications/iTerm.app || 'kMDItemVersion = "2.1.4"' != $(mdls -name kMDItemVersion ~/Applications/iTerm.app) ]]
+if [[ ! -d ~/Applications/iTerm.app || 'kMDItemVersion = "3.0.7"' != $(mdls -name kMDItemVersion ~/Applications/iTerm.app) ]]
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-2_1_4.zip
-    unzip -o -d ~/Applications/ ./iTerm2-2_1_4.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_0_7.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_0_7.zip
 fi
 
-# Install Atom
-if ! which atom &> /dev/null || [[ '1.7.2' != $(atom --version | awk 'NR==1{print $(3)}') ]]
+# Install Visual Studio Code
+if [[ ! -d ~/Applications/Visual\ Studio\ Code.app || 'kMDItemVersion = "1.4.0"' != $(mdls -name kMDItemVersion ~/Applications/Visual\ Studio\ Code.app) ]]
 then
-    curl -LO https://atom-installer.github.com/v1.7.2/atom-mac.zip
-    unzip -o -d ~/Applications/ ./atom-mac.zip
+    curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
+    unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
 fi
 
 # Install AppCleaner
@@ -174,7 +174,7 @@ then
 fi
 
 # Install f.lux
-if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "36.6"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
+if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "37.7"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
 then
     curl -LO https://justgetflux.com/mac/Flux.zip
     unzip -o -d ~/Applications/ ./Flux.zip
