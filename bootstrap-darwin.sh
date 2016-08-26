@@ -159,11 +159,29 @@ then
     unzip -o -d ~/Applications/ ./iTerm2-3_0_7.zip
 fi
 
-# Install Visual Studio Code
+# Install Visual Studio Code & the plugins
 if [[ ! -d ~/Applications/Visual\ Studio\ Code.app || 'kMDItemVersion = "1.4.0"' != $(mdls -name kMDItemVersion ~/Applications/Visual\ Studio\ Code.app) ]]
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
+fi
+if which code &> /dev/null
+then
+    VSCODE_PLUGINS=(
+        'EditorConfig.EditorConfig'
+        'christian-kohler.path-intellisense'
+        'ms-vscode.PowerShell'
+        'ms-vscode.csharp'
+        'vscodevim.vim'
+    )
+    for PLUGIN in "${VSCODE_PLUGINS[@]}"
+    do
+        if ! code --list-extensions | grep ${PLUGIN} &> /dev/null
+        then
+            code --install-extension ${PLUGIN}
+        fi
+    done
+    unset VSCODE_PLUGINS PLUGIN
 fi
 
 # Install AppCleaner
