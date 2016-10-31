@@ -8,7 +8,6 @@
 
 # TODO: Run as administrator
 #Set-ExecutionPolicy RemoteSigned
-#Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 
 #
 # Functions
@@ -45,10 +44,22 @@ function Run ([string] $path, [string] $argv = $null)
     If (!$argv)
     {
         Start-Process -FilePath $path -Wait
-        Return    
+        Return
     }
     Start-Process -FilePath $path -ArgumentList $($argv -split '; ') -Wait
     #Invoke-Expression -Command "$path [string]$argv"
+}
+
+function RunAs ([string] $path, [string] $argv = $null)
+{
+    $filename = Split-Path $path -Leaf
+    Write-Output "Running $filename"
+    If (!$argv)
+    {
+        Start-Process -FilePath $path -Verb runas -Wait
+        Return
+    }
+    Start-Process -FilePath $path -ArgumentList $($argv -split '; ') -Verb runas -Wait
 }
 
 function Mklink ([string] $src, [string] $dst)
@@ -122,6 +133,11 @@ $conemuXml = "$env:APPDATA\ConEmu.xml"
 If (Test-Path -Path $conemuXml -PathType Leaf) { Remove-Item $conemuXml }
 Mklink "$cwd\windows\AppData\Roaming\ConEmu.xml" $conemuXml
 
+# Docker
+RunAs 'powershell' 'Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All'
+Download 'https://download.docker.com/win/stable/InstallDocker.msi' $downloadPath
+Run "$downloadPath\InstallDocker.msi"
+
 # Visual Studio Code
 Download 'https://go.microsoft.com/fwlink/?LinkID=623230' $downloadPath 'VSCodeSetup-stable.exe'
 Run "$downloadPath\VSCodeSetup-stable.exe"
@@ -136,6 +152,7 @@ Run 'code' @"
     ilich8086.classic-asp
     ms-vscode.csharp
     ms-vscode.PowerShell
+    shinnn.stylelint
     vscodevim.vim
 "@
 

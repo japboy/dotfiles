@@ -13,5 +13,11 @@
     "editor.renderWhitespace": "boundary",
 
     // Controls whether the editor should render indent guides
-    "editor.renderIndentGuides": true
+    "editor.renderIndentGuides": true,
+
+    // Enables or disables all validations
+    "css.validate": false,
+
+    // stylelint
+    "stylelint.enable": true
 }
