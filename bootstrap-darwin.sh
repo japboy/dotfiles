@@ -26,11 +26,11 @@ DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
 
 function is_older_app () {
     TARGET_PATH=${1}
-    ! [ -d ${TARGET_PATH} ] && return 0
+    ! [ -d ${TARGET_PATH} ] && return 1
     TARGET_VERSION=${2}
     ACTUAL_VERSION=$(mdls -name kMDItemVersion ${TARGET_PATH} | sed -e 's/^kMDItemVersion = "\([0-9\.]*\)"$/\1/g')
-    [ $(echo "${TARGET_VERSION} < ${ACTUAL_VERSION}" | bc) -eq 1 ] && return 1
-    return 0
+    [ ${TARGET_VERSION} != ${ACTUAL_VERSION} ] && return 0
+    return 1
 }
 
 function is_specific_serial () {
