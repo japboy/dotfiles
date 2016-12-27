@@ -335,7 +335,6 @@ BREWS=(
     'neovim'
     'openssl'
     'packer'
-    'perl-build'
     'pip-completion'
     'pkg-config'
     're2c'
@@ -343,7 +342,6 @@ BREWS=(
     'rmtrash'
     'ruby-build'
     'scons'
-    'vagrant-completion'
     'webp'
 )
 
@@ -375,8 +373,6 @@ then
     fi
     export PATH="${ANYENV}/bin:${PATH}"
     eval "$(anyenv init -)"
-    anyenv install plenv
-    anyenv install phpenv
     anyenv install pyenv
     anyenv install rbenv
     anyenv install ndenv
@@ -386,37 +382,6 @@ else
 fi
 
 unset ANYENV
-
-# Perl through `plenv` if not exists
-PLVER='5.23.3'
-
-if ! plenv versions | grep ${PLVER} &> /dev/null
-then
-    plenv install ${PLVER}
-fi
-
-plenv global ${PLVER}
-plenv rehash
-
-unset PLVER
-
-# PHP through `phpenv` if not exists
-PHPVER='system'
-
-if ! phpenv versions | grep php-5.5.7 &> /dev/null
-then
-    CONFIGURE_OPTIONS="--with-jpeg-dir=$(brew --prefix libjpeg) \
-                       --with-png-dir=$(brew --prefix libpng) \
-                       --with-openssl=$(brew --prefix openssl) \
-                       --with-mcrypt=$(brew --prefix mcrypt) \
-                       --with-apxs2=/usr/sbin/apxs" \
-    phpenv install php-5.5.7
-fi
-
-phpenv global ${PHPVER}
-phpenv rehash
-
-unset PHPVER
 
 # Python through `pyenv` if not exists
 PYVER='3.6.0'

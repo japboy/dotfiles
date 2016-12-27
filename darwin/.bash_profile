@@ -118,7 +118,7 @@ alias vim='nvim'
 export EDITOR='nvim'
 
 # Set alternate text editor
-export ALTERNATE_EDITOR='atom'
+export ALTERNATE_EDITOR='code'
 
 
 ##
@@ -166,16 +166,6 @@ export GISTY_SSL_VERIFY='NONE'
 
 # RubyGems completion
 [ -f "$(brew --prefix)/etc/bash_completion.d/gem" ] && source "$(brew --prefix)/etc/bash_completion.d/gem"
-
-# Vagrant completion
-[ -f "$(brew --prefix)/etc/bash_completion.d/vagrant" ] && source "$(brew --prefix)/etc/bash_completion.d/vagrant"
-
-# Docker completion
-[ -f "${HOME}/Developer/etc/bash_completion.d/docker" ] && source "${HOME}/Developer/etc/bash_completion.d/docker"
-[ -f "${HOME}/Developer/etc/bash_completion.d/docker-compose" ] && source "${HOME}/Developer/etc/bash_completion.d/docker-compose"
-[ -f "${HOME}/Developer/etc/bash_completion.d/docker-machine" ] && source "${HOME}/Developer/etc/bash_completion.d/docker-machine"
-[ -f "${HOME}/Developer/etc/bash_completion.d/docker-machine-wrapper" ] && source "${HOME}/Developer/etc/bash_completion.d/docker-machine-wrapper"
-[ -f "${HOME}/Developer/etc/bash_completion.d/docker-machine-prompt" ] && source "${HOME}/Developer/etc/bash_completion.d/docker-machine-prompt"
 
 
 # Load extra settings
