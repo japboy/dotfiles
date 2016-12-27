@@ -2,17 +2,7 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
-repo = 'Shougo/vimproc'
-
-  [plugins.build]
-  windows = 'tools\\update-dll-mingw'
-  cygwin  = 'make -f make_cygwin.mak'
-  mac     = 'make -f make_mac.mak'
-  linux   = 'make'
-  unix    = 'gmake'
-
-[[plugins]]
-repo = 'altercation/vim-colors-solarized'
+repo = 'Shougo/denite.nvim'
 
 [[plugins]]
 repo = 'aperezdc/vim-template'
@@ -30,6 +20,9 @@ repo = 'scrooloose/nerdtree'
 repo = 'scrooloose/syntastic'
 
 [[plugins]]
+repo = 'mtscout6/syntastic-local-eslint.vim'
+
+[[plugins]]
 repo = 'Shougo/deoplete.nvim'
 
 [[plugins]]
@@ -37,3 +30,6 @@ repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
+
+[[plugins]]
+repo = 'easymotion/vim-easymotion'

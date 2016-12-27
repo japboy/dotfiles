@@ -30,7 +30,7 @@ DOTFILES_PATH="${HOME}/.dotfiles"
 # Functions
 
 # Update shell
-function update {
+function update_source () {
     PROFILE_PATH="${HOME}/.bash_profile"
     RC_PATH="${HOME}/.bashrc"
 
@@ -48,7 +48,7 @@ function update {
 }
 
 # Link dotfiles to home directory
-function link {
+function make_link {
     DIR=${1}
 
     if [ -z "${DIR}" ]
@@ -96,12 +96,15 @@ function link {
                 unset CHILD_DEST
             done
             unset CHILD_SRC
+        else
+            ln -s ${SRC} ${DEST}
+            echo "Symlink created ${DEST}"
         fi
 
         unset DEST
     done
 
-    update
+    update_source
     unset DIR SRC
 }
 
@@ -151,19 +154,19 @@ then
         exit 1
     fi
 
-    link 'darwin'
+    make_link 'darwin'
 fi
 
 # Setup Linux environment
 if [ 'Linux' == ${OS} ]
 then
     echo "${TEXT_BOLD}Installing for Linux...${TEXT_RESET}"
-    link 'linux'
+    make_link 'linux'
 fi
 
 # Setup common environment
 echo "${TEXT_BOLD}Installing for common environment...${TEXT_RESET}"
-link 'common'
+make_link 'common'
 
 # Initialise Git settings
 if [ -z "$(git config --global user.name)" ]
@@ -180,7 +183,7 @@ then
     unset GIT_CONFIG_USER_EMAIL
 fi
 
-echo 'Git settings updated.'
+echo 'Git settings update.'
 
 # Finish
 echo "${TEXT_BOLD}${TEXT_GREEN}All done.${TEXT_RESET}"
@@ -196,5 +199,5 @@ unset \
     DOTFILES_PATH
 
 unset -f \
-    update \
-    link
+    update_source \
+    make_link

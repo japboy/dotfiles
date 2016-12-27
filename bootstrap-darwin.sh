@@ -16,7 +16,29 @@ TEXT_RED=$(tput setaf 1)
 TEXT_GREEN=$(tput setaf 2)
 TEXT_RESET=$(tput sgr0)
 
+MAC_SERIAL=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
+
 DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
+
+
+##
+# Functions
+
+function is_older_app () {
+    TARGET_PATH=${1}
+    ! [ -d ${TARGET_PATH} ] && return 0
+    TARGET_VERSION=${2}
+    ACTUAL_VERSION=$(mdls -name kMDItemVersion ${TARGET_PATH} | sed -e 's/^kMDItemVersion = "\([0-9\.]*\)"$/\1/g')
+    [ $(echo "${TARGET_VERSION} < ${ACTUAL_VERSION}" | bc) -eq 1 ] && return 1
+    return 0
+}
+
+function is_specific_serial () {
+    TARGET_SERIAL=${1}
+    ACTUAL_SERIAL=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
+    [ ${TARGET_SERIAL} = ${ACTUAL_SERIAL} ] && return 0
+    return 1
+}
 
 
 ##
@@ -24,21 +46,21 @@ DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
 
 echo "${TEXT_BOLD}Now installing login & logout hook scripts...${TEXT_RESET}"
 
-# Install LoginHook
+# LoginHook
 #if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
 #then
 #    chmod +x ${DOTFILES_DARWIN_PATH}/loginhook.sh
 #    sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/loginhook.sh
 #fi
 
-# Install LogoutHook
+# LogoutHook
 #if ! sudo defaults read com.apple.loginwindow LogoutHook &> /dev/null
 #then
 #    chmod +x ${DOTFILES_DARWIN_PATH}/logouthook.sh
 #    sudo defaults write com.apple.loginwindow LogoutHook ${DOTFILES_DARWIN_PATH}/logouthook.sh
 #fi
 
-# Install login scripts using LaunchAgents
+# login scripts using LaunchAgents
 if ! [ -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
 then
     ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
@@ -49,6 +71,10 @@ echo "${TEXT_BOLD}Now customizing default configuration...${TEXT_RESET}"
 
 # Turn off local Time Machine snapshots
 sudo tmutil disablelocal
+
+# Key repeat speed up
+defaults write NSGlobalDomain InitialKeyRepeat -int 35
+defaults write NSGlobalDomain KeyRepeat -int 2
 
 # Enable `locate` command
 if ! sudo launchctl list | grep com.apple.locate &> /dev/null
@@ -95,23 +121,23 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 # Current directory to ~/Downloads
 cd ${HOME}/Downloads
 
-# Install ClamXav
-if [[ ! -d /Applications/ClamXav.app || 'kMDItemVersion = "2.9.2"' != $(mdls -name kMDItemVersion /Applications/ClamXav.app) ]] && [ 'C02NN0VDG3QR' != $(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}') ]
+# ClamXav
+if is_older_app /Applications/ClamXav.app '2.11' && is_specific_serial 'C02N93B6G3QR'
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.9.2_2478.zip
-    unzip -o -d /Applications/ ./ClamXav_2.9.2_2478.zip
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.11_2835.zip
+    unzip -o -d /Applications/ ./ClamXav_2.11_2835.zip
 fi
 
-# Install XQuartz
-if [[ ! -d /Applications/Utilities/XQuartz.app || 'kMDItemVersion = "2.7.8"' != $(mdls -name kMDItemVersion /Applications/Utilities/XQuartz.app) ]]
+# XQuartz
+if is_older_app /Applications/Utilities/XQuartz.app '2.7.11'
 then
-    curl -LO http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.8.dmg
-    hdiutil attach XQuartz-2.7.8.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.7.8/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.7.8
+    curl -LO https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg
+    hdiutil attach XQuartz-2.7.11.dmg
+    sudo installer -pkg /Volumes/XQuartz-2.7.11/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.7.11
 fi
 
-# Install Asepsis
+# Asepsis
 if ! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]]
 then
     curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
@@ -120,8 +146,8 @@ then
     hdiutil detach /Volumes/Asepsis
 fi
 
-# Install XtraFinder
-if [[ ! -d /Applications/XtraFinder.app || 'kMDItemVersion = "0.25.9"' != $(mdls -name kMDItemVersion /Applications/XtraFinder.app) ]]
+# XtraFinder
+if is_older_app /Applications/XtraFinder.app '0.25.9' && is_specific_serial 'C02N93B6G3QR'
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -129,38 +155,25 @@ then
     hdiutil detach /Volumes/XtraFinder
 fi
 
-# Install Native Docker
-if ! which docker &> /dev/null || [[ '1.12.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+# Docker
+if ! which docker &> /dev/null || [[ '1.12.5' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://download.docker.com/mac/stable/Docker.dmg
     hdiutil attach Docker.dmg
     cp -R /Volumes/Docker/Docker.app /Applications/
     hdiutil detach /Volumes/Docker
-fi
-if [ ! -f ${HOME}/Developer/etc/bash_completion.d/docker ]
-then
-    DEST=${HOME}/Developer/etc/bash_completion.d
-    mkdir -p ${DEST}
-    DOCKER_VERSION=$(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
-    DOCKER_COMPOSE_VERSION=$(docker-compose --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
-    DOCKER_MACHINE_VERSION=$(docker-machine --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}')
-    curl -L https://raw.githubusercontent.com/docker/docker/v${DOCKER_VERSION}/contrib/completion/bash/docker > ${DEST}/docker
-    curl -L https://raw.githubusercontent.com/docker/compose/${DOCKER_COMPOSE_VERSION}/contrib/completion/bash/docker-compose > ${DEST}/docker-compose
-    curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine.bash > ${DEST}/docker-machine
-    curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine-wrapper.bash > ${DEST}/docker-machine-wrapper
-    curl -L https://raw.githubusercontent.com/docker/machine/v${DOCKER_MACHINE_VERSION}/contrib/completion/bash/docker-machine-prompt.bash > ${DEST}/docker-machine-prompt
-    unset DEST DOCKER_VERSION DOCKER_COMPOSE_VERSION DOCKER_MACHINE_VERSION
+    open /Applications/Docker.app
 fi
 
-# Install iTerm2
-if [[ ! -d ~/Applications/iTerm.app || 'kMDItemVersion = "3.0.7"' != $(mdls -name kMDItemVersion ~/Applications/iTerm.app) ]]
+# iTerm2
+if is_older_app ~/Applications/iTerm.app '3.0.13'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_0_7.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_0_7.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_0_13.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_0_13.zip
 fi
 
-# Install Visual Studio Code & the plugins
-if [[ ! -d ~/Applications/Visual\ Studio\ Code.app || 'kMDItemVersion = "1.4.0"' != $(mdls -name kMDItemVersion ~/Applications/Visual\ Studio\ Code.app) ]]
+# Visual Studio Code & the plugins
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.8.1'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
@@ -170,8 +183,14 @@ then
     VSCODE_PLUGINS=(
         'EditorConfig.EditorConfig'
         'christian-kohler.path-intellisense'
+        'dbaeumer.vscode-eslint'
+        'ilich8086.classic-asp'
+        'jaydenlin.ctags-support'
+        'mrmlnc.vscode-stylefmt'
         'ms-vscode.PowerShell'
         'ms-vscode.csharp'
+        'ricard.PostCSS'
+        'shinnn.stylelint'
         'vscodevim.vim'
     )
     for PLUGIN in "${VSCODE_PLUGINS[@]}"
@@ -184,15 +203,15 @@ then
     unset VSCODE_PLUGINS PLUGIN
 fi
 
-# Install AppCleaner
-if [[ ! -d ~/Applications/AppCleaner.app || 'kMDItemVersion = "3.3"' != $(mdls -name kMDItemVersion ~/Applications/AppCleaner.app) ]]
+# AppCleaner
+if is_older_app ~/Applications/AppCleaner.app '3.4'
 then
-    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.3.zip
-    unzip -o -d ~/Applications/ ./AppCleaner_3.3.zip
+    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.4.zip
+    unzip -o -d ~/Applications/ ./AppCleaner_3.4.zip
 fi
 
-# Install f.lux
-if [[ ! -d ~/Applications/Flux.app || 'kMDItemVersion = "37.7"' != $(mdls -name kMDItemVersion ~/Applications/Flux.app) ]]
+# f.lux
+if is_older_app ~/Applications/Flux.app '37.7'
 then
     curl -LO https://justgetflux.com/mac/Flux.zip
     unzip -o -d ~/Applications/ ./Flux.zip
@@ -204,18 +223,18 @@ then
     mkdir -p ${HOME}/Library/QuickLook
 fi
 
-# Install QuickLook qlImageSize
+# QuickLook qlImageSize
 if [ ! -d /Library/QuickLook/qlImageSize.qlgenerator ]
 then
     curl -LO http://repo.whine.fr/qlImageSize.pkg
     sudo installer -pkg ${HOME}/Downloads/qlImageSize.pkg -target /
 fi
 
-# Install QuickLook qlImageSize
+# QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
 then
-    curl -LO https://github.com/whomwah/qlstephen/releases/download/1.4.2/QLStephen.qlgenerator.1.4.2.zip
-    unzip QLStephen.qlgenerator.1.4.2.zip -d ${HOME}/Library/QuickLook/
+    curl -LO https://github.com/whomwah/qlstephen/releases/download/1.4.3/QLStephen.qlgenerator.1.4.3.zip
+    unzip QLStephen.qlgenerator.1.4.3.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Restart QuickLook
@@ -242,9 +261,19 @@ xcodebuild -checkFirstLaunchStatus
 if ! pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &> /dev/null
 then
     xcode-select --install
+    echo "${TEXT_RED}Xcode Command Line Tools must be installed first. Aborted.${TEXT_RESET}"
+    exit 1
 fi
 
-# Install Homebrew if not exists
+# Check if JDK is installed
+if ! javac -version &> /dev/null
+then
+    open "http://www.oracle.com/technetwork/java/javase/downloads/index.html"
+    echo "${TEXT_RED}JDK must be installed first. Aborted.${TEXT_RESET}"
+    exit 1
+fi
+
+# Homebrew if not exists
 HOMEBREW="${HOME}/.homebrew"
 
 if ! which brew &> /dev/null
@@ -279,7 +308,7 @@ done
 
 unset TAP TAPS
 
-# Install fundamental dependencies through Homebrew
+# fundamental dependencies through Homebrew
 brew update
 brew upgrade
 
@@ -334,7 +363,7 @@ unset BREW BREWS
 
 brew cleanup
 
-# Install `anyenv` for **env
+# `anyenv` for **env
 ANYENV="${HOME}/.anyenv"
 
 if ! which anyenv &> /dev/null
@@ -351,14 +380,14 @@ then
     anyenv install pyenv
     anyenv install rbenv
     anyenv install ndenv
-    exec ${SHELL} -l
+    #exec ${SHELL} -l
 else
     anyenv update
 fi
 
 unset ANYENV
 
-# Install Perl through `plenv` if not exists
+# Perl through `plenv` if not exists
 PLVER='5.23.3'
 
 if ! plenv versions | grep ${PLVER} &> /dev/null
@@ -371,7 +400,7 @@ plenv rehash
 
 unset PLVER
 
-# Install PHP through `phpenv` if not exists
+# PHP through `phpenv` if not exists
 PHPVER='system'
 
 if ! phpenv versions | grep php-5.5.7 &> /dev/null
@@ -389,8 +418,8 @@ phpenv rehash
 
 unset PHPVER
 
-# Install Python through `pyenv` if not exists
-PYVER='2.7.12'
+# Python through `pyenv` if not exists
+PYVER='3.6.0'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -404,16 +433,13 @@ pyenv rehash
 
 unset PYVER
 
-# Install PyPIs
+# PyPIs
 if which pip &> /dev/null
 then
     PIPS=(
         'pip'
-        'awscli'
-        'fabric'
         'flake8'
         'neovim'
-        'sphinx'
         'virtualenv'
     )
 
@@ -427,8 +453,8 @@ then
     unset PIPS PIP
 fi
 
-# Install Ruby through `rbenv` if not exists
-RBVER='2.3.1'
+# Ruby through `rbenv` if not exists
+RBVER='2.4.0'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
@@ -442,14 +468,12 @@ rbenv rehash
 
 unset RBVER
 
-# Install RubyGems
+# RubyGems
 if which gem &> /dev/null
 then
     GEMS=(
         'bundler'
-        'foreman'
         'gisty'
-        'mdl'
     )
 
     for GEM in "${GEMS[@]}"
@@ -468,8 +492,8 @@ then
     unset GEMS
 fi
 
-# Install Node.js through `ndenv` if not exists
-NDVER='v6.4.0'
+# Node.js through `ndenv` if not exists
+NDVER='v6.9.2'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
@@ -481,7 +505,7 @@ ndenv rehash
 
 unset NDVER
 
-# Install NPMs
+# NPMs
 if which npm &> /dev/null
 then
     NPMS=(
@@ -504,12 +528,12 @@ then
     unset NPMS NPM
 fi
 
-# Install .NET Core
-if ! which dotnet &> /dev/null || [[ '1.0.0-preview2-003121' != $(dotnet --version) ]]
+# .NET Core
+if ! which dotnet &> /dev/null || [[ '1.0.0-preview2-003177' != $(dotnet --version) ]]
 then
     cd ${HOME}/Downloads
-    curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003121.pkg https://go.microsoft.com/fwlink/?LinkID=809124
-    sudo installer -pkg ./dotnet-dev-osx-x64.1.0.0-preview2-003121.pkg -target /
+    curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg https://go.microsoft.com/fwlink/?LinkID=835011
+    sudo installer -pkg ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg -target /
     cd ${CWD}
 fi
 
@@ -524,3 +548,7 @@ unset \
     TEXT_GREEN \
     TEXT_RESET \
     DOTFILES_DARWIN_PATH
+
+unset -f \
+    is_older_app \
+    is_specific_serial

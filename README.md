@@ -58,7 +58,7 @@ Requirements
 
 ### Linux
 
-* Maybe for Ubuntu 12.04
+* Meh X(
 
 Credits
 -------

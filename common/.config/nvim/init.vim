@@ -27,6 +27,8 @@ endif
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir)
 
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+
   let s:dein_toml = expand('$XDG_CONFIG_HOME/nvim/dein.toml')
   let s:dein_lazy_toml = expand('$XDG_CONFIG_HOME/nvim/dein_lazy.toml')
 
@@ -95,8 +97,7 @@ set ambiwidth=double
 set scrolloff=5         " Set scroll top position to line 5
 
 " Let NeoVim choose Python runtime wisely
-let g:python_host_prog = expand('~/.pyenv/shims/python')
-let g:python3_host_prog = expand('~/.pyenv/versions/3.5.1/bin/python')
+let g:python3_host_prog = expand('$HOME') . '/.anyenv/envs/pyenv/shims/python'
 
 
 ""
@@ -115,17 +116,19 @@ nmap g# g#zz
 ""
 " Color scheme & highlight
 
+set termguicolors
+
 let g:solarized_termcolors=256  " Enable Solarized colour theme
 let g:solarized_termtrans=1
 
 if has('gui_running')
-    set background=light
-else
     set background=dark
+else
+    set background=light
 endif
 
 syntax enable
-"colorscheme solarized
+colorscheme solarized
 
 " Highlight characters over 80 chars
 set colorcolumn=80
@@ -208,7 +211,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_signs = 1
 
+let g:syntastic_css_checkers = ['stylelint']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_coffee_coffeelint_args = '--reporter csv --file .coffeelintrc'
 
