@@ -3,7 +3,7 @@ dotfiles
 
 Yet another dotfiles written by [@japboy](http://github.com/japboy/).
 
-**Heavily work in progress, and this is currently focusing only on Mac OS X**
+**Heavily work in progress, and this is currently focusing only on Mac OS X and macOS**
 
 Installation
 ------------
@@ -52,7 +52,7 @@ Requirements
 
 ### Mac OS X
 
-* Mac OS X 10.10 (Yosemite)
+* Mac OS X 10.10 (Yosemite) or macOS 10.12
 * [Xcode](http://itunes.apple.com/en/app/xcode/id497799835)
 * [Command Line Tools](http://developer.apple.com/xcode/) (if you prefer to not installing entire Xcode SDK)
 

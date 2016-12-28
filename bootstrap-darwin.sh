@@ -33,7 +33,8 @@ function is_older_app () {
 
 function is_older_os () {
     TARGET_VERSION=${1}
-    ACTUAL_VERSION=$(system_profiler SPSoftwareDataType | grep 'System Version' | awk '{print $4}' | cut -c-5)
+    # FIXME: No compatibility macOS for { print $4 } for macOS, { print $5 } for OS X
+    ACTUAL_VERSION=$(system_profiler SPSoftwareDataType | grep 'System Version' | awk '{ print $5 }' | cut -c-5)
     [ $(echo "${TARGET_VERSION} >= ${ACTUAL_VERSION}" | bc) -eq 1 ] && return 0
     return 1
 }
