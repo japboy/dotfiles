@@ -34,78 +34,42 @@ function update_source () {
     PROFILE_PATH="${HOME}/.bash_profile"
     RC_PATH="${HOME}/.bashrc"
 
-    if [ -f ${PROFILE_PATH} ]
-    then
-        source ${PROFILE_PATH}
-    fi
-
-    if [ -f ${RC_PATH} ]
-    then
-        source ${RC_PATH}
-    fi
+    [ -f ${PROFILE_PATH} ] && source ${PROFILE_PATH}
+    [ -f ${RC_PATH} ] && source ${RC_PATH}
 
     unset PROFILE_PATH RC_PATH
 }
 
 # Link dotfiles to home directory
 function make_link {
-    DIR=${1}
+    TARGET_PARENT=${1}
 
-    if [ -z "${DIR}" ]
+    if [ -z "${TARGET_PARENT}" ]
     then
         echo "${TEXT_RED}Link source path required. Aborted.${TEXT_RESET}"
-        unset DIR
+        unset TARGET_PARENT
         exit 1
     fi
 
-    for SRC in ${DOTFILES_PATH}/${DIR}/.[^.]*
-    do
-        DEST="${HOME}/$(basename ${SRC})"
-
-        if [ -L ${DEST} ]
-        then
-            rm ${DEST}
-            echo "Symlink removed ${DEST}"
-            ln -s ${SRC} ${DEST}
-            echo "Symlink created ${DEST}"
-        elif [ -f ${DEST} ]
-        then
-            mv ${DEST} ${DEST}.orig
-            echo "File renamed to ${DEST}.orig"
-            ln -s ${SRC} ${DEST}
-            echo "Symlink created ${DEST}"
-        elif [ -d ${DEST} ]
-        then
-            for CHILD_SRC in ${SRC}/*
-            do
-                CHILD_DEST="${DEST}/$(basename ${CHILD_SRC})"
-
-                if [ -L ${CHILD_DEST} ]
-                then
-                    rm ${CHILD_DEST}
-                    echo "Symlink removed ${CHILD_DEST}"
-                elif [ -f ${CHILD_DEST} ] || [ -d ${CHILD_DEST} ]
-                then
-                    mv ${CHILD_DEST} ${CHILD_DEST}.orig
-                    echo "File/Directory renamed to ${CHILD_DEST}.orig"
-                fi
-
-                ln -s ${CHILD_SRC} ${CHILD_DEST}
-                echo "Symlink created ${CHILD_DEST}"
-
-                unset CHILD_DEST
-            done
-            unset CHILD_SRC
-        else
-            ln -s ${SRC} ${DEST}
-            echo "Symlink created ${DEST}"
-        fi
-
-        unset DEST
-    done
+    find "${DOTFILES_PATH}/${TARGET_PARENT}" -type f -not -name '.DS_Store' |
+    {
+        while read ACTUAL_PATH
+        do
+            TARGET_PATH=".${ACTUAL_PATH##${DOTFILES_PATH}/${TARGET_PARENT}}"
+            [ ! -d "${TARGET_PATH%/*}" ] && mkdir -p "${TARGET_PATH%/*}"
+            [ -f "${TARGET_PATH}" -a ! -L "${TARGET_PATH}" ] && mv "${TARGET_PATH}" "${TARGET_PATH}.orig"
+            if [ ! -e "${TARGET_PATH}" ]
+            then
+                ln -s "${ACTUAL_PATH}" "${TARGET_PATH}"
+                echo "Symlink created: ${TARGET_PATH}"
+            fi
+            unset ACTUAL_PATH TARGET_PATH
+        done
+    }
 
     update_source
-    unset DIR SRC
+
+    unset TARGET_PARENT
 }
 
 
@@ -127,7 +91,7 @@ then
     fi
 
     # Check if `~/.dotfiles` exists or not
-    if ! [ -d ${DOTFILES_PATH} ]
+    if [ ! -d ${DOTFILES_PATH} ]
     then
         git clone --recursive ${DOTFILES_REPO} ${DOTFILES_PATH}
     elif [ -d ${DOTFILES_PATH}/.git ]
@@ -143,7 +107,7 @@ then
 fi
 
 # Setup Mac OS X environment
-if [ 'Darwin' == ${OS} ]
+if [ 'Darwin' = ${OS} ]
 then
     echo "${TEXT_BOLD}Installing for Mac OS X...${TEXT_RESET}"
 
@@ -158,7 +122,7 @@ then
 fi
 
 # Setup Linux environment
-if [ 'Linux' == ${OS} ]
+if [ 'Linux' = ${OS} ]
 then
     echo "${TEXT_BOLD}Installing for Linux...${TEXT_RESET}"
     make_link 'linux'

@@ -24,7 +24,7 @@ DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
 
 function is_older_app () {
     TARGET_PATH="${1}"
-    ! [ -d "${TARGET_PATH}" ] && return 1
+    [ ! -d "${TARGET_PATH}" ] && return 1
     TARGET_VERSION=${2}
     ACTUAL_VERSION=$(mdls -name kMDItemVersion "${TARGET_PATH}" | sed -e 's/^kMDItemVersion = "\([0-9\.]*\)"$/\1/g')
     [ ${TARGET_VERSION} != ${ACTUAL_VERSION} ] && return 0
@@ -66,7 +66,7 @@ echo "${TEXT_BOLD}Now installing login & logout hook scripts...${TEXT_RESET}"
 #fi
 
 # login scripts using LaunchAgents
-if ! [ -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
+if [ ! -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
 then
     ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
     launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
@@ -143,7 +143,7 @@ then
 fi
 
 # Asepsis
-if is_older_os '10.10' && ! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]]
+if is_older_os '10.10' && (! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]])
 then
     curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
     hdiutil attach Asepsis-1.5.2.dmg
@@ -152,7 +152,7 @@ then
 fi
 
 # XtraFinder
-if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/XtraFinder.app '0.25.9'
+if is_older_os '10.10' && is_older_app /Applications/XtraFinder.app '0.25.9'
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -233,7 +233,7 @@ then
 fi
 
 # QuickLook qlImageSize
-if [ ! -d /Library/QuickLook/qlImageSize.qlgenerator ]
+if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
 then
     curl -LO http://repo.whine.fr/qlImageSize.pkg
     sudo installer -pkg ${HOME}/Downloads/qlImageSize.pkg -target /
@@ -502,7 +502,7 @@ then
 fi
 
 # .NET Core
-if ! which dotnet &> /dev/null || [[ '1.0.0-preview2-003177' != $(dotnet --version) ]]
+if ! which dotnet &> /dev/null || [[ '1.0.0-preview2-1-003177' != $(dotnet --version) ]]
 then
     cd ${HOME}/Downloads
     curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg https://go.microsoft.com/fwlink/?LinkID=835011
