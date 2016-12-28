@@ -226,6 +226,16 @@ then
     unzip -o -d ~/Applications/ ./Flux.zip
 fi
 
+# IPSecuritas
+if is_specific_serial 'C02ST0UWGY6N' && is_older_app ~/Applications/IPSecuritas.app '4.7'
+then
+    curl -LO http://www.lobotomo.com/products/downloads/IPSecuritas%204.7.dmg
+    hdiutil attach IPSecuritas\ 4.7.dmg
+    cp -R /Volumes/IPSecuritas\ 4.7/IPSecuritas.app ~/Applications/
+    hdiutil detach /Volumes/IPSecuritas\ 4.7
+fi
+
+
 # Check if QuickLook directory exists
 if [ ! -d ${HOME}/Library/QuickLook ]
 then
