@@ -16,8 +16,6 @@ TEXT_RED=$(tput setaf 1)
 TEXT_GREEN=$(tput setaf 2)
 TEXT_RESET=$(tput sgr0)
 
-MAC_SERIAL=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
-
 DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
 
 
@@ -30,6 +28,13 @@ function is_older_app () {
     TARGET_VERSION=${2}
     ACTUAL_VERSION=$(mdls -name kMDItemVersion "${TARGET_PATH}" | sed -e 's/^kMDItemVersion = "\([0-9\.]*\)"$/\1/g')
     [ ${TARGET_VERSION} != ${ACTUAL_VERSION} ] && return 0
+    return 1
+}
+
+function is_older_os () {
+    TARGET_VERSION=${1}
+    ACTUAL_VERSION=$(system_profiler SPSoftwareDataType | grep 'System Version' | awk '{print $4}' | cut -c-5)
+    [ $(echo "${TARGET_VERSION} >= ${ACTUAL_VERSION}" | bc) -eq 1 ] && return 0
     return 1
 }
 
@@ -122,7 +127,7 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # ClamXav
-if is_older_app /Applications/ClamXav.app '2.11' && is_specific_serial 'C02N93B6G3QR'
+if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.11'
 then
     curl -LO https://www.clamxav.com/downloads/ClamXav_2.11_2835.zip
     unzip -o -d /Applications/ ./ClamXav_2.11_2835.zip
@@ -138,7 +143,7 @@ then
 fi
 
 # Asepsis
-if ! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]]
+if is_older_os '10.10' && ! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]]
 then
     curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
     hdiutil attach Asepsis-1.5.2.dmg
@@ -147,7 +152,7 @@ then
 fi
 
 # XtraFinder
-if is_older_app /Applications/XtraFinder.app '0.25.9' && is_specific_serial 'C02N93B6G3QR'
+if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/XtraFinder.app '0.25.9'
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -182,13 +187,17 @@ if which code &> /dev/null
 then
     VSCODE_PLUGINS=(
         'EditorConfig.EditorConfig'
+        'PeterJausovec.vscode-docker'
         'christian-kohler.path-intellisense'
         'dbaeumer.vscode-eslint'
+        'donjayamanne.githistory'
         'ilich8086.classic-asp'
         'jaydenlin.ctags-support'
         'mrmlnc.vscode-stylefmt'
         'ms-vscode.PowerShell'
         'ms-vscode.csharp'
+        'msjsdiag.debugger-for-chrome'
+        'msjsdiag.debugger-for-ios-web'
         'ricard.PostCSS'
         'shinnn.stylelint'
         'vscodevim.vim'
@@ -340,7 +349,6 @@ BREWS=(
     're2c'
     'readline'
     'rmtrash'
-    'ruby-build'
     'scons'
     'webp'
 )
@@ -516,4 +524,5 @@ unset \
 
 unset -f \
     is_older_app \
+    is_older_os \
     is_specific_serial
