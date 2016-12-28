@@ -265,6 +265,16 @@ qlmanage -r cache
 cd ${CWD}
 
 
+if [ -d ~/Library/Fonts/powerline-fonts ]
+then
+    cd ~/Library/Fonts/powerline-fonts
+    git pull origin master
+    cd ${CWD}
+else
+    git clone https://github.com/powerline/fonts.git ~/Library/Fonts/powerline-fonts
+fi
+
+
 echo "${TEXT_BOLD}Now setting up development environment...${TEXT_RESET}"
 
 # Check if Xcode is installed
@@ -351,17 +361,20 @@ BREWS=(
     'lua --with-completion'
     'mcrypt'
     'mercurial'
-    'mono'
+    #'mono'
     'neovim'
     'openssl'
     'packer'
+    'pcre'
     'pip-completion'
     'pkg-config'
     're2c'
     'readline'
     'rmtrash'
     'scons'
+    'the_silver_searcher'
     'webp'
+    'xz'
 )
 
 for BREW in "${BREWS[@]}"

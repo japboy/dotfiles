@@ -99,6 +99,10 @@ set scrolloff=5         " Set scroll top position to line 5
 " Let NeoVim choose Python runtime wisely
 let g:python3_host_prog = expand('$HOME') . '/.anyenv/envs/pyenv/shims/python'
 
+" The Silver Searcher
+" https://github.com/ggreer/the_silver_searcher
+let g:ackprg = 'ag --vimgrep'
+
 
 ""
 " My shorthands
@@ -111,6 +115,8 @@ nmap * *zz
 nmap # #zz
 nmap g* g*zz
 nmap g# g#zz
+
+vnoremap /g y:Denite grep::-iHRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
 
 
 ""
@@ -223,11 +229,12 @@ let g:syntastic_coffee_coffeelint_args = '--reporter csv --file .coffeelintrc'
 " https://github.com/aperezdc/vim-template
 
 let g:templates_no_builtin_templates = 1
-let g:templates_directory = ['~/.vim/templates']
+let g:templates_directory = ['~/.config/nvim/templates']
 
 
 ""
 " vim-airline
 " https://github.com/vim-airline/vim-airline
 
-let g:airline_powerline_fonts=0
+let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled = 1

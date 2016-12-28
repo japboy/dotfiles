@@ -5,6 +5,9 @@ repo = 'Shougo/dein.vim'
 repo = 'Shougo/denite.nvim'
 
 [[plugins]]
+repo = 'Shougo/deoplete.nvim'
+
+[[plugins]]
 repo = 'aperezdc/vim-template'
 
 [[plugins]]
@@ -23,13 +26,13 @@ repo = 'scrooloose/syntastic'
 repo = 'mtscout6/syntastic-local-eslint.vim'
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-
-[[plugins]]
 repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
 
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
