@@ -22,3 +22,6 @@
 [mergetool "vim"]
 	cmd = vim -d $LOCAL $MERGED $REMOTE
 	keepbackup = false
+[user]
+	name = Yu I.
+	email = lagfer@youck.org
