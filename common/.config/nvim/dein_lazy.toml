@@ -27,6 +27,10 @@ repo = 'kewah/vim-stylefmt'
 on_ft = ['css']
 
 [[plugins]]
+repo = 'posva/vim-vue'
+on_ft = ['vue']
+
+[[plugins]]
 repo = 'tikhomirov/vim-glsl'
 on_ft = ['frag', 'vert']
 
