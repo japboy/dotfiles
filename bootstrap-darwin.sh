@@ -531,6 +531,11 @@ then
     curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg https://go.microsoft.com/fwlink/?LinkID=835011
     sudo installer -pkg ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg -target /
     cd ${CWD}
+
+    # https://www.microsoft.com/net/core#macos
+    [ ! -d /usr/local/lib ] && sudo mkdir -p /usr/local/lib/
+    [ ! -f /usr/local/lib/libcrypto.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libcrypto.1.0.0.dylib /usr/local/lib/
+    [ ! -f /usr/local/lib/libssl.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libssl.1.0.0.dylib /usr/local/lib/
 fi
 
 # Setup default lagunage
