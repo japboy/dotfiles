@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>428</string>
+	<string>409.2</string>
 	<key>AMApplicationVersion</key>
-	<string>2.7</string>
+	<string>2.5</string>
 	<key>AMDocumentVersion</key>
 	<string>2</string>
 	<key>actions</key>
@@ -84,7 +84,7 @@
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>6BF69723-1B7C-45BC-89BC-28238E5A9C61</string>
+				<string>9683F10B-C993-4A88-9397-299E153B08DD</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -94,9 +94,9 @@
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>BEDD0803-5B0F-4997-BFF6-6F3F63218870</string>
+				<string>D7DFD329-4B0E-4E7F-9811-BEBEBC42BBBE</string>
 				<key>UUID</key>
-				<string>E7BEF14B-A859-4A58-85E3-2BF695493BF0</string>
+				<string>4A9F55B3-44FA-4534-B7BB-5D1F7B12AD31</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
