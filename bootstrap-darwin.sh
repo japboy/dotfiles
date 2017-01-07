@@ -33,8 +33,7 @@ function is_older_app () {
 
 function is_older_os () {
     TARGET_VERSION=${1}
-    # FIXME: No compatibility macOS for { print $4 } for macOS, { print $5 } for OS X
-    ACTUAL_VERSION=$(system_profiler SPSoftwareDataType | grep 'System Version' | awk '{ print $5 }' | cut -c-5)
+    ACTUAL_VERSION=$(system_profiler SPSoftwareDataType | grep 'System Version' | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | cut -c -5)
     [ $(echo "${TARGET_VERSION} >= ${ACTUAL_VERSION}" | bc) -eq 1 ] && return 0
     return 1
 }
@@ -532,6 +531,11 @@ then
     curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg https://go.microsoft.com/fwlink/?LinkID=835011
     sudo installer -pkg ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg -target /
     cd ${CWD}
+
+    # https://www.microsoft.com/net/core#macos
+    [ ! -d /usr/local/lib ] && sudo mkdir -p /usr/local/lib/
+    [ ! -f /usr/local/lib/libcrypto.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libcrypto.1.0.0.dylib /usr/local/lib/
+    [ ! -f /usr/local/lib/libssl.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libssl.1.0.0.dylib /usr/local/lib/
 fi
 
 # Setup default lagunage

@@ -78,6 +78,10 @@ export PATH="${HOME}/.anyenv/bin:${PATH}"
 eval "$(anyenv init -)"
 [ -f "${HOME}/.anyenv/completions/anyenv.bash" ] && source "${HOME}/.anyenv/completions/anyenv.bash"
 
+# pyenv anaconda hotfix
+# http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c
+export PATH="${PYENV_ROOT}/versions/anaconda3-4.2.0/bin/:${PATH}"
+
 
 ##
 # Additional settings
