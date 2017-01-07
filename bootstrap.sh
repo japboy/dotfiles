@@ -51,7 +51,11 @@ function make_link {
         exit 1
     fi
 
-    find "${DOTFILES_PATH}/${TARGET_PARENT}" -type f -not -name '.DS_Store' |
+    find "${DOTFILES_PATH}/${TARGET_PARENT}" -type f \
+        -not -name '.DS_Store' \
+        -not -name 'loginhook.sh' \
+        -not -name 'logouthook.sh' | \
+    grep --invert-match --regexp='\/Services\/.*\.workflow\/' |
     {
         while read ACTUAL_PATH
         do
