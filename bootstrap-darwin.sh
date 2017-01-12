@@ -538,6 +538,15 @@ then
     [ ! -f /usr/local/lib/libssl.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libssl.1.0.0.dylib /usr/local/lib/
 fi
 
+# PowerShell
+if ! which powershell &> /dev/null
+then
+    cd ${HOME}/Downloads
+    curl -LO https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/powershell-6.0.0-alpha.14.pkg
+    sudo installer -pkg ./powershell-6.0.0-alpha.14.pkg -target /
+    cd ${CWD}
+fi
+
 # Setup default lagunage
 #sudo languagesetup
 
