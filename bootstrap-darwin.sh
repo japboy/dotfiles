@@ -347,6 +347,7 @@ BREWS=(
     'bison'
     'ccache'
     'cmake'
+    'ctags'
     'gem-completion'
     'gettext'
     'gibo'
