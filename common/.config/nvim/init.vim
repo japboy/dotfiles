@@ -108,16 +108,16 @@ let g:ackprg = 'ag --vimgrep'
 ""
 " My shorthands
 
-"nnoremap <ESC><ESC> :nohlsearch<CR>
+"nmap n nzz
+"nmap N Nzz
+"nmap * *zz
+"nmap # #zz
+"nmap g* g*zz
+"nmap g# g#zz
 
-nmap n nzz
-nmap N Nzz
-nmap * *zz
-nmap # #zz
-nmap g* g*zz
-nmap g# g#zz
-
-vnoremap /g y:Denite grep::-iHRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
+nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap <C-]> :bnext<CR>
+nnoremap <C-[> :bprevious<CR>
 
 
 ""
@@ -195,6 +195,25 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+
+""
+" denite
+" https://github.com/Shougo/denite.nvim
+
+let g:denite_enable_ignore_case = 1
+let g:denite_enable_smart_case = 1
+
+if executable('ag')
+  let g:denite_source_grep_command = 'ag'
+  let g:denite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:denite_source_grep_recursive_opt = ''
+endif
+
+nnoremap <silent> ,g  :<C-u>Denite grep:. -buffer-name=search-buffer<CR>
+nnoremap <silent> ,f  :<C-u>Denite file_rec:. -buffer-name=search-buffer<CR>
+nnoremap <silent> ,cg :<C-u>Denite grep:. -buffer-name=search-buffer<CR><C-R><C-W><CR>
+vnoremap /g y:Denite grep::-iHRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
 
 
 ""
