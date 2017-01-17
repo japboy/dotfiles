@@ -78,9 +78,10 @@ set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true
 "let $LANG='ja_JP.UTF-8'
 
 set nobomb              " Turn BOM off
-set encoding=utf-8      " Encode text as UTF-8
-set fileencodings=utf-8,iso-2022-jp,euc-jp,sjis  " Encode file as UTF-8
-set fileformat=unix     " Set Line Feed as line break
+set encoding=utf-8      " Set default encoding as UTF-8
+set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8  " Detect encoding
+set fileformat=unix     " Set line-feed as line break
+set fileformats=dos,unix,mac  " Detect line break
 
 set printoptions=number:y,wrap:y,top:10mm,bottom:10mm,left:10mm,right:10m
 set printencoding=utf-8
