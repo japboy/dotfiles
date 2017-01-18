@@ -116,8 +116,8 @@ let g:ackprg = 'ag --vimgrep'
 "nmap g# g#zz
 
 "nnoremap <ESC><ESC> :nohlsearch<CR>
-nnoremap <C-]> :bnext<CR>
-nnoremap <C-[> :bprevious<CR>
+nnoremap <C-.> :bnext<CR>
+nnoremap <C-,> :bprevious<CR>
 
 
 ""
@@ -206,11 +206,11 @@ autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
 let g:denite_enable_ignore_case = 1
 let g:denite_enable_smart_case = 1
 
-if executable('ag')
-  let g:denite_source_grep_command = 'ag'
-  let g:denite_source_grep_default_opts = '--nogroup --nocolor --column'
-  let g:denite_source_grep_recursive_opt = ''
-endif
+"if executable('ag')
+"  let g:denite_source_grep_command = 'ag'
+"  let g:denite_source_grep_default_opts = '--nogroup --nocolor --column'
+"  let g:denite_source_grep_recursive_opt = ''
+"endif
 
 nnoremap <silent> ,g  :<C-u>Denite grep:. -buffer-name=search-buffer<CR>
 nnoremap <silent> ,f  :<C-u>Denite file_rec:. -buffer-name=search-buffer<CR>
