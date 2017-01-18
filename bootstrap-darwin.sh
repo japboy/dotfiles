@@ -369,6 +369,7 @@ BREWS=(
     'pcre'
     'pip-completion'
     'pkg-config'
+    'pt'
     're2c'
     'readline'
     'rmtrash'
