@@ -50,7 +50,7 @@ endif
 filetype indent on
 filetype plugin indent on
 
-scriptencoding utf-8
+"scriptencoding utf-8
 
 set number              " Display line number
 set wrap
@@ -67,7 +67,7 @@ set shiftwidth=4
 set softtabstop=4       " Remove 4 spaces with Backspace key
 
 set list                " Display unprintable characters (eol, tab, etc)
-set listchars=tab:..,trail:~
+set listchars=tab:>-,trail:~
 
 set foldmethod=syntax
 
@@ -79,21 +79,21 @@ set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true
 
 set nobomb              " Turn BOM off
 set encoding=utf-8      " Set default encoding as UTF-8
-set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8  " Detect encoding
 set fileformat=unix     " Set line-feed as line break
-set fileformats=dos,unix,mac  " Detect line break
+set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8  " Detect encoding
+set fileformats=dos,mac,unix  " Detect line break
 
-set printoptions=number:y,wrap:y,top:10mm,bottom:10mm,left:10mm,right:10m
-set printencoding=utf-8
-set printmbcharset=JIS_X_1990
-set printmbfont=r:Hiragino_Maru_Gothic_Pro
+"set printoptions=number:y,wrap:y,top:10mm,bottom:10mm,left:10mm,right:10m
+"set printencoding=utf-8
+"set printmbcharset=JIS_X_1990
+"set printmbfont=r:Hiragino_Maru_Gothic_Pro
 "set printexpr
 
 "set spell spelllang=en_gb
 
 set backspace=indent,eol,start
 
-set ambiwidth=double
+"set ambiwidth=double
 
 set scrolloff=5         " Set scroll top position to line 5
 
@@ -115,7 +115,7 @@ let g:ackprg = 'ag --vimgrep'
 "nmap g* g*zz
 "nmap g# g#zz
 
-nnoremap <ESC><ESC> :nohlsearch<CR>
+"nnoremap <ESC><ESC> :nohlsearch<CR>
 nnoremap <C-]> :bnext<CR>
 nnoremap <C-[> :bprevious<CR>
 
@@ -141,6 +141,8 @@ colorscheme solarized
 set colorcolumn=80
 "highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 "match OverLength /\%81v.\+/
+
+highlight SpecialKey ctermbg=NONE ctermfg=NONE guibg=NONE guifg=#DDDDDD
 
 " Highlight current line
 augroup CursorLine
