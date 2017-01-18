@@ -100,10 +100,6 @@ set scrolloff=5         " Set scroll top position to line 5
 " Let NeoVim choose Python runtime wisely
 let g:python3_host_prog = expand('$HOME') . '/.anyenv/envs/pyenv/shims/python'
 
-" The Silver Searcher
-" https://github.com/ggreer/the_silver_searcher
-let g:ackprg = 'ag --vimgrep'
-
 
 ""
 " My shorthands
@@ -186,36 +182,39 @@ endif
 
 ""
 " deoplete & autocomplete
+" :help deoplete
 " https://github.com/Shougo/deoplete.nvim
+
+set completeopt+=noinsert
 
 let g:deoplete#enable_at_startup = 1
 
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+let g:deoplete#sources = {}
+let g:deoplete#sources._ = ['buffer', 'tag', 'file', 'omni']
+
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#functions.css = 'csscomplete#CompleteCSS'
+let g:deoplete#omni#functions.javascript = 'javascriptcomplete#CompleteJS'
+let g:deoplete#omni#functions.python = 'pythoncomplete#Complete'
+let g:deoplete#omni#functions.xml = 'xmlcomplete#CompleteTags'
+let g:deoplete#omni#functions.csharp = 'OmniSharp#Complete'
 
 
 ""
 " denite
+" :help denite
 " https://github.com/Shougo/denite.nvim
 
-let g:denite_enable_ignore_case = 1
-let g:denite_enable_smart_case = 1
+call denite#custom#var('file_rec', 'command', ['pt', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
+call denite#custom#var('grep', 'command', ['pt', '--nocolor', '--nogroup','--smart-case', '--hidden'])
+call denite#custom#var('grep', 'default_opts', [])
+call denite#custom#var('grep', 'recursive_opts', [])
 
-"if executable('ag')
-"  let g:denite_source_grep_command = 'ag'
-"  let g:denite_source_grep_default_opts = '--nogroup --nocolor --column'
-"  let g:denite_source_grep_recursive_opt = ''
-"endif
-
-nnoremap <silent> ,g  :<C-u>Denite grep:. -buffer-name=search-buffer<CR>
-nnoremap <silent> ,f  :<C-u>Denite file_rec:. -buffer-name=search-buffer<CR>
-nnoremap <silent> ,cg :<C-u>Denite grep:. -buffer-name=search-buffer<CR><C-R><C-W><CR>
-vnoremap /g y:Denite grep::-iHRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
+nnoremap <silent> <C-k><C-f> :<C-u>Denite file_rec<CR>
+nnoremap <silent> <C-k><C-g> :<C-u>Denite grep<CR>
+nnoremap <silent> <C-k><C-l> :<C-u>Denite line<CR>
+nnoremap <silent> <C-k><C-u> :<C-u>Denite file_mru<CR>
+nnoremap <silent> <C-k><C-y> :<C-u>Denite neoyank<CR>
 
 
 ""
