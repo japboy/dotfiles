@@ -355,6 +355,7 @@ BREWS=(
     'giflib'
     'git'
     'git-extras'
+    'go'
     'grc'
     'libjpeg'
     'libpng'
