@@ -1,18 +1,76 @@
+# NEOVIM PLUGINS SYNCHRONOUSLY LOADED
+
+
+##
+# dein
+# :help dein
+# https://github.com/Shougo/dein.vim
+
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-depends = ['neomru.vim', 'neoyank.vim']
 
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
+##
+# neomru
+# https://github.com/Shougo/neomru.vim
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
 
+
+##
+# neoyank
+# https://github.com/Shougo/neoyank.vim
+
 [[plugins]]
 repo = 'Shougo/neoyank.vim'
+
+
+##
+# denite
+# :help denite
+# https://github.com/Shougo/denite.nvim
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+depends = ['neomru.vim', 'neoyank.vim']
+hook_add = '''
+nnoremap <silent> <C-k><C-f> :<C-u>Denite file_rec<CR>
+nnoremap <silent> <C-k><C-g> :<C-u>Denite grep<CR>
+nnoremap <silent> <C-k><C-l> :<C-u>Denite line<CR>
+nnoremap <silent> <C-k><C-u> :<C-u>Denite file_mru<CR>
+nnoremap <silent> <C-k><C-y> :<C-u>Denite neoyank<CR>
+'''
+hook_post_source = '''
+call denite#custom#var('file_rec', 'command',
+    \ ['pt', '--follow', '--nocolor', '--nogroup', '-g', ''])
+call denite#custom#var('grep', 'command',
+    \ ['pt', '--follow', '--nocolor', '--nogroup','--smart-case'])
+call denite#custom#var('grep', 'default_opts', [])
+call denite#custom#var('grep', 'recursive_opts', [])
+'''
+
+
+##
+# deoplete
+# :help deoplete
+# https://github.com/Shougo/deoplete.nvim
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_add = '''
+set completeopt+=noinsert
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = {}
+let g:deoplete#sources._ = ['buffer', 'tag', 'file', 'omni']
+let g:deoplete#omni#functions = {}
+let g:deoplete#omni#functions.css = 'csscomplete#CompleteCSS'
+let g:deoplete#omni#functions.javascript = 'javascriptcomplete#CompleteJS'
+let g:deoplete#omni#functions.python = 'pythoncomplete#Complete'
+let g:deoplete#omni#functions.xml = 'xmlcomplete#CompleteTags'
+let g:deoplete#omni#functions.csharp = 'OmniSharp#Complete'
+'''
+
 
 [[plugins]]
 repo = 'aperezdc/vim-template'
@@ -40,4 +98,3 @@ repo = 'vim-airline/vim-airline'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
-

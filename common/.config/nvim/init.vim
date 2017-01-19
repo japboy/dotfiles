@@ -181,43 +181,6 @@ endif
 
 
 ""
-" deoplete & autocomplete
-" :help deoplete
-" https://github.com/Shougo/deoplete.nvim
-
-set completeopt+=noinsert
-
-let g:deoplete#enable_at_startup = 1
-
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['buffer', 'tag', 'file', 'omni']
-
-let g:deoplete#omni#functions = {}
-let g:deoplete#omni#functions.css = 'csscomplete#CompleteCSS'
-let g:deoplete#omni#functions.javascript = 'javascriptcomplete#CompleteJS'
-let g:deoplete#omni#functions.python = 'pythoncomplete#Complete'
-let g:deoplete#omni#functions.xml = 'xmlcomplete#CompleteTags'
-let g:deoplete#omni#functions.csharp = 'OmniSharp#Complete'
-
-
-""
-" denite
-" :help denite
-" https://github.com/Shougo/denite.nvim
-
-call denite#custom#var('file_rec', 'command', ['pt', '--follow', '--nocolor', '--nogroup', '--hidden', '-g', ''])
-call denite#custom#var('grep', 'command', ['pt', '--nocolor', '--nogroup','--smart-case', '--hidden'])
-call denite#custom#var('grep', 'default_opts', [])
-call denite#custom#var('grep', 'recursive_opts', [])
-
-nnoremap <silent> <C-k><C-f> :<C-u>Denite file_rec<CR>
-nnoremap <silent> <C-k><C-g> :<C-u>Denite grep<CR>
-nnoremap <silent> <C-k><C-l> :<C-u>Denite line<CR>
-nnoremap <silent> <C-k><C-u> :<C-u>Denite file_mru<CR>
-nnoremap <silent> <C-k><C-y> :<C-u>Denite neoyank<CR>
-
-
-""
 " NERDTree
 " https://github.com/scrooloose/nerdtree
 
