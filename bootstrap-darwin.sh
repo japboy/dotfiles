@@ -161,7 +161,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '1.12.6' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '1.13.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://download.docker.com/mac/stable/Docker.dmg
     hdiutil attach Docker.dmg
