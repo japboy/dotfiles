@@ -45,3 +45,7 @@ on_ft = ['cs', 'csi', 'csx']
   windows = 'msbuild server/OmniSharp.sln'
   mac     = 'xbuild server/OmniSharp.sln'
   unix    = 'xbuild server/OmniSharp.sln'
+
+[[plugins]]
+repo = 'PProvost/vim-ps1'
+on_ft = ['ps1']
