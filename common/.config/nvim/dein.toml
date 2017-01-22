@@ -80,6 +80,19 @@ repo = 'editorconfig/editorconfig-vim'
 
 [[plugins]]
 repo = 'frankier/neovim-colors-solarized-truecolor-only'
+hook_add = '''
+let g:solarized_termcolors=256  " Enable Solarized colour theme
+let g:solarized_termtrans=1
+'''
+hook_source = '''
+set termguicolors
+if has('gui_running')
+    set background=light
+else
+    set background=dark
+endif
+colorscheme solarized
+'''
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
