@@ -119,19 +119,7 @@ nnoremap <C-,> :bprevious<CR>
 ""
 " Color scheme & highlight
 
-set termguicolors
-
-let g:solarized_termcolors=256  " Enable Solarized colour theme
-let g:solarized_termtrans=1
-
-if has('gui_running')
-    set background=dark
-else
-    set background=light
-endif
-
 syntax enable
-colorscheme solarized
 
 " Highlight characters over 80 chars
 set colorcolumn=80
