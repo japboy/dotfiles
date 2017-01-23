@@ -78,13 +78,14 @@ repo = 'aperezdc/vim-template'
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
 
+
+##
+# Solarized
+# https://github.com/frankier/neovim-colors-solarized-truecolor-only
+
 [[plugins]]
 repo = 'frankier/neovim-colors-solarized-truecolor-only'
 hook_add = '''
-let g:solarized_termcolors=256  " Enable Solarized colour theme
-let g:solarized_termtrans=1
-'''
-hook_source = '''
 set termguicolors
 if has('gui_running')
     set background=light
@@ -93,6 +94,7 @@ else
 endif
 colorscheme solarized
 '''
+
 
 [[plugins]]
 repo = 'scrooloose/nerdtree'
