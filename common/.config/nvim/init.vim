@@ -9,12 +9,15 @@ if has('nvim')
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
+" Let NeoVim choose Python runtime wisely
+let g:python3_host_prog = expand('$HOME/.anyenv/envs/pyenv/shims/python')
+
 
 ""
 " Dein.vim
 " https://github.com/Shougo/dein.vim
 
-let s:dein_dir = expand('~/.cache/dein')
+let s:dein_dir = expand('$HOME/.cache/dein')
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
 if &runtimepath !~# '/dein.vim'
@@ -97,9 +100,6 @@ set backspace=indent,eol,start
 
 set scrolloff=5         " Set scroll top position to line 5
 
-" Let NeoVim choose Python runtime wisely
-let g:python3_host_prog = expand('$HOME') . '/.anyenv/envs/pyenv/shims/python'
-
 
 ""
 " My shorthands
@@ -126,7 +126,7 @@ set colorcolumn=80
 "highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 "match OverLength /\%81v.\+/
 
-highlight SpecialKey ctermbg=NONE ctermfg=NONE guibg=NONE guifg=#DDDDDD
+highlight SpecialKey ctermbg=NONE ctermfg=NONE guibg=NONE guifg=#666666
 
 " Highlight current line
 augroup CursorLine
@@ -166,47 +166,3 @@ if has("gui_running")
     set shellslash  " / = \
   endif
 endif
-
-
-""
-" NERDTree
-" https://github.com/scrooloose/nerdtree
-
-let g:NERDTreeShowBookmarks=1
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd w
-autocmd BufEnter * NERDTreeMirror
-
-
-""
-" syntastic
-" https://github.com/scrooloose/syntastic
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_signs = 1
-
-let g:syntastic_css_checkers = ['stylelint']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_coffee_coffeelint_args = '--reporter csv --file .coffeelintrc'
-
-
-""
-" vim-tempalte
-" https://github.com/aperezdc/vim-template
-
-let g:templates_no_builtin_templates = 1
-let g:templates_directory = ['~/.config/nvim/templates']
-
-
-""
-" vim-airline
-" https://github.com/vim-airline/vim-airline
-
-let g:airline_powerline_fonts=1
-let g:airline#extensions#tabline#enabled = 1

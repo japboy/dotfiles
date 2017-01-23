@@ -59,7 +59,6 @@ call denite#custom#var('grep', 'recursive_opts', [])
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 hook_add = '''
-set completeopt+=noinsert
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources = {}
 let g:deoplete#sources._ = ['buffer', 'tag', 'file', 'omni']
@@ -69,11 +68,21 @@ let g:deoplete#omni#functions.javascript = 'javascriptcomplete#CompleteJS'
 let g:deoplete#omni#functions.python = 'pythoncomplete#Complete'
 let g:deoplete#omni#functions.xml = 'xmlcomplete#CompleteTags'
 let g:deoplete#omni#functions.csharp = 'OmniSharp#Complete'
+set completeopt+=noinsert
 '''
 
 
+##
+# vim-tempalte
+# https://github.com/aperezdc/vim-template
+
 [[plugins]]
 repo = 'aperezdc/vim-template'
+hook_add = '''
+let g:templates_no_builtin_templates = 1
+let g:templates_directory = ['$XDG_CONFIG_HOME/nvim/templates']
+'''
+
 
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
@@ -96,20 +105,63 @@ colorscheme solarized
 '''
 
 
-[[plugins]]
-repo = 'scrooloose/nerdtree'
+##
+# NERDTree
+# https://github.com/scrooloose/nerdtree
 
 [[plugins]]
-repo = 'scrooloose/syntastic'
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+let g:NERDTreeShowBookmarks=1
+autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd w
+autocmd BufEnter * NERDTreeMirror
+'''
+
 
 [[plugins]]
 repo = 'mtscout6/syntastic-local-eslint.vim'
 
+
+##
+# syntastic
+# https://github.com/scrooloose/syntastic
+
+[[plugins]]
+repo = 'scrooloose/syntastic'
+depends = ['syntastic-local-eslint.vim']
+hook_add = '''
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_signs = 1
+let g:syntastic_css_checkers = ['stylelint']
+let g:syntastic_javascript_checkers = ['eslint']
+'''
+hook_post_source = '''
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+'''
+
+
 [[plugins]]
 repo = 'tpope/vim-dispatch'
 
-[[plugins]]
-repo = 'vim-airline/vim-airline'
+
+##
+# vim-airline
+# https://github.com/vim-airline/vim-airline
 
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
+
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+depends = ['vim-airline-themes']
+hook_add = '''
+let g:airline_theme = 'solarized'
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+'''
