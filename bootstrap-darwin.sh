@@ -66,7 +66,7 @@ echo "${TEXT_BOLD}Now installing login & logout hook scripts...${TEXT_RESET}"
 #fi
 
 # login scripts using LaunchAgents
-if [ ! -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
+if is_specific_serial 'C02N93B6G3QR' && [ ! -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
 then
     ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
     launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
@@ -211,6 +211,15 @@ then
         fi
     done
     unset VSCODE_PLUGINS PLUGIN
+fi
+
+# nvALT
+if is_older_app ~/Applications/nvALT.app '2.2.7'
+then
+    curl -LO https://updates.designheresy.com/nvalt/nvALT2.2.7126.dmg
+    hdiutil attach nvALT2.2.7126.dmg
+    cp -R /Volumes/nvALT/nvALT.app ~/Applications/
+    hdiutil detach /Volumes/nvALT
 fi
 
 # AppCleaner
