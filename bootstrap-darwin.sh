@@ -336,6 +336,7 @@ TAPS=(
     'homebrew/versions'
     'universal-ctags/universal-ctags'
     'neovim/neovim'
+    'tkengo/highway'
 )
 
 for TAP in "${TAPS[@]}"
@@ -366,6 +367,7 @@ BREWS=(
     'git-extras'
     'go'
     'grc'
+    'highway'
     'libjpeg'
     'libpng'
     'libtiff'
