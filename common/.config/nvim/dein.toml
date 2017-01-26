@@ -120,8 +120,12 @@ autocmd BufEnter * NERDTreeMirror
 '''
 
 
+##
+# dispatch.vim
+# https://github.com/tpope/vim-dispatch
+
 [[plugins]]
-repo = 'mtscout6/syntastic-local-eslint.vim'
+repo = 'tpope/vim-dispatch'
 
 
 ##
@@ -129,8 +133,11 @@ repo = 'mtscout6/syntastic-local-eslint.vim'
 # https://github.com/scrooloose/syntastic
 
 [[plugins]]
+repo = 'mtscout6/syntastic-local-eslint.vim'
+
+[[plugins]]
 repo = 'scrooloose/syntastic'
-depends = ['syntastic-local-eslint.vim']
+depends = ['vim-dispatch', 'syntastic-local-eslint.vim']
 hook_add = '''
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -147,8 +154,12 @@ set statusline+=%*
 '''
 
 
+##
+# fugitive.vim
+# https://github.com/tpope/vim-fugitive
+
 [[plugins]]
-repo = 'tpope/vim-dispatch'
+repo = 'tpope/vim-fugitive'
 
 
 ##
@@ -160,7 +171,7 @@ repo = 'vim-airline/vim-airline-themes'
 
 [[plugins]]
 repo = 'vim-airline/vim-airline'
-depends = ['vim-airline-themes']
+depends = ['vim-airline-themes', 'vim-fugitive']
 hook_add = '''
 let g:airline_theme = 'solarized'
 let g:airline_powerline_fonts = 1
