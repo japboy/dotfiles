@@ -54,7 +54,8 @@ function make_link {
     find "${DOTFILES_PATH}/${TARGET_PARENT}" -type f \
         -not -name '.DS_Store' \
         -not -name 'loginhook.sh' \
-        -not -name 'logouthook.sh' | \
+        -not -name 'logouthook.sh' \
+        -not -name 'com.github.japboy.ramdisk.plist' | \
     grep --invert-match --regexp='\/Services\/.*\.workflow\/' |
     {
         while read ACTUAL_PATH
