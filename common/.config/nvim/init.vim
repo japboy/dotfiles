@@ -112,8 +112,8 @@ set scrolloff=5         " Set scroll top position to line 5
 "nmap g# g#zz
 
 "nnoremap <ESC><ESC> :nohlsearch<CR>
-nnoremap <C-.> :bnext<CR>
-nnoremap <C-,> :bprevious<CR>
+nnoremap <silent> <C-b><C-l> :bnext<CR>
+nnoremap <silent> <C-b><C-h> :bprevious<CR>
 
 
 ""

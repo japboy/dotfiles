@@ -35,6 +35,7 @@ repo = 'Shougo/neoyank.vim'
 repo = 'Shougo/denite.nvim'
 depends = ['neomru.vim', 'neoyank.vim']
 hook_add = '''
+nnoremap <silent> <C-k><C-b> :<C-u>Denite buffer<CR>
 nnoremap <silent> <C-k><C-f> :<C-u>Denite file_rec<CR>
 nnoremap <silent> <C-k><C-g> :<C-u>Denite grep -buffer-name=search-buffer-denite<CR>
 nnoremap <silent> <C-k><C-r> :<C-u>Denite -resume -buffer-name=search-buffer-denite -select=+1<CR>
@@ -61,6 +62,7 @@ call denite#custom#var('grep', 'recursive_opts', [])
 repo = 'Shougo/deoplete.nvim'
 hook_add = '''
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#sources = {}
 let g:deoplete#sources._ = ['buffer', 'tag', 'file', 'omni']
 let g:deoplete#omni#functions = {}
