@@ -87,8 +87,27 @@ let g:templates_directory = ['$XDG_CONFIG_HOME/nvim/templates']
 '''
 
 
+##
+# EditorConfig Vim Plugin
+# https://github.com/editorconfig/editorconfig-vim
+
 [[plugins]]
 repo = 'editorconfig/editorconfig-vim'
+hook_add = '''
+let g:EditorConfig_max_line_indicator = "line"
+'''
+
+
+##
+# Vim colorschemes
+# https://github.com/flazz/vim-colorschemes
+
+[[plugins]]
+repo = 'flazz/vim-colorschemes'
+hook_add = '''
+set termguicolors
+colorscheme Monokai
+'''
 
 
 ##
@@ -98,13 +117,13 @@ repo = 'editorconfig/editorconfig-vim'
 [[plugins]]
 repo = 'frankier/neovim-colors-solarized-truecolor-only'
 hook_add = '''
-set termguicolors
-if has('gui_running')
-    set background=light
-else
-    set background=dark
-endif
-colorscheme solarized
+"set termguicolors
+"if has('gui_running')
+"    set background=light
+"else
+"    set background=dark
+"endif
+"colorscheme solarized
 '''
 
 

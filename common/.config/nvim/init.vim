@@ -122,7 +122,7 @@ nnoremap <silent> <C-b><C-h> :bprevious<CR>
 syntax enable
 
 " Highlight characters over 80 chars
-set colorcolumn=80
+"set colorcolumn=80
 "highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 "match OverLength /\%81v.\+/
 
