@@ -505,7 +505,7 @@ then
 fi
 
 # Node.js through `ndenv` if not exists
-NDVER='v6.9.2'
+NDVER='v6.9.5'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
