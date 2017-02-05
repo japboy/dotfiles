@@ -118,12 +118,7 @@ sudo automount -vc
 [ ! -d "${HOME}/Applications" ] && mkdir ${HOME}/Applications
 
 # Create `Developer` directory if it doesn't exist
-[ ! -d "${HOME}/Developer" ] && mkdir -p \
-    ${HOME}/Developer/bin \
-    ${HOME}/Developer/etc \
-    ${HOME}/Developer/opt \
-    ${HOME}/Developer/share/man \
-    ${HOME}/Developer/src
+[ ! -d "${HOME}/Developer" ] && mkdir ${HOME}/Developer
 
 
 echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"

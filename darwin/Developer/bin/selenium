@@ -1,0 +1,3 @@
+#!/bin/sh
+cd ${HOME}/Developer/opt/selenium-server-standalone
+java -jar ./selenium-server-standalone-3.0.1.jar
