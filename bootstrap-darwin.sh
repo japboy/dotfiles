@@ -118,7 +118,12 @@ sudo automount -vc
 [ ! -d "${HOME}/Applications" ] && mkdir ${HOME}/Applications
 
 # Create `Developer` directory if it doesn't exist
-[ ! -d "${HOME}/Developer" ] && mkdir -p ${HOME}/Developer/bin ${HOME}/Developer/etc ${HOME}/Developer/share/man
+[ ! -d "${HOME}/Developer" ] && mkdir -p \
+    ${HOME}/Developer/bin \
+    ${HOME}/Developer/etc \
+    ${HOME}/Developer/opt \
+    ${HOME}/Developer/share/man \
+    ${HOME}/Developer/src
 
 
 echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
@@ -178,7 +183,7 @@ then
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.8.1'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.9.0'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
