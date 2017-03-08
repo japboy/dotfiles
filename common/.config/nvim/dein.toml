@@ -134,10 +134,12 @@ hook_add = '''
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-let g:NERDTreeShowBookmarks=1
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd w
-autocmd BufEnter * NERDTreeMirror
+if !has("gui_vimr")
+    let g:NERDTreeShowBookmarks=1
+    autocmd VimEnter * NERDTree
+    autocmd VimEnter * wincmd w
+    autocmd BufEnter * NERDTreeMirror
+endif
 '''
 
 
@@ -163,10 +165,10 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 let g:syntastic_enable_signs = 1
 
-let g:syntastic_error_symbol = '❌'
-let g:syntastic_style_error_symbol = '⁉️'
-let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_style_warning_symbol = '💩'
+let g:syntastic_error_symbol = 'e'
+let g:syntastic_style_error_symbol = 'e'
+let g:syntastic_warning_symbol = 'w'
+let g:syntastic_style_warning_symbol = 'w'
 
 "let g:syntastic_css_checkers = ['stylelint']
 "let g:syntastic_javascript_checkers = ['eslint']
