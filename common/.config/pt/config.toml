@@ -1,2 +1,5 @@
-smart-case
-global-gitignore
+color = true
+group = true
+smart-case = true
+ignore = [".git", "node_modules"]
+global-gitignore = true

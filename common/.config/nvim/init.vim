@@ -96,7 +96,7 @@ set fileformats=dos,mac,unix  " Detect line break
 
 set backspace=indent,eol,start
 
-"set ambiwidth=double
+set ambiwidth=double
 
 set scrolloff=5         " Set scroll top position to line 5
 

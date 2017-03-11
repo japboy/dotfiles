@@ -11,6 +11,14 @@ repo = 'Shougo/dein.vim'
 
 
 ##
+# easymotion
+# https://github.com/easymotion/vim-easymotion
+
+[[plugins]]
+repo = 'easymotion/vim-easymotion'
+
+
+##
 # neomru
 # https://github.com/Shougo/neomru.vim
 
@@ -44,12 +52,16 @@ nnoremap <silent> <C-k><C-u> :<C-u>Denite file_mru<CR>
 nnoremap <silent> <C-k><C-y> :<C-u>Denite neoyank<CR>
 '''
 hook_post_source = '''
-call denite#custom#var('file_rec', 'command',
-    \ ['hw', '--ignore-case', '--no-group', '--no-color'])
-call denite#custom#var('grep', 'command',
-    \ ['hw', '--follow-link', '--ignore-case', '--no-group', '--no-color'])
-call denite#custom#var('grep', 'default_opts', [])
+call denite#custom#var('file_rec', 'command',)
+    \ ['pt', '--follow', '--nocolor', '--nogroup', '-g:', ''])
+
+call denite#custom#var('grep', 'command', ['pt'])
+call denite#custom#var('grep', 'default_opts',
+    \ ['--nogroup', '--nocolor', '--smart-case'])
 call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
 '''
 
 
@@ -106,7 +118,11 @@ let g:EditorConfig_max_line_indicator = "line"
 repo = 'flazz/vim-colorschemes'
 hook_add = '''
 set termguicolors
-colorscheme Monokai
+if has('gui_vimr')
+    colorschemes editplus
+else
+    colorscheme Monokai
+endif
 '''
 
 
@@ -134,10 +150,12 @@ hook_add = '''
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-let g:NERDTreeShowBookmarks=1
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd w
-autocmd BufEnter * NERDTreeMirror
+if !has('gui_vimr')
+    let g:NERDTreeShowBookmarks=1
+    autocmd VimEnter * NERDTree
+    autocmd VimEnter * wincmd w
+    autocmd BufEnter * NERDTreeMirror
+endif
 '''
 
 
@@ -163,10 +181,10 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 1
 let g:syntastic_enable_signs = 1
 
-let g:syntastic_error_symbol = '❌'
-let g:syntastic_style_error_symbol = '⁉️'
-let g:syntastic_warning_symbol = '⚠️'
-let g:syntastic_style_warning_symbol = '💩'
+let g:syntastic_error_symbol = 'e'
+let g:syntastic_style_error_symbol = 'e'
+let g:syntastic_warning_symbol = 'w'
+let g:syntastic_style_warning_symbol = 'w'
 
 "let g:syntastic_css_checkers = ['stylelint']
 "let g:syntastic_javascript_checkers = ['eslint']
