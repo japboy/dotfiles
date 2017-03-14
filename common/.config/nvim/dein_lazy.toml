@@ -1,6 +1,18 @@
 # NEOVIM PLUGINS ASYNCHRONOUSLY LOADED
 
 
+##
+# vim-tags
+# https://github.com/szw/vim-tags
+
+[[plugins]]
+repo = 'szw/vim-tags'
+on_event = ['FocusLost', 'CursorHold']
+hook_add = '''
+let g:vim_tags_auto_generate = 1
+'''
+
+
 [[plugins]]
 repo = 'cespare/vim-toml'
 on_ft = ['toml']
