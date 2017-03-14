@@ -50,8 +50,7 @@ nnoremap <silent> <C-k><C-r> :<C-u>Denite -resume -buffer-name=search-buffer-den
 nnoremap <silent> <C-k><C-l> :<C-u>Denite line<CR>
 nnoremap <silent> <C-k><C-u> :<C-u>Denite file_mru<CR>
 nnoremap <silent> <C-k><C-y> :<C-u>Denite neoyank<CR>
-'''
-hook_source = '''
+
 call denite#custom#var('file_rec', 'command',
     \ ['pt', '--follow', '--nocolor', '--nogroup', '-g:', ''])
 
@@ -188,8 +187,7 @@ let g:syntastic_style_warning_symbol = 'w'
 
 "let g:syntastic_css_checkers = ['stylelint']
 "let g:syntastic_javascript_checkers = ['eslint']
-'''
-hook_post_source = '''
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
