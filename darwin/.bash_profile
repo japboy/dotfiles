@@ -80,7 +80,10 @@ eval "$(anyenv init -)"
 
 # pyenv anaconda hotfix
 # http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c
-export PATH="${PYENV_ROOT}/versions/anaconda3-4.2.0/bin/:${PATH}"
+#export PATH="${PYENV_ROOT}/versions/anaconda3-4.2.0/bin/:${PATH}"
+
+# yarn
+export PATH="${HOME}/.yarn/bin:${PATH}"
 
 
 ##
