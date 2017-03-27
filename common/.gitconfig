@@ -6,6 +6,7 @@
 [core]
 	autocrlf = input
 	excludesfile = ~/.gitignore
+	quotepath = false
 [gc]
 	auto = 3000
 	autopacklimit = 20
