@@ -127,10 +127,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # ClamXav
-if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.11'
+if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.12.1'
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.11_2835.zip
-    unzip -o -d /Applications/ ./ClamXav_2.11_2835.zip
+    curl -LO https://www.clamxav.com/downloads/ClamXav_2.12.1_3057.zip
+    unzip -o -d /Applications/ ./ClamXav_2.12.1_3057.zip
 fi
 
 # XQuartz
@@ -161,7 +161,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '1.13.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '1.13.1' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://download.docker.com/mac/stable/Docker.dmg
     hdiutil attach Docker.dmg
@@ -171,14 +171,14 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.0.13'
+if is_older_app ~/Applications/iTerm.app '3.0.15'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_0_13.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_0_13.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_0_15.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_0_15.zip
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.9.0'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.10.2'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
