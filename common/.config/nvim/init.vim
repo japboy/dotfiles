@@ -83,8 +83,8 @@ set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true
 set nobomb              " Turn BOM off
 set encoding=utf-8      " Set default encoding as UTF-8
 set fileformat=unix     " Set line-feed as line break
-set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8  " Detect encoding
-set fileformats=dos,mac,unix  " Detect line break
+set fileencodings=utf-8,iso-2022-jp,cp932,sjis,euc-jp  " Detect encoding
+set fileformats=unix,dos,mac  " Detect line break
 
 "set printoptions=number:y,wrap:y,top:10mm,bottom:10mm,left:10mm,right:10m
 "set printencoding=utf-8
@@ -99,6 +99,12 @@ set backspace=indent,eol,start
 set ambiwidth=double
 
 set scrolloff=5         " Set scroll top position to line 5
+
+" enable autoread to reload any files from files when checktime is called and
+" the file is changed
+set autoread
+" add an autocmd after vim started to execute checktime for *.js files on write
+au VimEnter * au BufWritePost * checktime
 
 
 ""
