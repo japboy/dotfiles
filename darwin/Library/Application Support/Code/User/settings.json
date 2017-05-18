@@ -1,10 +1,12 @@
 // Place your settings in this file to overwrite the default settings
 {
-  // Controls after how many characters the editor will wrap to the next line. Setting this to 0 turns on viewport width wrapping (word wrapping). Setting this to -1 forces the editor to never wrap.
-  "editor.wrappingColumn": 100,
-
-  // Controls if lines should wrap. The lines will wrap at min(editor.wrappingColumn, viewportWidthInColumns).
-  "editor.wordWrap": true,
+  // Controls how lines should wrap. Can be:
+  //  - 'off' (disable wrapping),
+  //  - 'on' (viewport wrapping),
+  //  - 'wordWrapColumn' (wrap at `editor.wordWrapColumn`) or
+  //  - 'bounded' (wrap at minimum of viewport and `editor.wordWrapColumn`).
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 100,
 
   // Controls the cursor style, accepted values are 'block', 'line' and 'underline'
   "editor.cursorStyle": "block",
@@ -15,18 +17,46 @@
   // Controls whether the editor should render indent guides
   "editor.renderIndentGuides": true,
 
+  // Controls if the minimap is shown
+  "editor.minimap.enabled": true,
+
+  // Configure glob patterns for excluding files and folders.
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/node_modules": true,
+    "**/.DS_Store": true,
+    "**/.ctags": true,
+    "**/tags": true
+  },
+
   // Configure file associations to languages (e.g. "*.extension": "html"). These have precedence over the default associations of the languages installed.
   "files.associations": {
       "*.asp": "asp",
-      "*.css": "postcss"
+      "*.css": "postcss",
+      "*.vue": "vue"
   },
 
   // The default end of line character.
   "files.eol": "\n",
 
+  // When enabled, will attempt to guess the character set encoding when opening files
+  "files.autoGuessEncoding": true,
+
   // Controls SCSS validation and problem severities.
   // Enables or disables all validations
   "css.validate": false,
+
+  // Controls SCSS validation and problem severities.
+  // Enables or disables all validations
+  "scss.validate": false,
+
+  // Specifies the color theme used in the workbench.
+  "workbench.colorTheme": "Default Light+",
+
+  // Specifies the icon theme used in the workbench.
+  "workbench.iconTheme": "vs-minimal",
 
   // Turns auto fix on save on or off.
   "eslint.autoFixOnSave": true,
@@ -38,5 +68,8 @@
   "vim.useSystemClipboard": true,
 
   // Show all matches of the most recent search pattern
-  "vim.hlsearch": true
+  "vim.hlsearch": true,
+
+  // Enable the EasyMotion plugin for Vim.
+  "vim.easymotion": true
 }
