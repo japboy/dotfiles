@@ -152,7 +152,7 @@ then
 fi
 
 # XtraFinder
-if is_older_os '10.10' && is_older_app /Applications/XtraFinder.app '0.25.9'
+if is_older_os '10.10' && is_older_app /Applications/XtraFinder.app '0.26'
 then
     curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
     hdiutil attach XtraFinder.dmg
@@ -161,14 +161,14 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '1.13.1' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
-then
-    curl -LO https://download.docker.com/mac/stable/Docker.dmg
-    hdiutil attach Docker.dmg
-    cp -R /Volumes/Docker/Docker.app /Applications/
-    hdiutil detach /Volumes/Docker
-    open /Applications/Docker.app
-fi
+#if ! which docker &> /dev/null || [[ '1.13.1' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+#then
+#    curl -LO https://download.docker.com/mac/stable/Docker.dmg
+#    hdiutil attach Docker.dmg
+#    cp -R /Volumes/Docker/Docker.app /Applications/
+#    hdiutil detach /Volumes/Docker
+#    open /Applications/Docker.app
+#fi
 
 # iTerm2
 if is_older_app ~/Applications/iTerm.app '3.0.15'
@@ -228,7 +228,7 @@ then
 fi
 
 # f.lux
-if is_older_app ~/Applications/Flux.app '37.7'
+if is_older_app ~/Applications/Flux.app '39.94'
 then
     curl -LO https://justgetflux.com/mac/Flux.zip
     unzip -o -d ~/Applications/ ./Flux.zip
@@ -539,11 +539,11 @@ then
 fi
 
 # .NET Core
-if ! which dotnet &> /dev/null || [[ '1.0.0-preview2-1-003177' != $(dotnet --version) ]]
+if ! which dotnet &> /dev/null || [[ '1.0.4' != $(dotnet --version) ]]
 then
     cd ${HOME}/Downloads
-    curl -L -o ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg https://go.microsoft.com/fwlink/?LinkID=835011
-    sudo installer -pkg ./dotnet-dev-osx-x64.1.0.0-preview2-003177.pkg -target /
+    curl -LO https://download.microsoft.com/download/B/9/F/B9F1AF57-C14A-4670-9973-CDF47209B5BF/dotnet-dev-osx-x64.1.0.4.pkg
+    sudo installer -pkg ./dotnet-dev-osx-x64.1.0.4.pkg -target /
     cd ${CWD}
 
     # https://www.microsoft.com/net/core#macos
@@ -556,8 +556,8 @@ fi
 if ! which powershell &> /dev/null
 then
     cd ${HOME}/Downloads
-    curl -LO https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/powershell-6.0.0-alpha.14.pkg
-    sudo installer -pkg ./powershell-6.0.0-alpha.14.pkg -target /
+    curl -LO https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/powershell-6.0.0-beta.1-osx.10.12-x64.pkg
+    sudo installer -pkg ./powershell-6.0.0-beta.1-osx.10.12-x64.pkg -target /
     cd ${CWD}
 fi
 
