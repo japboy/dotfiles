@@ -178,7 +178,7 @@ then
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.10.2'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.12.2'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
@@ -187,19 +187,17 @@ if which code &> /dev/null
 then
     VSCODE_PLUGINS=(
         'EditorConfig.EditorConfig'
-        'PeterJausovec.vscode-docker'
         'christian-kohler.path-intellisense'
         'dbaeumer.vscode-eslint'
         'donjayamanne.githistory'
-        'ilich8086.classic-asp'
-        'jaydenlin.ctags-support'
+        'jtanx.ctagsx'
+        'jtjoo.classic-asp-html'
         'mrmlnc.vscode-stylefmt'
         'ms-mssql.mssql'
-        'ms-vscode.PowerShell'
         'ms-vscode.csharp'
-        'msjsdiag.debugger-for-chrome'
-        'msjsdiag.debugger-for-ios-web'
+        'ms-vscode.PowerShell'
         'ricard.PostCSS'
+        'seanwash.vue'
         'shinnn.stylelint'
         'vscodevim.vim'
     )
