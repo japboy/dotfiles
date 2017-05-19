@@ -60,6 +60,7 @@ export MANPATH="${HOME}/.homebrew/share/man:${MANPATH}"
 export PKG_CONFIG_PATH="/opt/X11/lib/pkgconfig"
 export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:${PKG_CONFIG_PATH}"
 export PKG_CONFIG_PATH="${HOME}/.homebrew/lib/pkgconfig:${PKG_CONFIG_PATH}"
+export LD_LIBRARY_PATH="${HOME}/.homebrew/lib"
 
 # XDG Base Directory
 export XDG_CONFIG_HOME=${HOME}/.config
