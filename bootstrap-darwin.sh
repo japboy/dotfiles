@@ -190,6 +190,8 @@ then
         'christian-kohler.path-intellisense'
         'dbaeumer.vscode-eslint'
         'donjayamanne.githistory'
+        'donjayamanne.python'
+        'eg2.vscode-npm-script'
         'jtanx.ctagsx'
         'jtjoo.classic-asp-html'
         'mrmlnc.vscode-stylefmt'
