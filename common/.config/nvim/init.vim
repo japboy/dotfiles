@@ -106,6 +106,9 @@ set autoread
 " add an autocmd after vim started to execute checktime for *.js files on write
 au VimEnter * au BufWritePost * checktime
 
+" Specify Ctags file name
+set tags=./tags,./.tags,tags,.tags;
+
 
 ""
 " My shorthands
