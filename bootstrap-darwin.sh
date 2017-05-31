@@ -431,7 +431,7 @@ fi
 unset ANYENV
 
 # Python through `pyenv` if not exists
-PYVER='3.6.0'
+PYVER='3.6.1'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -466,7 +466,7 @@ then
 fi
 
 # Ruby through `rbenv` if not exists
-RBVER='2.4.0'
+RBVER='2.4.1'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
@@ -505,7 +505,7 @@ then
 fi
 
 # Node.js through `ndenv` if not exists
-NDVER='v6.9.5'
+NDVER='v6.10.3'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
@@ -521,7 +521,7 @@ unset NDVER
 if which npm &> /dev/null
 then
     NPMS=(
-        'npm'
+        'npm@latest'
         'yo'
     )
 
