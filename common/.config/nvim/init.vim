@@ -72,7 +72,7 @@ set softtabstop=4       " Remove 4 spaces with Backspace key
 set list                " Display unprintable characters (eol, tab, etc)
 set listchars=tab:>-,trail:~
 
-set foldmethod=syntax
+"set foldmethod=syntax
 
 set laststatus=2
 set statusline=%t%m%r%=%{'enc=['.(&fenc!=''?&fenc:&enc).']\ bomb=['.(&bomb?'true':'false').']\ ff=['.&ff.']'}
