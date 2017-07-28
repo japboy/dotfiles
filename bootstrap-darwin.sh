@@ -127,10 +127,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # ClamXav
-if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.12.1'
+if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.14'
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_2.12.1_3057.zip
-    unzip -o -d /Applications/ ./ClamXav_2.12.1_3057.zip
+    curl -LO https://www.clamxav.com/downloads/ClamXav_Current.dmg
+    unzip -o -d /Applications/ ./ClamXAV_2.14_3295.zip
 fi
 
 # XQuartz
@@ -142,33 +142,15 @@ then
     hdiutil detach /Volumes/XQuartz-2.7.11
 fi
 
-# Asepsis
-if is_older_os '10.10' && (! which asepsisctl &> /dev/null || [[ 'asepsisctl 1.5.2' != $(asepsisctl --version) ]])
-then
-    curl -LO http://downloads.binaryage.com/Asepsis-1.5.2.dmg
-    hdiutil attach Asepsis-1.5.2.dmg
-    sudo installer -pkg /Volumes/Asepsis/Asepsis.pkg -target /
-    hdiutil detach /Volumes/Asepsis
-fi
-
-# XtraFinder
-if is_older_os '10.10' && is_older_app /Applications/XtraFinder.app '0.26'
-then
-    curl -LO http://www.trankynam.com/xtrafinder/downloads/XtraFinder.dmg
-    hdiutil attach XtraFinder.dmg
-    sudo installer -pkg /Volumes/XtraFinder/XtraFinder.pkg -target /
-    hdiutil detach /Volumes/XtraFinder
-fi
-
 # Docker
-#if ! which docker &> /dev/null || [[ '1.13.1' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
-#then
-#    curl -LO https://download.docker.com/mac/stable/Docker.dmg
-#    hdiutil attach Docker.dmg
-#    cp -R /Volumes/Docker/Docker.app /Applications/
-#    hdiutil detach /Volumes/Docker
-#    open /Applications/Docker.app
-#fi
+if ! which docker &> /dev/null || [[ '17.06.0-ce' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+then
+    curl -LO https://download.docker.com/mac/stable/Docker.dmg
+    hdiutil attach Docker.dmg
+    cp -R /Volumes/Docker/Docker.app /Applications/
+    hdiutil detach /Volumes/Docker
+    open /Applications/Docker.app
+fi
 
 # iTerm2
 if is_older_app ~/Applications/iTerm.app '3.0.15'
@@ -178,7 +160,7 @@ then
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.12.2'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.14.2'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
@@ -191,6 +173,7 @@ then
         'dbaeumer.vscode-eslint'
         'donjayamanne.githistory'
         'eg2.vscode-npm-script'
+        'flowtype.flow-for-vscode'
         'jtanx.ctagsx'
         'jtjoo.classic-asp-html'
         'magicstack.MagicPython'
@@ -198,8 +181,9 @@ then
         'ms-mssql.mssql'
         'ms-vscode.csharp'
         'ms-vscode.PowerShell'
+        'octref.vetur'
+        'oysun.vuehelper'
         'ricard.PostCSS'
-        'seanwash.vue'
         'shinnn.stylelint'
         'vscodevim.vim'
     )
@@ -486,6 +470,7 @@ then
     GEMS=(
         'bundler'
         'gisty'
+        'neovim'
     )
 
     for GEM in "${GEMS[@]}"
@@ -505,7 +490,7 @@ then
 fi
 
 # Node.js through `ndenv` if not exists
-NDVER='v6.10.3'
+NDVER='v6.11.1'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
@@ -522,6 +507,7 @@ if which npm &> /dev/null
 then
     NPMS=(
         'npm@latest'
+        'vue-cli'
         'yo'
     )
 
