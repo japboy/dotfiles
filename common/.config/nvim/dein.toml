@@ -65,25 +65,35 @@ call denite#custom#var('grep', 'final_opts', [])
 
 
 ##
+# neosnippet
+# https://github.com/Shougo/neosnippet.vim
+
+[[plugins]]
+repo = 'Shougo/neosnippet'
+hook_add = '''
+let g:neosnippet#enable_completed_snippet = 1
+'''
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+
+##
 # deoplete
 # :help deoplete
 # https://github.com/Shougo/deoplete.nvim
 
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
+depends = ['neosnippet', 'neosnippet-snippets']
 hook_add = '''
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['buffer', 'tag', 'file', 'omni']
-let g:deoplete#omni#functions = {}
-let g:deoplete#omni#functions.css = 'csscomplete#CompleteCSS'
-let g:deoplete#omni#functions.javascript = 'javascriptcomplete#CompleteJS'
-let g:deoplete#omni#functions.python = 'pythoncomplete#Complete'
-let g:deoplete#omni#functions.xml = 'xmlcomplete#CompleteTags'
-let g:deoplete#omni#functions.csharp = 'OmniSharp#Complete'
 set completeopt+=noinsert
 '''
+
+[[plugins]]
+repo = 'wokalski/autocomplete-flow'
 
 
 ##
@@ -182,7 +192,7 @@ let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_fix_on_save = 1
 
 let g:ale_linters = {'vue': ['stylelint', 'eslint']}
-let g:ale_linter_aliases = {'vue': 'css'}
+let g:ale_linter_aliases = {'vue': ['css', 'html', 'javascript']}
 '''
 
 
