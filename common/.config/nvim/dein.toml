@@ -172,6 +172,7 @@ repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'w0rp/ale'
+depends = ['vim-vue']
 hook_add = '''
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -180,7 +181,7 @@ let g:airline#extensions#ale#enabled = 1
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_fix_on_save = 1
 
-let g:ale_linters = {'vue': ['eslint', 'stylelint']}
+let g:ale_linters = {'vue': ['stylelint', 'eslint']}
 let g:ale_linter_aliases = {'vue': 'css'}
 '''
 
