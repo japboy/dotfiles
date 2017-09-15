@@ -178,3 +178,9 @@ if has("gui_running")
     set shellslash  " / = \
   endif
 endif
+
+
+""
+" Extra settings for Dein lazy load plugins
+
+autocmd FileType vue syntax sync fromstart
