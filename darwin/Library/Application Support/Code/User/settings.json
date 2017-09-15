@@ -25,9 +25,12 @@
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
+    "**/__pycache__": true,
+    "**/node_modules": true,
     "**/.DS_Store": true,
     "**/.ctags": true,
-    "**/node_modules": true
+    "**/.eslintcache": true,
+    "**/.stylelintcache": true
   },
 
   // Configure file associations to languages (e.g. "*.extension": "html"). These have precedence over the default associations of the languages installed.
@@ -50,6 +53,9 @@
   // Controls SCSS validation and problem severities.
   // Enables or disables all validations
   "scss.validate": false,
+
+  // Validation for PostCSS files
+  "postcss.validate": false,
 
   // Specifies the color theme used in the workbench.
   "workbench.colorTheme": "Default Light+",
@@ -80,6 +86,30 @@
     "typescriptreact",
     "vue"
   ],
+
+  // Path to folder with a list of Virtual Environments (e.g. ~/.pyenv, ~/Envs, ~/.virtualenvs).
+  "python.venvPath": "${workspaceRoot}",
+
+  // Whether to lint Python files when no workspace is opened.
+  "python.linting.enabledWithoutWorkspace": false,
+
+  // Whether to lint Python files using pylint.
+  "python.linting.pylintEnabled": false,
+
+  // Whether to lint Python files using flake8
+  "python.linting.flake8Enabled": true,
+
+  // Whether to lint Python files using mypy.
+  "python.linting.mypyEnabled": true,
+
+  // Format the document upon saving.
+  "python.formatting.formatOnSave": true,
+
+  // Fully qualified path to tag file (exuberant ctag file), used to provide workspace symbols.
+  "python.workspaceSymbols.tagFilePath": "${workspaceRoot}/tags",
+
+  // Whether to enable or disable unit testing using nosetests.
+  "python.unitTest.nosetestsEnabled": true,
 
   // Use system clipboard for unnamed register.
   "vim.useSystemClipboard": true,
