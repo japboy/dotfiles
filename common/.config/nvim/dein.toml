@@ -89,6 +89,7 @@ depends = ['neosnippet', 'neosnippet-snippets']
 hook_add = '''
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#file#enable_buffer_path = 1
+let deoplete#tag#cache_limit_size = 5000000
 set completeopt+=noinsert
 '''
 
@@ -182,7 +183,7 @@ repo = 'tpope/vim-dispatch'
 
 [[plugins]]
 repo = 'w0rp/ale'
-depends = ['vim-vue']
+depends = ['vim-virtualenv', 'vim-vue']
 hook_add = '''
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -198,6 +199,10 @@ let g:ale_linters = {
     \ 'vue': ['stylelint', 'eslint'],
     \ }
 let g:ale_linter_aliases = {'vue': ['css', 'html', 'javascript']}
+
+let g:ale_fixers = {
+    \ 'python': ['autopep8'],
+    \ }
 '''
 
 
