@@ -127,10 +127,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # ClamXav
-if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.14'
+if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.15.2'
 then
     curl -LO https://www.clamxav.com/downloads/ClamXav_Current.dmg
-    unzip -o -d /Applications/ ./ClamXAV_2.14_3295.zip
+    unzip -o -d /Applications/ ./ClamXAV_2.15.2_3471.zip
 fi
 
 # XQuartz
@@ -143,7 +143,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '17.06.0-ce' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '17.06.2-ce' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://download.docker.com/mac/stable/Docker.dmg
     hdiutil attach Docker.dmg
@@ -153,14 +153,14 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.0.15'
+if is_older_app ~/Applications/iTerm.app '3.1.1'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_0_15.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_0_15.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_1_1.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_1_1.zip
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.14.2'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.16.1'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
@@ -198,10 +198,10 @@ then
 fi
 
 # nvALT
-if is_older_app ~/Applications/nvALT.app '2.2.7'
+if is_older_app ~/Applications/nvALT.app '2.2.8'
 then
-    curl -LO https://updates.designheresy.com/nvalt/nvALT2.2.7126.dmg
-    hdiutil attach nvALT2.2.7126.dmg
+    curl -LO https://updates.designheresy.com/nvalt/nvALT2.2.8128.dmg
+    hdiutil attach nvALT2.2.8128.dmg
     cp -R /Volumes/nvALT/nvALT.app ~/Applications/
     hdiutil detach /Volumes/nvALT
 fi
@@ -214,7 +214,7 @@ then
 fi
 
 # f.lux
-if is_older_app ~/Applications/Flux.app '39.94'
+if is_older_app ~/Applications/Flux.app '39.983'
 then
     curl -LO https://justgetflux.com/mac/Flux.zip
     unzip -o -d ~/Applications/ ./Flux.zip
@@ -279,6 +279,7 @@ fi
 
 # Setup Xcode
 xcodebuild -checkFirstLaunchStatus
+sudo xcodebuild -license accept
 
 # Check if Command Line Tools are installed
 if ! pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &> /dev/null
