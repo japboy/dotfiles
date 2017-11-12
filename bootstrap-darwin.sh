@@ -127,10 +127,10 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # ClamXav
-if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.15.2'
+if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.15.3'
 then
     curl -LO https://www.clamxav.com/downloads/ClamXav_Current.dmg
-    unzip -o -d /Applications/ ./ClamXAV_2.15.2_3471.zip
+    unzip -o -d /Applications/ ./ClamXAV_2.15.3_3501.zip
 fi
 
 # XQuartz
@@ -143,7 +143,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '17.06.2-ce' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '17.09.0-ce' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     curl -LO https://download.docker.com/mac/stable/Docker.dmg
     hdiutil attach Docker.dmg
@@ -153,14 +153,14 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.1.1'
+if is_older_app ~/Applications/iTerm.app '3.1.5'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_1_1.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_1_1.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_1_5.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_1_5.zip
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.16.1'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.18.0'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
@@ -173,18 +173,18 @@ then
         'dbaeumer.vscode-eslint'
         'donjayamanne.githistory'
         'eg2.vscode-npm-script'
-        'flowtype.flow-for-vscode'
         'jtanx.ctagsx'
         'jtjoo.classic-asp-html'
         'magicstack.MagicPython'
-        'mrmlnc.vscode-stylefmt'
+        'mhmadhamster.postcss-language'
         'ms-mssql.mssql'
+        'ms-python.python'
         'ms-vscode.csharp'
         'ms-vscode.PowerShell'
         'octref.vetur'
-        'oysun.vuehelper'
-        'ricard.PostCSS'
+        'polymer.polymer-ide'
         'shinnn.stylelint'
+        'slevesque.shader'
         'vscodevim.vim'
     )
     for PLUGIN in "${VSCODE_PLUGINS[@]}"
@@ -491,7 +491,7 @@ then
 fi
 
 # Node.js through `ndenv` if not exists
-NDVER='v6.11.1'
+NDVER='v8.9.0'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
@@ -503,24 +503,24 @@ ndenv rehash
 
 unset NDVER
 
-# NPMs
-if which npm &> /dev/null
+# NPMs (Yarn)
+if which yarn &> /dev/null
 then
     NPMS=(
-        'npm@latest'
-        'vue-cli'
-        'yo'
+        'bower'
+        'firebase-tools'
+        'polymer-cli'
     )
 
     for NPM in "${NPMS[@]}"
     do
-        if ! npm list -g | grep ${NPM} &> /dev/null
+        if ! yarn global list | grep ${NPM} &> /dev/null
         then
-            npm install -g ${NPM}
-        else
-            npm update -g ${NPM}
+            yarn global add ${NPM}
         fi
     done
+
+    yarn global upgrade
 
     ndenv rehash
 
