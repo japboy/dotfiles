@@ -159,7 +159,7 @@ cscope.po.out
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## Build generated
-build/
+#build/
 DerivedData/
 
 ## Various settings
@@ -263,7 +263,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/
+#build/
 develop-eggs/
 dist/
 downloads/
@@ -374,7 +374,7 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+#build/Release
 
 # Dependency directories
 node_modules
@@ -428,7 +428,7 @@ _testmain.go
 *.out
 
 # External packages folder
-vendor/
+#vendor/
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
@@ -593,7 +593,7 @@ cscope.po.out
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## Build generated
-build/
+#build/
 DerivedData/
 
 ## Various settings
@@ -697,7 +697,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/
+#build/
 develop-eggs/
 dist/
 downloads/
@@ -808,7 +808,7 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+#build/Release
 
 # Dependency directories
 node_modules
@@ -862,7 +862,7 @@ _testmain.go
 *.out
 
 # External packages folder
-vendor/
+#vendor/
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
