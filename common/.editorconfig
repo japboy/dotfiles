@@ -1,23 +1,26 @@
-; EditorConfig is awesome: http://EditorConfig.org
+# EditorConfig is awesome: http://EditorConfig.org
 
-; top-most EditorConfig file
+# top-most EditorConfig file
 root = true
 
-; Base rules
 [*]
-;end_of_line = lf
-insert_final_newline = true
+end_of_line = lf
+charset = utf-8
 indent_style = space
 indent_size = 4
-;charset = utf-8
 trim_trailing_whitespace = true
-max_line_length = 100
+insert_final_newline = true
 
-; Markdown
+# Markdown
 [*.{md,markdown}]
 trim_trailing_whitespace = false
 
-; .gitignore
-[.gitignore]
+# Git configuration
+[{.gitattributes,.gitignore}]
 indent_style = tab
 tab_width = 4
+
+# Web frontend coding
+[*.{css,html,js,json,vue}]
+indent_style = space
+indent_size = 2
