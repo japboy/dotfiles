@@ -1,7 +1,7 @@
 color = true
 group = true
 smart-case = true
-ignore = [".git", "node_modules"]
+ignore = [".git", ".venv", "__pycache__", "node_modules"]
 vcs-ignore = [".gitignore"]
 global-gitignore = false
 home-ptignore = false
