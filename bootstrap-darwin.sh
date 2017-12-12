@@ -433,10 +433,10 @@ unset PYVER
 if which pip &> /dev/null
 then
     PIPS=(
-        'pip'
         'flake8'
+        'jedi'
         'neovim'
-        'virtualenv'
+        'pip'
     )
 
     for PIP in "${PIPS[@]}"
