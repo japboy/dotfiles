@@ -22,15 +22,17 @@
 
   // Configure glob patterns for excluding files and folders.
   "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
     "**/__pycache__": true,
-    "**/node_modules": true,
-    "**/.DS_Store": true,
     "**/.ctags": true,
+    "**/.DS_Store": true,
     "**/.eslintcache": true,
-    "**/.stylelintcache": true
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.stylelintcache": true,
+    "**/.svn": true,
+    "**/.venv": true,
+    "**/node_modules": true,
+    "**/tags": true
   },
 
   // Configure file associations to languages (e.g. "*.extension": "html"). These have precedence over the default associations of the languages installed.
@@ -74,9 +76,6 @@
     "vue"
   ],
 
-  // Support using flow through your node_modules folder, WARNING: Checking this box is a security risk. When you open a project we will immediately run code contained within it.
-  "flow.useNPMPackagedFlow": true,
-
  // Control whether stylelint is enabled for CSS/SCSS/Less files or not.
   "stylelint.enable": true,
 
@@ -87,8 +86,11 @@
     "vue"
   ],
 
+  // Validate css/scss/less/postcss in <style>
+  "vetur.validation.style": true,
+
   // Path to folder with a list of Virtual Environments (e.g. ~/.pyenv, ~/Envs, ~/.virtualenvs).
-  "python.venvPath": "${workspaceRoot}",
+  "python.venvPath": "${workspaceRoot}/.venv",
 
   // Whether to lint Python files when no workspace is opened.
   "python.linting.enabledWithoutWorkspace": false,
@@ -124,8 +126,5 @@
   "vim.enableNeovim": true,
 
   // Path to run neovim executable. For example, /usr/bin/nvim, or
-  "vim.neovimPath": "/Users/Yu/.homebrew/bin/nvim",
-
-  // Get rid of that annoying message that shows up everytime you make a new file
-  "vim.disableAnnoyingNeovimMessage": true
+  "vim.neovimPath": "/Users/Yu/.homebrew/bin/nvim"
 }
