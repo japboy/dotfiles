@@ -319,7 +319,6 @@ TAPS=(
     'homebrew/dupes'
     'homebrew/versions'
     'universal-ctags/universal-ctags'
-    'neovim/neovim'
     'tkengo/highway'
 )
 
