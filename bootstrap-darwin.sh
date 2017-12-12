@@ -160,7 +160,7 @@ then
 fi
 
 # Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.18.0'
+if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.18.1'
 then
     curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
     unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
@@ -172,7 +172,6 @@ then
         'christian-kohler.path-intellisense'
         'dbaeumer.vscode-eslint'
         'donjayamanne.githistory'
-        'eg2.vscode-npm-script'
         'jtanx.ctagsx'
         'jtjoo.classic-asp-html'
         'magicstack.MagicPython'
@@ -221,12 +220,12 @@ then
 fi
 
 # IPSecuritas
-if is_specific_serial 'C02ST0UWGY6N' && is_older_app ~/Applications/IPSecuritas.app '4.7'
+if is_specific_serial 'C02ST0UWGY6N' && is_older_app ~/Applications/IPSecuritas.app '4.8'
 then
-    curl -LO http://www.lobotomo.com/products/downloads/IPSecuritas%204.7.dmg
-    hdiutil attach IPSecuritas\ 4.7.dmg
-    cp -R /Volumes/IPSecuritas\ 4.7/IPSecuritas.app ~/Applications/
-    hdiutil detach /Volumes/IPSecuritas\ 4.7
+    curl -LO http://www.lobotomo.com/products/downloads/IPSecuritas%204.8.dmg
+    hdiutil attach IPSecuritas\ 4.8.dmg
+    cp -R /Volumes/IPSecuritas\ 4.8/IPSecuritas.app ~/Applications/
+    hdiutil detach /Volumes/IPSecuritas\ 4.8
 fi
 
 
