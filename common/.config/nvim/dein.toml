@@ -78,12 +78,31 @@ let g:neosnippet#disable_runtime_snippets = { '_': 1 }
 
 
 ##
+# LanguageClient-neovim
+# https://github.com/autozimu/LanguageClient-neovim
+
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+rev = 'next'
+build = './install.sh'
+hook_add = '''
+let g:LanguageClient_serverCommands = {
+    \ 'vue': ['vls']
+    \ }
+'''
+
+
+##
 # nvim-completion-manager
 # https://github.com/roxma/nvim-completion-manager
 
 [[plugins]]
 repo = 'roxma/nvim-completion-manager'
-depends = ['neosnippet']
+depends = ['neosnippet', 'LanguageClient-neovim']
+
+[[plugins]]
+repo = 'roxma/nvim-cm-tern'
+build = 'yarn install'
 
 
 ##
