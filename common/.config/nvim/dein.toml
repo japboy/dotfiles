@@ -179,6 +179,7 @@ let g:ale_linter_aliases = {'vue': ['css', 'html', 'javascript']}
 let g:ale_fixers = {
     \ 'python': ['autopep8'],
     \ }
+let g:ale_python_autopep8_options = '--max-line-length 140'
 '''
 
 
