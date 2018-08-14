@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite the default settings
 {
+
   // Controls how lines should wrap. Can be:
   //  - 'off' (disable wrapping),
   //  - 'on' (viewport wrapping),
@@ -10,6 +11,9 @@
 
   // Controls the cursor style, accepted values are 'block', 'line' and 'underline'
   "editor.cursorStyle": "block",
+
+  // Format a file on save. A formatter must be available, the file must not be auto-saved, and editor must not be shutting down.
+  "editor.formatOnSave": false,
 
   // Controls how the editor should render whitespace characters, possibilities are 'none', 'boundary', and 'all'. The 'boundary' option does not render single spaces between words.
   "editor.renderWhitespace": "boundary",
@@ -37,9 +41,9 @@
 
   // Configure file associations to languages (e.g. "*.extension": "html"). These have precedence over the default associations of the languages installed.
   "files.associations": {
-      "*.asp": "asp",
-      "*.css": "postcss",
-      "*.vue": "vue"
+    "*.asp": "asp",
+    "*.css": "postcss",
+    "*.vue": "vue"
   },
 
   // The default end of line character.
@@ -55,6 +59,9 @@
   // Controls SCSS validation and problem severities.
   // Enables or disables all validations
   "scss.validate": false,
+
+  // Enables or disables all validations
+  "less.validate": false,
 
   // Validation for PostCSS files
   "postcss.validate": false,
@@ -75,25 +82,19 @@
     "typescriptreact",
     "vue"
   ],
+  // Turns auto fix on save on or off, or defines which rules (e.g. `no-var-keyword`) to auto fix on save.
+  "tslint.autoFixOnSave": true,
 
- // Control whether stylelint is enabled for CSS/SCSS/Less files or not.
-  "stylelint.enable": true,
-
-  // A optional set of additional document types to run stylelint against.
-  "stylelint.additionalDocumentSelectors": [
-    "javascriptreact",
-    "typescriptreact",
-    "vue"
+  // A list of languages IDs to disable this extension on
+  "prettier.disableLanguages": [
+    "json"
   ],
 
-  // Validate css/scss/less/postcss in <style>
-  "vetur.validation.style": true,
+  // Require a 'prettierconfig' to format
+  "prettier.requireConfig": false,
 
   // Path to folder with a list of Virtual Environments (e.g. ~/.pyenv, ~/Envs, ~/.virtualenvs).
   "python.venvPath": "${workspaceRoot}/.venv",
-
-  // Whether to lint Python files when no workspace is opened.
-  "python.linting.enabledWithoutWorkspace": false,
 
   // Whether to lint Python files using pylint.
   "python.linting.pylintEnabled": false,
@@ -104,14 +105,24 @@
   // Whether to lint Python files using mypy.
   "python.linting.mypyEnabled": true,
 
-  // Format the document upon saving.
-  "python.formatting.formatOnSave": true,
+  // Arguments passed in. Each argument is a separate item in the array.
+  "python.formatting.autopep8Args": [
+    "--global-config ${workspaceRoot}/.flake8"
+  ],
 
   // Fully qualified path to tag file (exuberant ctag file), used to provide workspace symbols.
   "python.workspaceSymbols.tagFilePath": "${workspaceRoot}/tags",
 
   // Whether to enable or disable unit testing using nosetests.
   "python.unitTest.nosetestsEnabled": true,
+
+  // Arguments passed in. Each argument is a separate item in the array.
+  "python.unitTest.nosetestArgs": [
+    "-s"
+  ],
+
+  // Validate css/scss/less/postcss in <style>
+  "vetur.validation.style": true,
 
   // Use system clipboard for unnamed register.
   "vim.useSystemClipboard": true,
@@ -122,9 +133,17 @@
   // Enable the EasyMotion plugin for Vim.
   "vim.easymotion": true,
 
-  // Use neovim on backend. (only works for Ex commands right now). You should restart VScode after enable/disabling this for the changes to take effect. NOTE: Neovim must be installed and neovimPath must be set the executable in order for this setting to work. Otherwise, vscodevim will crash.
-  "vim.enableNeovim": true,
-
-  // Path to run neovim executable. For example, /usr/bin/nvim, or
-  "vim.neovimPath": "/Users/Yu/.homebrew/bin/nvim"
+  "git.autofetch": true,
+  "sync.gist": "281787f82e7b237a1ca79dff3757f935",
+  "sync.lastUpload": "2018-08-14T10:02:12.884Z",
+  "sync.autoDownload": false,
+  "sync.autoUpload": false,
+  "sync.lastDownload": "2018-02-09T06:12:37.473Z",
+  "sync.forceDownload": false,
+  "sync.host": "",
+  "sync.pathPrefix": "",
+  "sync.quietSync": false,
+  "sync.askGistName": false,
+  "sync.removeExtensions": true,
+  "sync.syncExtensions": true
 }
