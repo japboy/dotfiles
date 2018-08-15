@@ -414,7 +414,7 @@ fi
 unset ANYENV
 
 # Python through `pyenv` if not exists
-PYVER='3.6.1'
+PYVER='3.7.0a3'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -449,7 +449,7 @@ then
 fi
 
 # Ruby through `rbenv` if not exists
-RBVER='2.4.1'
+RBVER='2.4.2'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
@@ -489,7 +489,7 @@ then
 fi
 
 # Node.js through `ndenv` if not exists
-NDVER='v8.9.0'
+NDVER='v8.11.3'
 
 if ! ndenv versions | grep ${NDVER} &> /dev/null
 then
