@@ -6,3 +6,5 @@ vcs-ignore = [".gitignore"]
 global-gitignore = false
 home-ptignore = false
 skip-vcs-ignores = true
+follow = true
+hidden = true

@@ -42,6 +42,10 @@ let g:javascript_plugin_flow = 1
 '''
 
 [[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = ['typescript']
+
+[[plugins]]
 repo = 'posva/vim-vue'
 on_ft = ['vue']
 
@@ -52,15 +56,6 @@ on_ft = ['python']
 [[plugins]]
 repo = 'tikhomirov/vim-glsl'
 on_ft = ['frag', 'vert']
-
-[[plugins]]
-repo = 'OmniSharp/omnisharp-vim'
-on_ft = ['csharp']
-
-  [plugins.build]
-  windows = 'msbuild server/OmniSharp.sln'
-  mac     = 'xbuild server/OmniSharp.sln'
-  unix    = 'xbuild server/OmniSharp.sln'
 
 [[plugins]]
 repo = 'PProvost/vim-ps1'

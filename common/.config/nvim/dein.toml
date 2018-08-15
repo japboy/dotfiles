@@ -65,47 +65,6 @@ call denite#custom#var('grep', 'final_opts', [])
 
 
 ##
-# neosnippet
-# https://github.com/Shougo/neosnippet.vim
-
-[[plugins]]
-repo = 'Shougo/neosnippet'
-hook_add = '''
-let g:neosnippet#snippets_directory = expand('$XDG_CONFIG_HOME/nvim/snippets/')
-let g:neosnippet#enable_completed_snippet = 1
-let g:neosnippet#disable_runtime_snippets = { '_': 1 }
-'''
-
-
-##
-# LanguageClient-neovim
-# https://github.com/autozimu/LanguageClient-neovim
-
-[[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-rev = 'next'
-build = './install.sh'
-hook_add = '''
-let g:LanguageClient_serverCommands = {
-    \ 'vue': ['vls']
-    \ }
-'''
-
-
-##
-# nvim-completion-manager
-# https://github.com/roxma/nvim-completion-manager
-
-[[plugins]]
-repo = 'roxma/nvim-completion-manager'
-depends = ['neosnippet', 'LanguageClient-neovim']
-
-[[plugins]]
-repo = 'roxma/nvim-cm-tern'
-build = 'yarn install'
-
-
-##
 # EditorConfig Vim Plugin
 # https://github.com/editorconfig/editorconfig-vim
 
@@ -166,39 +125,40 @@ endif
 
 
 ##
-# dispatch.vim
-# https://github.com/tpope/vim-dispatch
-
-[[plugins]]
-repo = 'tpope/vim-dispatch'
-
-
-##
 # ALE
 # https://github.com/w0rp/ale
 
 [[plugins]]
 repo = 'w0rp/ale'
-depends = ['vim-virtualenv', 'vim-vue']
+depends = ['vim-airline', 'vim-virtualenv', 'vim-vue']
 hook_add = '''
+set completeopt=menuone,preview
+
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 let g:airline#extensions#ale#enabled = 1
+let g:ale_completion_enabled = 1
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_fix_on_save = 1
 
 let g:ale_linters = {
-    \ 'css': ['stylelint'],
     \ 'html': [],
-    \ 'javascript': ['eslint'],
-    \ 'vue': ['stylelint', 'eslint'],
+    \ 'typescript': ['tslint', 'tsserver', 'typecheck'],
     \ }
-let g:ale_linter_aliases = {'vue': ['css', 'html', 'javascript']}
+
+let g:ale_linter_aliases = {
+    \ 'vue': ['css', 'html', 'javascript', 'typescript'],
+    \ }
 
 let g:ale_fixers = {
+    \ 'css': ['stylelint'],
+    \ 'javascript': ['eslint'],
     \ 'python': ['autopep8'],
+    \ 'rust': ['rustfmt'],
+    \ 'typescript': ['tslint'],
     \ }
+
 let g:ale_python_autopep8_options = '--max-line-length 140'
 '''
 
