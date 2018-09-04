@@ -66,11 +66,11 @@ echo "${TEXT_BOLD}Now installing login & logout hook scripts...${TEXT_RESET}"
 #fi
 
 # login scripts using LaunchAgents
-if is_specific_serial 'C02N93B6G3QR' && [ ! -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
-then
-    ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
-    launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
-fi
+#if is_specific_serial 'C02N93B6G3QR' && [ ! -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
+#then
+#    ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
+#    launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
+#fi
 
 echo "${TEXT_BOLD}Now customizing default configuration...${TEXT_RESET}"
 
