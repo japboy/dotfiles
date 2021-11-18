@@ -14,15 +14,19 @@
 	unpackLimit = 10
 	fsckObjects = false
 [diff]
-	tool = vim
+	tool = vscode
 [difftool "vim"]
 	cmd = vim -d $LOCAL $REMOTE
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
 [merge]
 	ff = true
-	tool = vim
+	tool = vscode
 [mergetool "vim"]
 	cmd = vim -d $LOCAL $MERGED $REMOTE
 	keepbackup = false
+[mergetool "vscode"]
+	cmd = code --wait $MERGED
 [user]
 	name = Yu I.
 	email = lagfer@youck.org

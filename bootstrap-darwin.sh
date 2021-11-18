@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 #
 # MAC OS X BOOTSTRAP
@@ -8,6 +8,8 @@
 
 ##
 # Variables
+
+ARCH=$(uname -a | awk '{print $NF}')
 
 CWD=$(pwd)
 
@@ -49,33 +51,7 @@ function is_specific_serial () {
 ##
 # Main process
 
-echo "${TEXT_BOLD}Now installing login & logout hook scripts...${TEXT_RESET}"
-
-# LoginHook
-#if ! sudo defaults read com.apple.loginwindow LoginHook &> /dev/null
-#then
-#    chmod +x ${DOTFILES_DARWIN_PATH}/loginhook.sh
-#    sudo defaults write com.apple.loginwindow LoginHook ${DOTFILES_DARWIN_PATH}/loginhook.sh
-#fi
-
-# LogoutHook
-#if ! sudo defaults read com.apple.loginwindow LogoutHook &> /dev/null
-#then
-#    chmod +x ${DOTFILES_DARWIN_PATH}/logouthook.sh
-#    sudo defaults write com.apple.loginwindow LogoutHook ${DOTFILES_DARWIN_PATH}/logouthook.sh
-#fi
-
-# login scripts using LaunchAgents
-#if is_specific_serial 'C02N93B6G3QR' && [ ! -L ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ]
-#then
-#    ln -s ${DOTFILES_DARWIN_PATH}/Library/LaunchAgents/com.github.japboy.ramdisk.plist ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
-#    launchctl load ${HOME}/Library/LaunchAgents/com.github.japboy.ramdisk.plist
-#fi
-
 echo "${TEXT_BOLD}Now customizing default configuration...${TEXT_RESET}"
-
-# Turn off local Time Machine snapshots
-sudo tmutil disablelocal
 
 # Key repeat speed up
 defaults write NSGlobalDomain InitialKeyRepeat -int 35
@@ -92,6 +68,9 @@ if ! defaults read com.apple.desktopservices DSDontWriteNetworkStores &> /dev/nu
 then
     defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 fi
+
+# Apply changes for Autofs
+sudo automount -vc
 
 # Make hidden files visible
 if ! defaults read com.apple.finder AppleShowAllFiles &> /dev/null
@@ -111,9 +90,6 @@ then
     killall SystemUIServer
 fi
 
-# Apply changes for Autofs
-sudo automount -vc
-
 # Create `Applications` directory under the home directory if it doesn't exist
 [ ! -d "${HOME}/Applications" ] && mkdir ${HOME}/Applications
 
@@ -126,26 +102,23 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 # Current directory to ~/Downloads
 cd ${HOME}/Downloads
 
-# ClamXav
-if is_specific_serial 'C02N93B6G3QR' && is_older_app /Applications/ClamXav.app '2.15.3'
+# AppCleaner
+if is_older_app ~/Applications/AppCleaner.app '3.6.0'
 then
-    curl -LO https://www.clamxav.com/downloads/ClamXav_Current.dmg
-    unzip -o -d /Applications/ ./ClamXAV_2.15.3_3501.zip
-fi
-
-# XQuartz
-if is_older_app /Applications/Utilities/XQuartz.app '2.7.11'
-then
-    curl -LO https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg
-    hdiutil attach XQuartz-2.7.11.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.7.11/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.7.11
+    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.zip
+    unzip -o -d ~/Applications/ ./AppCleaner_3.6.zip
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '17.09.0-ce' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '20.10.10' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
-    curl -LO https://download.docker.com/mac/stable/Docker.dmg
+    if [[ "${ARCH}" = 'arm64' ]]
+    then
+        curl -LO https://desktop.docker.com/mac/main/arm64/Docker.dmg
+    elif [[ "${ARCH}" = 'x86_64' ]]
+    then
+        curl -LO https://desktop.docker.com/mac/stable/amd64/Docker.dmg
+    fi
     hdiutil attach Docker.dmg
     cp -R /Volumes/Docker/Docker.app /Applications/
     hdiutil detach /Volumes/Docker
@@ -153,79 +126,35 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.1.5'
+if is_older_app ~/Applications/iTerm.app '3.4.12'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_1_5.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_1_5.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_12.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_4_12.zip
 fi
 
-# Visual Studio Code & the plugins
-if is_older_app ~/Applications/Visual\ Studio\ Code.app '1.18.1'
+# PowerShell
+if is_older_app /Applications/PowerShell.app '7.2.0'
 then
-    curl -L -o ./VSCode-darwin-stable.zip https://go.microsoft.com/fwlink/?LinkID=620882
-    unzip -o -d ~/Applications/ ./VSCode-darwin-stable.zip
-fi
-if which code &> /dev/null
-then
-    VSCODE_PLUGINS=(
-        'EditorConfig.EditorConfig'
-        'christian-kohler.path-intellisense'
-        'dbaeumer.vscode-eslint'
-        'donjayamanne.githistory'
-        'jtanx.ctagsx'
-        'jtjoo.classic-asp-html'
-        'magicstack.MagicPython'
-        'mhmadhamster.postcss-language'
-        'ms-mssql.mssql'
-        'ms-python.python'
-        'ms-vscode.csharp'
-        'ms-vscode.PowerShell'
-        'octref.vetur'
-        'polymer.polymer-ide'
-        'shinnn.stylelint'
-        'slevesque.shader'
-        'vscodevim.vim'
-    )
-    for PLUGIN in "${VSCODE_PLUGINS[@]}"
-    do
-        if ! code --list-extensions | grep ${PLUGIN} &> /dev/null
-        then
-            code --install-extension ${PLUGIN}
-        fi
-    done
-    unset VSCODE_PLUGINS PLUGIN
+    cd ${HOME}/Downloads
+    if [[ "${ARCH}" = 'arm64' ]]
+    then
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.0/powershell-7.2.0-osx-arm64.pkg
+        sudo installer -pkg ./powershell-7.2.0-osx-arm64.pkg -target /
+    elif [[ "${ARCH}" = 'x86_64' ]]
+    then
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.0/powershell-7.2.0-osx-x64.pkg
+        sudo installer -pkg ./powershell-7.2.0-osx-x64.pkg -target /
+    fi
+    cd ${CWD}
 fi
 
-# nvALT
-if is_older_app ~/Applications/nvALT.app '2.2.8'
+# XQuartz
+if is_older_app /Applications/Utilities/XQuartz.app '2.8.1'
 then
-    curl -LO https://updates.designheresy.com/nvalt/nvALT2.2.8128.dmg
-    hdiutil attach nvALT2.2.8128.dmg
-    cp -R /Volumes/nvALT/nvALT.app ~/Applications/
-    hdiutil detach /Volumes/nvALT
-fi
-
-# AppCleaner
-if is_older_app ~/Applications/AppCleaner.app '3.4'
-then
-    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.4.zip
-    unzip -o -d ~/Applications/ ./AppCleaner_3.4.zip
-fi
-
-# f.lux
-if is_older_app ~/Applications/Flux.app '39.983'
-then
-    curl -LO https://justgetflux.com/mac/Flux.zip
-    unzip -o -d ~/Applications/ ./Flux.zip
-fi
-
-# IPSecuritas
-if is_specific_serial 'C02ST0UWGY6N' && is_older_app ~/Applications/IPSecuritas.app '4.8'
-then
-    curl -LO http://www.lobotomo.com/products/downloads/IPSecuritas%204.8.dmg
-    hdiutil attach IPSecuritas\ 4.8.dmg
-    cp -R /Volumes/IPSecuritas\ 4.8/IPSecuritas.app ~/Applications/
-    hdiutil detach /Volumes/IPSecuritas\ 4.8
+    curl -LO https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.1/XQuartz-2.8.1.dmg
+    hdiutil attach XQuartz-2.8.1.dmg
+    sudo installer -pkg /Volumes/XQuartz-2.8.1/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.8.1
 fi
 
 
@@ -238,15 +167,15 @@ fi
 # QuickLook qlImageSize
 if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
 then
-    curl -LO http://repo.whine.fr/qlImageSize.pkg
-    sudo installer -pkg ${HOME}/Downloads/qlImageSize.pkg -target /
+    curl -LO https://github.com/Nyx0uf/qlImageSize/releases/download/2.6.1/qlImageSize.qlgenerator.zip
+    unzip qlImageSize.qlgenerator.zip -d ${HOME}/Library/QuickLook/
 fi
 
-# QuickLook qlImageSize
+# QuickLook qlstephen
 if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
 then
-    curl -LO https://github.com/whomwah/qlstephen/releases/download/1.4.3/QLStephen.qlgenerator.1.4.3.zip
-    unzip QLStephen.qlgenerator.1.4.3.zip -d ${HOME}/Library/QuickLook/
+    curl -LO https://github.com/whomwah/qlstephen/releases/download/1.5.1/QLStephen.qlgenerator.1.5.1.zip
+    unzip QLStephen.qlgenerator.1.5.1.zip -d ${HOME}/Library/QuickLook/
 fi
 
 # Restart QuickLook
@@ -281,8 +210,9 @@ xcodebuild -checkFirstLaunchStatus
 sudo xcodebuild -license accept
 
 # Check if Command Line Tools are installed
-if ! pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &> /dev/null
+if [ ! pkgutil --pkg-info=com.apple.pkg.CLTools_Executables &> /dev/null ]
 then
+    # sudo rm -rf /Library/Developer/CommandLineTools
     xcode-select --install
     echo "${TEXT_RED}Xcode Command Line Tools must be installed first. Aborted.${TEXT_RESET}"
     exit 1
@@ -301,23 +231,21 @@ HOMEBREW="${HOME}/.homebrew"
 
 if ! which brew &> /dev/null
 then
+    export HOMEBREW_CELLAR="${HOMEBREW}/Cellar"
+    export HOMEBREW_PREFIX=${HOMEBREW}
     export PATH="${HOMEBREW}/bin:${PATH}"
 fi
 
 if [ ! -d ${HOMEBREW} ]
 then
     mkdir -p ${HOMEBREW}
-    curl -L https://github.com/mxcl/homebrew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
+    curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
 fi
 
 unset HOMEBREW
 
 # Add Homebrew 3rd party repositories
 TAPS=(
-    'homebrew/binary'
-    'homebrew/completions'
-    'homebrew/dupes'
-    'homebrew/versions'
     'universal-ctags/universal-ctags'
     'tkengo/highway'
 )
@@ -339,40 +267,34 @@ brew upgrade
 BREWS=(
     'autoconf'
     'automake'
-    'bison'
     'ccache'
     'cmake'
-    'gem-completion'
     'gettext'
-    'gibo'
+    'gh'
     'giflib'
-    'git'
     'git-extras'
-    'go'
+    'git'
     'grc'
     'highway'
     'libjpeg'
     'libpng'
     'libtiff'
-    'lua --with-completion'
+    'lua'
     'mcrypt'
-    'mercurial'
-    #'mono'
     'neovim'
-    'openssl'
-    'packer'
+    'openssl@1.1'
     'pcre'
-    'pip-completion'
     'pkg-config'
     're2c'
     'readline'
-    'rmtrash'
     'scons'
     'the_platinum_searcher'
     'the_silver_searcher'
+    'trash'
     'universal-ctags --HEAD'
     'webp'
     'xz'
+    'zsh-completions'
 )
 
 for BREW in "${BREWS[@]}"
@@ -398,14 +320,16 @@ if ! which anyenv &> /dev/null
 then
     if [ ! -d ${ANYENV} ]
     then
-        git clone https://github.com/riywo/anyenv ${ANYENV}
+        git clone https://github.com/anyenv/anyenv.git ${ANYENV}
         git clone https://github.com/znz/anyenv-update.git ${ANYENV}/plugins/anyenv-update
     fi
     export PATH="${ANYENV}/bin:${PATH}"
     eval "$(anyenv init -)"
+    anyenv install --init
+    anyenv install goenv
+    anyenv install nodenv
     anyenv install pyenv
     anyenv install rbenv
-    anyenv install ndenv
     #exec ${SHELL} -l
 else
     anyenv update
@@ -413,8 +337,56 @@ fi
 
 unset ANYENV
 
+# Go through `goenv` if not exists
+GOVER='1.17.3'
+
+if ! goenv versions | grep ${GOVER} &> /dev/null
+then
+    goenv install ${GOVER}
+fi
+
+goenv global ${GOVER}
+goenv rehash
+
+unset GOVER
+
+# Node.js through `nodenv` if not exists
+NDVER='16.13.0'
+
+if ! nodenv versions | grep ${NDVER} &> /dev/null
+then
+    nodenv install ${NDVER}
+fi
+
+nodenv global ${NDVER}
+nodenv rehash
+
+unset NDVER
+
+# NPMs (Yarn)
+if which yarn &> /dev/null
+then
+    NPMS=(
+        'bower'
+    )
+
+    for NPM in "${NPMS[@]}"
+    do
+        if ! yarn global list | grep ${NPM} &> /dev/null
+        then
+            yarn global add ${NPM}
+        fi
+    done
+
+    yarn global upgrade
+
+    nodenv rehash
+
+    unset NPMS NPM
+fi
+
 # Python through `pyenv` if not exists
-PYVER='3.7.0a3'
+PYVER='3.9.9'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -432,10 +404,9 @@ unset PYVER
 if which pip &> /dev/null
 then
     PIPS=(
-        'flake8'
-        'jedi'
         'neovim'
         'pip'
+        'wheel'
     )
 
     for PIP in "${PIPS[@]}"
@@ -449,12 +420,12 @@ then
 fi
 
 # Ruby through `rbenv` if not exists
-RBVER='2.4.2'
+RBVER='3.0.2'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
-    CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl) \
-                    --with-readline-dir=$(brew --prefix readline)" \
+    RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1) \
+                         --with-readline-dir=$(brew --prefix readline)" \
     rbenv install ${RBVER}
 fi
 
@@ -468,7 +439,6 @@ if which gem &> /dev/null
 then
     GEMS=(
         'bundler'
-        'gisty'
         'neovim'
     )
 
@@ -488,71 +458,12 @@ then
     unset GEMS
 fi
 
-# Node.js through `ndenv` if not exists
-NDVER='v8.11.3'
-
-if ! ndenv versions | grep ${NDVER} &> /dev/null
-then
-    ndenv install ${NDVER}
-fi
-
-ndenv global ${NDVER}
-ndenv rehash
-
-unset NDVER
-
-# NPMs (Yarn)
-if which yarn &> /dev/null
-then
-    NPMS=(
-        'bower'
-        'firebase-tools'
-        'polymer-cli'
-    )
-
-    for NPM in "${NPMS[@]}"
-    do
-        if ! yarn global list | grep ${NPM} &> /dev/null
-        then
-            yarn global add ${NPM}
-        fi
-    done
-
-    yarn global upgrade
-
-    ndenv rehash
-
-    unset NPMS NPM
-fi
-
-# .NET Core
-if ! which dotnet &> /dev/null || [[ '1.0.4' != $(dotnet --version) ]]
-then
-    cd ${HOME}/Downloads
-    curl -LO https://download.microsoft.com/download/B/9/F/B9F1AF57-C14A-4670-9973-CDF47209B5BF/dotnet-dev-osx-x64.1.0.4.pkg
-    sudo installer -pkg ./dotnet-dev-osx-x64.1.0.4.pkg -target /
-    cd ${CWD}
-
-    # https://www.microsoft.com/net/core#macos
-    [ ! -d /usr/local/lib ] && sudo mkdir -p /usr/local/lib/
-    [ ! -f /usr/local/lib/libcrypto.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libcrypto.1.0.0.dylib /usr/local/lib/
-    [ ! -f /usr/local/lib/libssl.1.0.0.dylib ] && sudo ln -s $(brew --prefix openssl)/lib/libssl.1.0.0.dylib /usr/local/lib/
-fi
-
-# PowerShell
-if ! which powershell &> /dev/null
-then
-    cd ${HOME}/Downloads
-    curl -LO https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/powershell-6.0.0-beta.1-osx.10.12-x64.pkg
-    sudo installer -pkg ./powershell-6.0.0-beta.1-osx.10.12-x64.pkg -target /
-    cd ${CWD}
-fi
-
 # Setup default lagunage
 #sudo languagesetup
 
 # Done
 unset \
+    ARCH \
     CWD \
     TEXT_BOLD \
     TEXT_RED \

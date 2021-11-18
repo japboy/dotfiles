@@ -14,7 +14,7 @@
 ##
 # Variables
 
-OS=$(uname -s)
+OS=$(uname -a)
 CWD=$(pwd)
 
 TEXT_BOLD=$(tput bold)
@@ -111,10 +111,10 @@ then
     fi
 fi
 
-# Setup Mac OS X environment
-if [ 'Darwin' = ${OS} ]
+# Setup macOS environment
+if [[ ${OS} =~ Darwin ]]
 then
-    echo "${TEXT_BOLD}Installing for Mac OS X...${TEXT_RESET}"
+    echo "${TEXT_BOLD}Installing for macOS...${TEXT_RESET}"
 
     # Run `bootstrap-darwin.sh`
     if ! bash ${DOTFILES_PATH}/bootstrap-darwin.sh

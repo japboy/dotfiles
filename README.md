@@ -21,13 +21,20 @@ in `~/.dotfiles` then;
 bash ~/.dotfiles/bootstrap.sh sync
 ```
 
-### .bash_extras
+```cmd
+powershell ^
+    -ExecutionPolicy RemoteSigned ^
+    -Command "$cwd = Get-Location; Start-Process powershell -ArgumentList \"-ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -Command Push-Location -Path $cwd; $(Join-Path $cwd bootstrap.ps1)\" -Verb RunAs"
+```
 
-You can create an addtional file named `.bash_extras` in your home directory. It
+
+### .shell_extras
+
+You can create an addtional file named `.shell_extras` in your home directory. It
 will be loaded if there. This is intend to be used for some credentials like
 secret tokens etc.
 
-`.bash_extras` should be something like this:
+`.shell_extras` should be something like this:
 
 ```bash
 #
@@ -52,7 +59,7 @@ Requirements
 
 ### Mac OS X
 
-* macOS Sierra 10.12
+* macOS Big Sur 11.6
 * [Xcode](http://itunes.apple.com/en/app/xcode/id497799835)
 * [Command Line Tools](http://developer.apple.com/xcode/) (if you prefer to not installing entire Xcode SDK)
 

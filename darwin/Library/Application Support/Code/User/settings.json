@@ -145,5 +145,6 @@
   "sync.quietSync": false,
   "sync.askGistName": false,
   "sync.removeExtensions": true,
-  "sync.syncExtensions": true
+  "sync.syncExtensions": true,
+  "editor.inlineSuggest.enabled": true
 }
