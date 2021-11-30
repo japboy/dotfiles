@@ -5,20 +5,18 @@
 	ui = true
 [core]
 	autocrlf = input
+	editor = code --wait
 	excludesfile = ~/.gitignore
 	quotepath = false
-[gc]
-	auto = 3000
-	autopacklimit = 20
-[transfer]
-	unpackLimit = 10
-	fsckObjects = false
 [diff]
 	tool = vscode
 [difftool "vim"]
 	cmd = vim -d $LOCAL $REMOTE
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
+[gc]
+	auto = 3000
+	autopacklimit = 20
 [merge]
 	ff = true
 	tool = vscode
@@ -27,6 +25,11 @@
 	keepbackup = false
 [mergetool "vscode"]
 	cmd = code --wait $MERGED
+[pull]
+	rebase = false
+[transfer]
+	fsckObjects = false
+	unpackLimit = 10
 [user]
-	name = Yu I.
 	email = lagfer@youck.org
+	name = Yu I.
