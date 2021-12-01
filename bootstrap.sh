@@ -29,17 +29,6 @@ DOTFILES_PATH="${HOME}/.dotfiles"
 ##
 # Functions
 
-# Update shell
-function update_source () {
-    PROFILE_PATH="${HOME}/.bash_profile"
-    RC_PATH="${HOME}/.bashrc"
-
-    [ -f ${PROFILE_PATH} ] && source ${PROFILE_PATH}
-    [ -f ${RC_PATH} ] && source ${RC_PATH}
-
-    unset PROFILE_PATH RC_PATH
-}
-
 # Link dotfiles to home directory
 function make_link {
     TARGET_PARENT=${1}
@@ -52,10 +41,7 @@ function make_link {
     fi
 
     find "${DOTFILES_PATH}/${TARGET_PARENT}" -type f \
-        -not -name '.DS_Store' \
-        -not -name 'loginhook.sh' \
-        -not -name 'logouthook.sh' \
-        -not -name 'com.github.japboy.ramdisk.plist' | \
+        -not -name '.DS_Store' | \
     grep --invert-match --regexp='\/Services\/.*\.workflow\/' |
     {
         while read ACTUAL_PATH
@@ -71,8 +57,6 @@ function make_link {
             unset ACTUAL_PATH TARGET_PATH
         done
     }
-
-    update_source
 
     unset TARGET_PARENT
 }
@@ -117,7 +101,7 @@ then
     echo "${TEXT_BOLD}Installing for macOS...${TEXT_RESET}"
 
     # Run `bootstrap-darwin.sh`
-    if ! bash ${DOTFILES_PATH}/bootstrap-darwin.sh
+    if ! zsh ${DOTFILES_PATH}/bootstrap-darwin.sh
     then
         echo "${TEXT_RED}Error occurred. Aborted.${TEXT_RESET}"
         exit 1
@@ -127,7 +111,7 @@ then
 fi
 
 # Setup Linux environment
-if [ 'Linux' = ${OS} ]
+if [[ 'Linux' = ${OS} ]]
 then
     echo "${TEXT_BOLD}Installing for Linux...${TEXT_RESET}"
     make_link 'linux'
@@ -167,6 +151,4 @@ unset \
     DOTFILES_REPO \
     DOTFILES_PATH
 
-unset -f \
-    update_source \
-    make_link
+unset -f make_link
