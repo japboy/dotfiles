@@ -120,3 +120,7 @@ export ALTERNATE_EDITOR='code --wait'
 
 export GISTY_DIR="${HOME}/Dropbox/Workspace/com.github.gist"
 export GISTY_SSL_VERIFY='NONE'
+
+
+# Load extra settings
+[ -f "${HOME}/.shell_extras" ] && source "${HOME}/.shell_extras"

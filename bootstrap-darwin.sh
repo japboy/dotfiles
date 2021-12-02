@@ -26,9 +26,10 @@ DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
 
 function is_older_app () {
     TARGET_PATH="${1}"
-    [ ! -d "${TARGET_PATH}" ] && return 1
+    [ ! -d "${TARGET_PATH}" ] && return 0
     TARGET_VERSION=${2}
     ACTUAL_VERSION=$(mdls -name kMDItemVersion "${TARGET_PATH}" | sed -e 's/^kMDItemVersion = "\([0-9\.]*\)"$/\1/g')
+    # TODO: should compare the version sizes
     [ ${TARGET_VERSION} != ${ACTUAL_VERSION} ] && return 0
     return 1
 }
@@ -126,10 +127,19 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.4.12'
+if is_older_app ~/Applications/iTerm.app '3.4.14'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_12.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_4_12.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_14.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_4_14.zip
+fi
+
+# MonitorControl
+if is_older_app ~/Applications/MonitorControl.app '4.0.2'
+then
+    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.0.2/MonitorControl.4.0.2.dmg
+    hdiutil attach ./MonitorControl.4.0.2.dmg
+    cp -a /Volumes/MonitorControl.app ~/Applications/
+    hdiutil detach /Volumes/MonitorControl.4.0.2.dmg
 fi
 
 # PowerShell
@@ -364,6 +374,12 @@ nodenv rehash
 unset NDVER
 
 # NPMs (Yarn)
+if which corepack &> /dev/null
+then
+    # @see https://yarnpkg.com/getting-started/install
+    corepack enable
+fi
+
 if which yarn &> /dev/null
 then
     NPMS=(

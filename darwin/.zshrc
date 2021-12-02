@@ -37,7 +37,3 @@ precmd_functions+=( precmd_vcs_info )
 setopt prompt_subst
 RPROMPT=\$vcs_info_msg_0_
 zstyle ':vcs_info:git:*' formats '%b'
-
-
-# Load extra settings
-[ -f "${HOME}/.shell_extras" ] && source "${HOME}/.shell_extras"

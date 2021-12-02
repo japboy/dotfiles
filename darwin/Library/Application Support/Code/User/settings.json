@@ -35,6 +35,7 @@
     "**/.stylelintcache": true,
     "**/.svn": true,
     "**/.venv": true,
+    "**/.yarn": true,
     "**/node_modules": true,
     "**/tags": true
   },
@@ -51,6 +52,7 @@
 
   // Git
   "git.autofetch": true,
+  "git.confirmSync": false,
 
   // Github
   "github.copilot.enable": {
