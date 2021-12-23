@@ -3,28 +3,36 @@
 
 
 ##
-# Environment variables
+# Built-in shell variables
+# @see https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Used-By-The-Shell
 
 # Set up `locale` properly
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 
-# Glob ignore pattern
-export GLOBIGNORE=.:..
-
 # Enable 256 colour terminal for Solarized theme
 export TERM=xterm-256color
+
+# Output format for `time` command
+export TIMEFMT=$'\n========================\njob    : %J\ncpu       : %P\nuser      : %*Us\nsystem : %*Ss\ntotal  : %*Es\n========================\n'
+
+
+##
+# Environment variables
 
 # Colourify `ls` output
 export CLICOLOR=1
 export LSCOLORS=Exfxcxdxbxegedabagacad
 
+# Disable to create `._` file in OS X
+export COPYFILE_DISABLE=true
+
 # Colourify `grep` output
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;37;41'
 
-# Disable to create `._` file in OS X
-export COPYFILE_DISABLE=true
+# Glob ignore pattern
+export GLOBIGNORE=.:..
 
 
 ##
@@ -59,8 +67,8 @@ export PATH="$(brew --prefix ccache)/libexec:${PATH}"
 export PATH="${HOME}/.anyenv/bin:${PATH}"
 
 # Go (w/ anyenv)
-export PATH="${GOROOT}/bin:${PATH}"
-export PATH="${PATH}:${GOPATH}/bin"
+#export PATH="${GOROOT}/bin:${PATH}"
+#export PATH="${PATH}:${GOPATH}/bin"
 
 # Mono
 export MONO_GAC_PREFIX="$(brew --prefix)"
