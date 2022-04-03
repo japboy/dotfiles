@@ -104,14 +104,14 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # AppCleaner
-if is_older_app ~/Applications/AppCleaner.app '3.6.0'
+if is_older_app ~/Applications/AppCleaner.app '3.6.4'
 then
-    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.zip
-    unzip -o -d ~/Applications/ ./AppCleaner_3.6.zip
+    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.4.zip
+    unzip -o -d ~/Applications/ ./AppCleaner_3.6.4.zip
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '20.10.10' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '20.10.13' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
@@ -127,10 +127,10 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.4.14'
+if is_older_app ~/Applications/iTerm.app '3.4.15'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_14.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_4_14.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_15.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_4_15.zip
 fi
 
 # MonitorControl
@@ -143,17 +143,17 @@ then
 fi
 
 # PowerShell
-if is_older_app /Applications/PowerShell.app '7.2.0'
+if is_older_app /Applications/PowerShell.app '7.2.2'
 then
     cd ${HOME}/Downloads
     if [[ "${ARCH}" = 'arm64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.0/powershell-7.2.0-osx-arm64.pkg
-        sudo installer -pkg ./powershell-7.2.0-osx-arm64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/powershell-7.2.2-osx-arm64.pkg
+        sudo installer -pkg ./powershell-7.2.2-osx-arm64.pkg -target /
     elif [[ "${ARCH}" = 'x86_64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.0/powershell-7.2.0-osx-x64.pkg
-        sudo installer -pkg ./powershell-7.2.0-osx-x64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/powershell-7.2.2-osx-x64.pkg
+        sudo installer -pkg ./powershell-7.2.2-osx-x64.pkg -target /
     fi
     cd ${CWD}
 fi
@@ -277,6 +277,7 @@ brew upgrade
 BREWS=(
     'autoconf'
     'automake'
+    'cairo'
     'ccache'
     'cmake'
     'gettext'
@@ -286,13 +287,16 @@ BREWS=(
     'git'
     'grc'
     'highway'
+    'jpeg'
     'libjpeg'
     'libpng'
+    'librsvg'
     'libtiff'
     'lua'
     'mcrypt'
     'neovim'
     'openssl@1.1'
+    'pango'
     'pcre'
     'pkg-config'
     're2c'
@@ -348,7 +352,7 @@ fi
 unset ANYENV
 
 # Go through `goenv` if not exists
-GOVER='1.17.3'
+GOVER='1.18.0'
 
 if ! goenv versions | grep ${GOVER} &> /dev/null
 then
@@ -361,7 +365,7 @@ goenv rehash
 unset GOVER
 
 # Node.js through `nodenv` if not exists
-NDVER='16.13.0'
+NDVER='16.14.2'
 
 if ! nodenv versions | grep ${NDVER} &> /dev/null
 then
@@ -402,7 +406,7 @@ then
 fi
 
 # Python through `pyenv` if not exists
-PYVER='3.9.9'
+PYVER='3.10.4'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -436,7 +440,7 @@ then
 fi
 
 # Ruby through `rbenv` if not exists
-RBVER='3.0.2'
+RBVER='3.1.1'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
