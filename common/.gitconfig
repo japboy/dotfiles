@@ -33,3 +33,5 @@
 [user]
 	email = lagfer@youck.org
 	name = Yu I.
+[init]
+	defaultBranch = main

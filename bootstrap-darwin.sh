@@ -104,14 +104,14 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # AppCleaner
-if is_older_app ~/Applications/AppCleaner.app '3.6.4'
+if is_older_app ~/Applications/AppCleaner.app '3.6.7'
 then
-    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.4.zip
-    unzip -o -d ~/Applications/ ./AppCleaner_3.6.4.zip
+    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.7.zip
+    unzip -o -d ~/Applications/ ./AppCleaner_3.6.7.zip
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '20.10.13' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '20.10.21' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
@@ -127,44 +127,44 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.4.15'
+if is_older_app ~/Applications/iTerm.app '3.4.18'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_15.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_4_15.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_18.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_4_18.zip
 fi
 
 # MonitorControl
-if is_older_app ~/Applications/MonitorControl.app '4.0.2'
+if is_older_app ~/Applications/MonitorControl.app '4.1.0'
 then
-    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.0.2/MonitorControl.4.0.2.dmg
-    hdiutil attach ./MonitorControl.4.0.2.dmg
+    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.0.2/MonitorControl.4.1.0.dmg
+    hdiutil attach ./MonitorControl.4.1.0.dmg
     cp -a /Volumes/MonitorControl.app ~/Applications/
-    hdiutil detach /Volumes/MonitorControl.4.0.2.dmg
+    hdiutil detach /Volumes/MonitorControl.4.1.0.dmg
 fi
 
 # PowerShell
-if is_older_app /Applications/PowerShell.app '7.2.2'
+if is_older_app /Applications/PowerShell.app '7.3.1'
 then
     cd ${HOME}/Downloads
     if [[ "${ARCH}" = 'arm64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/powershell-7.2.2-osx-arm64.pkg
-        sudo installer -pkg ./powershell-7.2.2-osx-arm64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.3.1/powershell-7.3.1-osx-arm64.pkg
+        sudo installer -pkg ./powershell-7.3.1-osx-arm64.pkg -target /
     elif [[ "${ARCH}" = 'x86_64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.2.2/powershell-7.2.2-osx-x64.pkg
-        sudo installer -pkg ./powershell-7.2.2-osx-x64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.3.1/powershell-7.3.1-osx-x64.pkg
+        sudo installer -pkg ./powershell-7.3.1-osx-x64.pkg -target /
     fi
     cd ${CWD}
 fi
 
 # XQuartz
-if is_older_app /Applications/Utilities/XQuartz.app '2.8.1'
+if is_older_app /Applications/Utilities/XQuartz.app '2.8.3'
 then
-    curl -LO https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.1/XQuartz-2.8.1.dmg
-    hdiutil attach XQuartz-2.8.1.dmg
-    sudo installer -pkg /Volumes/XQuartz-2.8.1/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.8.1
+    curl -LO https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.3/XQuartz-2.8.3.pkg
+    hdiutil attach XQuartz-2.8.3.pkg
+    sudo installer -pkg /Volumes/XQuartz-2.8.3/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.8.3
 fi
 
 
@@ -308,7 +308,9 @@ BREWS=(
     'universal-ctags --HEAD'
     'webp'
     'xz'
+    'zsh-autosuggestions'
     'zsh-completions'
+    'zsh-syntax-highlighting'
 )
 
 for BREW in "${BREWS[@]}"
@@ -352,7 +354,7 @@ fi
 unset ANYENV
 
 # Go through `goenv` if not exists
-GOVER='1.18.0'
+GOVER='1.19.4'
 
 if ! goenv versions | grep ${GOVER} &> /dev/null
 then
@@ -365,7 +367,7 @@ goenv rehash
 unset GOVER
 
 # Node.js through `nodenv` if not exists
-NDVER='16.14.2'
+NDVER='18.12.1'
 
 if ! nodenv versions | grep ${NDVER} &> /dev/null
 then
@@ -377,36 +379,18 @@ nodenv rehash
 
 unset NDVER
 
-# NPMs (Yarn)
+# NPMs
 if which corepack &> /dev/null
 then
+    # @see https://pnpm.io/installation
     # @see https://yarnpkg.com/getting-started/install
     corepack enable
-fi
-
-if which yarn &> /dev/null
-then
-    NPMS=(
-        'bower'
-    )
-
-    for NPM in "${NPMS[@]}"
-    do
-        if ! yarn global list | grep ${NPM} &> /dev/null
-        then
-            yarn global add ${NPM}
-        fi
-    done
-
-    yarn global upgrade
-
-    nodenv rehash
-
-    unset NPMS NPM
+    corepack prepare pnpm@latest --activate
+    corepack prepare yarn@stable --activate
 fi
 
 # Python through `pyenv` if not exists
-PYVER='3.10.4'
+PYVER='3.11.1'
 
 if ! pyenv versions | grep ${PYVER} &> /dev/null
 then
@@ -440,7 +424,7 @@ then
 fi
 
 # Ruby through `rbenv` if not exists
-RBVER='3.1.1'
+RBVER='3.1.3'
 
 if ! rbenv versions | grep ${RBVER} &> /dev/null
 then
