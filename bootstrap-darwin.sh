@@ -104,14 +104,14 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 cd ${HOME}/Downloads
 
 # AppCleaner
-if is_older_app ~/Applications/AppCleaner.app '3.6.7'
+if is_older_app ~/Applications/AppCleaner.app '3.6.8'
 then
-    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.7.zip
-    unzip -o -d ~/Applications/ ./AppCleaner_3.6.7.zip
+    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.8.zip
+    unzip -o -d ~/Applications/ ./AppCleaner_3.6.8.zip
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '20.10.21' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '24.0.6' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
@@ -127,44 +127,44 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.4.18'
+if is_older_app ~/Applications/iTerm.app '3.4.23'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_18.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_4_18.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_23.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_4_23.zip
 fi
 
 # MonitorControl
-if is_older_app ~/Applications/MonitorControl.app '4.1.0'
+if is_older_app ~/Applications/MonitorControl.app '4.2.0'
 then
-    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.0.2/MonitorControl.4.1.0.dmg
-    hdiutil attach ./MonitorControl.4.1.0.dmg
+    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.0.2/MonitorControl.4.2.0.dmg
+    hdiutil attach ./MonitorControl.4.2.0.dmg
     cp -a /Volumes/MonitorControl.app ~/Applications/
-    hdiutil detach /Volumes/MonitorControl.4.1.0.dmg
+    hdiutil detach /Volumes/MonitorControl.4.2.0.dmg
 fi
 
 # PowerShell
-if is_older_app /Applications/PowerShell.app '7.3.1'
+if is_older_app /Applications/PowerShell.app '7.4.0'
 then
     cd ${HOME}/Downloads
     if [[ "${ARCH}" = 'arm64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.3.1/powershell-7.3.1-osx-arm64.pkg
-        sudo installer -pkg ./powershell-7.3.1-osx-arm64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell-7.4.0-osx-arm64.pkg
+        sudo installer -pkg ./powershell-7.4.0-osx-arm64.pkg -target /
     elif [[ "${ARCH}" = 'x86_64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.3.1/powershell-7.3.1-osx-x64.pkg
-        sudo installer -pkg ./powershell-7.3.1-osx-x64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell-7.4.0-osx-x64.pkg
+        sudo installer -pkg ./powershell-7.4.0-osx-x64.pkg -target /
     fi
     cd ${CWD}
 fi
 
 # XQuartz
-if is_older_app /Applications/Utilities/XQuartz.app '2.8.3'
+if is_older_app /Applications/Utilities/XQuartz.app '2.8.5'
 then
-    curl -LO https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.3/XQuartz-2.8.3.pkg
-    hdiutil attach XQuartz-2.8.3.pkg
-    sudo installer -pkg /Volumes/XQuartz-2.8.3/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.8.3
+    curl -LO https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.5/XQuartz-2.8.5.pkg
+    hdiutil attach XQuartz-2.8.5.pkg
+    sudo installer -pkg /Volumes/XQuartz-2.8.5/XQuartz.pkg -target /
+    hdiutil detach /Volumes/XQuartz-2.8.5
 fi
 
 

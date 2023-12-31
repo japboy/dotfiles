@@ -57,9 +57,9 @@ export GISTY_ACCESS_TOKEN='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 Requirements
 ------------
 
-### Mac OS X
+### macOS
 
-* macOS Big Sur 11.6
+* macOS Ventura 13.6.3
 * [Xcode](http://itunes.apple.com/en/app/xcode/id497799835)
 * [Command Line Tools](http://developer.apple.com/xcode/) (if you prefer to not installing entire Xcode SDK)
 
