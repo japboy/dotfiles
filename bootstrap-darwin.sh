@@ -329,57 +329,50 @@ unset BREW BREWS
 
 brew cleanup
 
-# `anyenv` for **env
-ANYENV="${HOME}/.anyenv"
+# `asdf` for **env
+ASDF="${HOME}/.asdf"
 
-if ! which anyenv &> /dev/null
+if ! which asdf &> /dev/null
 then
-    if [ ! -d ${ANYENV} ]
+    if [ ! -d ${ASDF} ]
     then
-        git clone https://github.com/anyenv/anyenv.git ${ANYENV}
-        git clone https://github.com/znz/anyenv-update.git ${ANYENV}/plugins/anyenv-update
+        git clone https://github.com/asdf-vm/asdf.git ${ASDF} --branch v0.13.1
     fi
-    export PATH="${ANYENV}/bin:${PATH}"
-    eval "$(anyenv init -)"
-    anyenv install --init
-    anyenv install goenv
-    anyenv install nodenv
-    anyenv install pyenv
-    anyenv install rbenv
-    #exec ${SHELL} -l
+    source "${ASDF}/asdf.sh"
+    asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
+    asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
+    asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+    asdf plugin add python https://github.com/asdf-community/asdf-python.git
+    asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
 else
-    anyenv update
+    asdf update
+    asdf plugin update --all
 fi
 
-unset ANYENV
+unset ASDF
 
-# Go through `goenv` if not exists
-GOVER='1.19.4'
-
-if ! goenv versions | grep ${GOVER} &> /dev/null
+# Deno
+if asdf plugin list | grep deno &> /dev/null
 then
-    goenv install ${GOVER}
+    asdf install deno latest
+    asdf global deno latest
 fi
 
-goenv global ${GOVER}
-goenv rehash
-
-unset GOVER
-
-# Node.js through `nodenv` if not exists
-NDVER='18.12.1'
-
-if ! nodenv versions | grep ${NDVER} &> /dev/null
+# Go
+if asdf plugin list | grep golang &> /dev/null
 then
-    nodenv install ${NDVER}
+    asdf install golang latest
+    asdf global golang latest
 fi
 
-nodenv global ${NDVER}
-nodenv rehash
+# Node.js
+if asdf plugin list | grep nodejs &> /dev/null
+then
+    asdf install nodejs latest
+    asdf global nodejs latest
+fi
 
-unset NDVER
-
-# NPMs
+# Node.js NPMs
 if which corepack &> /dev/null
 then
     # @see https://pnpm.io/installation
@@ -389,22 +382,16 @@ then
     corepack prepare yarn@stable --activate
 fi
 
-# Python through `pyenv` if not exists
-PYVER='3.11.1'
-
-if ! pyenv versions | grep ${PYVER} &> /dev/null
+# Python
+if asdf plugin list | grep python &> /dev/null
 then
     CFLAGS="-I$(brew --prefix readline)/include" \
     LDFLAGS="-L$(brew --prefix readline)/lib" \
-    pyenv install ${PYVER}
+    asdf install python latest
+    asdf global python latest
 fi
 
-pyenv global ${PYVER}
-pyenv rehash
-
-unset PYVER
-
-# PyPIs
+# Python PyPIs
 if which pip &> /dev/null
 then
     PIPS=(
@@ -418,25 +405,17 @@ then
         pip install --upgrade ${PIP}
     done
 
-    pyenv rehash
-
     unset PIPS PIP
 fi
 
 # Ruby through `rbenv` if not exists
-RBVER='3.1.3'
-
-if ! rbenv versions | grep ${RBVER} &> /dev/null
+if asdf plugin list | grep ruby &> /dev/null
 then
     RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1) \
                          --with-readline-dir=$(brew --prefix readline)" \
-    rbenv install ${RBVER}
+    asdf install ruby latest
+    asdf global ruby latest
 fi
-
-rbenv global ${RBVER}
-rbenv rehash
-
-unset RBVER
 
 # RubyGems
 if which gem &> /dev/null
@@ -457,7 +436,6 @@ then
     done
 
     gem cleanup
-    rbenv rehash
 
     unset GEMS
 fi

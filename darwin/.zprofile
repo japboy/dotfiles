@@ -63,13 +63,6 @@ export XDG_CONFIG_HOME=${HOME}/.config
 # ccache
 export PATH="$(brew --prefix ccache)/libexec:${PATH}"
 
-# anyenv
-export PATH="${HOME}/.anyenv/bin:${PATH}"
-
-# Go (w/ anyenv)
-#export PATH="${GOROOT}/bin:${PATH}"
-#export PATH="${PATH}:${GOPATH}/bin"
-
 # Mono
 export MONO_GAC_PREFIX="$(brew --prefix)"
 

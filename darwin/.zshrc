@@ -22,11 +22,11 @@ fi
 [ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 ##
-# All in one for **env
-# @see https://github.com/anyenv/anyenv
+# asdf
+# @see https://github.com/asdf-vm/asdf
 
-eval "$(anyenv init -)"
-[ -f "${HOME}/.anyenv/completions/anyenv.zsh" ] && source "${HOME}/.anyenv/completions/anyenv.zsh"
+[ -f "${HOME}/.asdf/asdf.sh" ] && source "${HOME}/.asdf/asdf.sh"
+[ -f "${HOME}/.asdf/completions/asdf.bash" ] && source "${HOME}/.asdf/completions/asdf.bash"
 
 ##
 # Generic Colouriser
