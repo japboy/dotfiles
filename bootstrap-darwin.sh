@@ -280,6 +280,7 @@ BREWS=(
     'cairo'
     'ccache'
     'cmake'
+    'direnv'
     'gettext'
     'gh'
     'giflib'

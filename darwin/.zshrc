@@ -22,6 +22,12 @@ fi
 [ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 ##
+# direnv
+# @see https://direnv.net/
+
+eval "$(direnv hook zsh)"
+
+##
 # asdf
 # @see https://github.com/asdf-vm/asdf
 
