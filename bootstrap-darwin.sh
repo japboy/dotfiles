@@ -345,6 +345,7 @@ then
     asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
     asdf plugin add python https://github.com/asdf-community/asdf-python.git
     asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git
+    asdf plugin add rust https://github.com/asdf-community/asdf-rust.git
 else
     asdf update
     asdf plugin update --all
@@ -409,7 +410,7 @@ then
     unset PIPS PIP
 fi
 
-# Ruby through `rbenv` if not exists
+# Ruby
 if asdf plugin list | grep ruby &> /dev/null
 then
     RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1) \
@@ -439,6 +440,13 @@ then
     gem cleanup
 
     unset GEMS
+fi
+
+# Rust
+if asdf plugin list | grep rust &> /dev/null
+then
+    asdf install rust latest
+    asdf global rust latest
 fi
 
 # Setup default lagunage
