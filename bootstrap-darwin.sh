@@ -111,7 +111,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '24.0.6' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '28.3.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
@@ -127,33 +127,33 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.4.23'
+if is_older_app ~/Applications/iTerm.app '3.5.14'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_4_23.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_4_23.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_5_14.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_5_14.zip
 fi
 
 # MonitorControl
-if is_older_app ~/Applications/MonitorControl.app '4.2.0'
+if is_older_app ~/Applications/MonitorControl.app '4.3.3'
 then
-    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.0.2/MonitorControl.4.2.0.dmg
-    hdiutil attach ./MonitorControl.4.2.0.dmg
+    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.3.3/MonitorControl.4.3.3.dmg
+    hdiutil attach ./MonitorControl.4.3.3.dmg
     cp -a /Volumes/MonitorControl.app ~/Applications/
-    hdiutil detach /Volumes/MonitorControl.4.2.0.dmg
+    hdiutil detach /Volumes/MonitorControl.4.3.3.dmg
 fi
 
 # PowerShell
-if is_older_app /Applications/PowerShell.app '7.4.0'
+if is_older_app /Applications/PowerShell.app '7.5.2'
 then
     cd ${HOME}/Downloads
     if [[ "${ARCH}" = 'arm64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell-7.4.0-osx-arm64.pkg
-        sudo installer -pkg ./powershell-7.4.0-osx-arm64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/powershell-7.5.2-osx-arm64.pkg
+        sudo installer -pkg ./powershell-7.5.2-osx-arm64.pkg -target /
     elif [[ "${ARCH}" = 'x86_64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell-7.4.0-osx-x64.pkg
-        sudo installer -pkg ./powershell-7.4.0-osx-x64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/powershell-7.5.2-osx-x64.pkg
+        sudo installer -pkg ./powershell-7.5.2-osx-x64.pkg -target /
     fi
     cd ${CWD}
 fi
