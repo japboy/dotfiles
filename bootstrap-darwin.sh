@@ -228,6 +228,12 @@ then
     exit 1
 fi
 
+# Rosetta (x86_64 compatibility layer)
+if [ "${ARCH}" = 'arm64' ]
+then
+    softwareupdate --install-rosetta
+fi
+
 # Check if JDK is installed
 if ! javac -version &> /dev/null
 then
