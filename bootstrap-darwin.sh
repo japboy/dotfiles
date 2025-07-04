@@ -361,6 +361,7 @@ then
     PIPS=(
         'neovim'
         'pip'
+        'uv'
         'wheel'
     )
 
