@@ -28,11 +28,10 @@ fi
 eval "$(direnv hook zsh)"
 
 ##
-# asdf
-# @see https://github.com/asdf-vm/asdf
+# mise
+# @see https://mise.jdx.dev/installing-mise.html#zsh
 
-[ -f "${HOME}/.asdf/asdf.sh" ] && source "${HOME}/.asdf/asdf.sh"
-[ -f "${HOME}/.asdf/completions/asdf.bash" ] && source "${HOME}/.asdf/completions/asdf.bash"
+eval "$(mise activate zsh)"
 
 ##
 # Generic Colouriser
