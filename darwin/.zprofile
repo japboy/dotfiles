@@ -42,6 +42,8 @@ export GLOBIGNORE=.:..
 export PATH="${HOME}/Developer/bin:${PATH}"
 export MANPATH="${HOME}/Developer/share/man:${MANPATH}"
 
+export PATH="${HOME}/.local/bin:${PATH}"
+
 # MacPorts
 #export PATH="/opt/local/bin:/opt/local/sbin:${PATH}"
 #export MANPATH="/opt/local/share/man:${MANPATH}"
