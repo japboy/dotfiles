@@ -54,9 +54,3 @@ then
     precmd () { __git_ps1 "%n" ":%~$ " "|%s" }
 fi
 [ -f "$(brew --prefix git-extras)/share/git-extras/git-extras-completion.zsh" ] && source "$(brew --prefix git-extras)/share/git-extras/git-extras-completion.zsh"
-export QUBENA_WORKSPACE=/Users/yu.inao/Workspace # appended by qubena-dev-setup
-export QUBENA_CONF_DIR=/Users/yu.inao/.config/qubena # appended by qubena-dev-setup
-export QUBENA_OPT_DIR=/Users/yu.inao/opt # appended by qubena-dev-setup
-export QUBENA_BIN_DIR=/Users/yu.inao/bin # appended by qubena-dev-setup
-export USE_GKE_GCLOUD_AUTH_PLUGIN=True # appended by qubena-dev-setup
-source /Users/yu.inao/Workspace/com.github.compass-inc.qubena-dev-setup/envs/local.env # appended by qubena-dev-setup
