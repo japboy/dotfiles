@@ -111,7 +111,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '28.3.0' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '28.3.2' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
