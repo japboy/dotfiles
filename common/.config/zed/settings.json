@@ -1,0 +1,122 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "agent_servers": {
+    "Claude Code": {
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "@zed-industries/claude-code-acp@latest"
+      ],
+      "env": {}
+    }
+  },
+  "context_servers": {
+    "Serena": {
+      "source": "custom",
+      "enabled": true,
+      "command": "mise",
+      "args": [
+        "exec",
+        "python@3",
+        "--",
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ],
+      "env": {}
+    },
+    "Playwright": {
+      "source": "custom",
+      "enabled": true,
+      "command": "mise",
+      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
+    "Filesystem": {
+      "source": "custom",
+      "enabled": true,
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/Users"
+      ],
+      "env": {}
+    }
+  },
+  "base_keymap": "VSCode",
+  "file_types": {
+    "vue": ["*.vue"],
+    "postcss": ["*.css"],
+    "html": ["*.tmpl", "*.tpl"],
+    "asp": ["*.asp"]
+  },
+  "show_whitespaces": "boundary",
+  "show_edit_predictions": true,
+  "preferred_line_length": 100,
+  "soft_wrap": "editor_width",
+  "hard_tabs": false,
+  "tab_size": 4,
+  "minimap": {
+    "show": "auto"
+  },
+  "cursor_shape": "bar",
+  "vim_mode": true,
+  "agent": {
+    "profiles": {
+      "agent": {
+        "name": "Agent",
+        "tools": {
+          "terminal": true,
+          "read_file": true,
+          "project_notifications": true,
+          "open": true,
+          "now": true,
+          "move_path": true,
+          "list_directory": true,
+          "find_path": true,
+          "grep": true,
+          "fetch": true,
+          "edit_file": true,
+          "diagnostics": true,
+          "delete_path": true,
+          "create_directory": true,
+          "copy_path": true,
+          "thinking": true
+        },
+        "enable_all_context_servers": true
+      }
+    },
+    "play_sound_when_agent_done": true,
+    "always_allow_tool_actions": true,
+    "default_profile": "agent",
+    "model_parameters": [],
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5"
+    }
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 14,
+  "theme": {
+    "mode": "system",
+    "light": "VSCode Light+",
+    "dark": "One Dark"
+  }
+}
