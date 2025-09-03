@@ -15,6 +15,7 @@
   },
   "editor.cursorStyle": "line",
   "editor.detectIndentation": false,
+  "editor.editContext": false,
   "editor.formatOnSave": true,
   "editor.inlineSuggest.enabled": true,
   "editor.insertSpaces": true,
@@ -116,8 +117,14 @@
   "githubPullRequests.pullBranch": "never",
 
   // Github Copilot
+  "chat.mcp.autostart": "newAndOutdated",
   "chat.mcp.serverSampling": {},
   "chat.mcp.discovery.enabled": true,
+  "chat.tools.terminal.autoApprove": {
+    "git": true,
+    "npm": true,
+    "yarn": true
+  },
   "github.copilot.enable": {
     "*": true,
     "markdown": true,
@@ -127,6 +134,9 @@
 
   // IntelliCode
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+  // Jest
+  "jest.runMode": "on-save",
 
   // Playwright
   "playwright.reuseBrowser": true,
