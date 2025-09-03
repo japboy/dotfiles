@@ -35,7 +35,7 @@
 	fsckObjects = false
 	unpackLimit = 10
 [user]
-	email = lagfer@youck.org
+	email = 84360+japboy@users.noreply.github.com
 	name = Yu I.
 [init]
 	defaultBranch = main
