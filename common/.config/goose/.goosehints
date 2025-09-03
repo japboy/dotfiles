@@ -1,0 +1,2 @@
+- Prefer using Playwright MCP when you access to a URL
+- Prefer using Serena MCP when you scan/refactor a codebase

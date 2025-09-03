@@ -1,0 +1,163 @@
+GOOSE_LEAD_MODEL: claude-sonnet-4-0
+GOOSE_ENABLE_ROUTER: 'true'
+extensions:
+  developer:
+    enabled: true
+    type: builtin
+    name: developer
+    display_name: Developer
+    description: null
+    timeout: 300
+    bundled: true
+    available_tools: []
+  memory:
+    enabled: true
+    type: builtin
+    name: memory
+    display_name: Memory
+    description: null
+    timeout: 300
+    bundled: true
+    available_tools: []
+  fetch:
+    enabled: false
+    type: stdio
+    name: fetch
+    cmd: mise
+    args:
+    - exec
+    - python@3
+    - --
+    - uvx
+    - mcp-server-fetch
+    envs: {}
+    env_keys: []
+    timeout: 300
+    description: Web content fetching and processing capabilities
+    bundled: null
+    available_tools: []
+  playwright:
+    enabled: true
+    type: stdio
+    name: playwright
+    cmd: mise
+    args:
+    - exec
+    - node@22
+    - --
+    - npx
+    - -y
+    - '@playwright/mcp@latest'
+    envs: {}
+    env_keys: []
+    timeout: 300
+    description: Playwright MCP Server
+    bundled: null
+    available_tools: []
+  filesystem:
+    enabled: false
+    type: stdio
+    name: filesystem
+    cmd: mise
+    args:
+    - exec
+    - node@22
+    - --
+    - npx
+    - -y
+    - '@modelcontextprotocol/server-filesystem@latest'
+    - /Users/yu.inao
+    envs: {}
+    env_keys: []
+    timeout: 300
+    description: Filesystem MCP Server
+    bundled: null
+    available_tools: []
+  computercontroller:
+    enabled: true
+    type: builtin
+    name: computercontroller
+    display_name: Computer Controller
+    description: null
+    timeout: 300
+    bundled: true
+    available_tools: []
+  speechinterface:
+    enabled: false
+    type: stdio
+    name: speechinterface
+    cmd: mise
+    args:
+    - exec
+    - python@3
+    - --
+    - uvx
+    - -p
+    - 3.10.14
+    - speech-mcp@latest
+    envs: {}
+    env_keys:
+    - CFLAGS
+    - LDFLAGS
+    timeout: 300
+    description: Voice interaction with audio visualization for Goose - enables real-time voice interaction, audio/video transcription, text-to-speech conversion, and multi-speaker audio generation
+    bundled: null
+    available_tools: []
+  jetbrains:
+    enabled: false
+    type: builtin
+    name: jetbrains
+    display_name: Jetbrains
+    description: null
+    timeout: 300
+    bundled: true
+    available_tools: []
+  tutorial:
+    enabled: false
+    type: builtin
+    name: tutorial
+    display_name: Tutorial
+    description: null
+    timeout: 300
+    bundled: true
+    available_tools: []
+  figma:
+    enabled: true
+    type: streamable_http
+    name: figma
+    uri: http://127.0.0.1:3845/mcp
+    envs: {}
+    env_keys: []
+    headers: {}
+    description: ''
+    timeout: 300
+    bundled: null
+    available_tools: []
+  serena:
+    enabled: true
+    type: stdio
+    name: serena
+    cmd: mise
+    args:
+    - exec
+    - python@3
+    - --
+    - uvx
+    - --from
+    - git+https://github.com/oraios/serena
+    - serena
+    - start-mcp-server
+    envs: {}
+    env_keys: []
+    timeout: 300
+    description: ''
+    bundled: null
+    available_tools: []
+GOOSE_LEAD_FALLBACK_TURNS: 2
+GOOSE_LEAD_PROVIDER: anthropic
+claude-code_configured: true
+GOOSE_MODEL: claude-sonnet-4-0
+GOOSE_PROVIDER: anthropic
+ANTHROPIC_HOST: https://api.anthropic.com
+GOOSE_LEAD_TURNS: 3
+CLAUDE_CODE_COMMAND: claude
