@@ -114,7 +114,7 @@ alias vim='nvim'
 export EDITOR='nvim'
 
 # Set alternate text editor
-export ALTERNATE_EDITOR='code --wait'
+export ALTERNATE_EDITOR='zed --wait'
 
 
 ##
