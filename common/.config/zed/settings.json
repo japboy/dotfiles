@@ -7,19 +7,41 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "agent_servers": {
-    "Claude Code": {
-      "command": "mise",
-      "args": [
-        "exec",
-        "node@22",
-        "--",
-        "npx",
-        "@zed-industries/claude-code-acp@latest"
-      ],
-      "env": {}
+  "agent": {
+    "profiles": {
+      "agent": {
+        "name": "Agent",
+        "tools": {
+          "terminal": true,
+          "read_file": true,
+          "project_notifications": true,
+          "open": true,
+          "now": true,
+          "move_path": true,
+          "list_directory": true,
+          "find_path": true,
+          "grep": true,
+          "fetch": true,
+          "edit_file": true,
+          "diagnostics": true,
+          "delete_path": true,
+          "create_directory": true,
+          "copy_path": true,
+          "thinking": true
+        },
+        "enable_all_context_servers": true
+      }
+    },
+    "play_sound_when_agent_done": true,
+    "always_allow_tool_actions": true,
+    "default_profile": "ask",
+    "model_parameters": [],
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5"
     }
   },
+  "agent_servers": {},
   "context_servers": {
     "Serena": {
       "source": "custom",
@@ -60,57 +82,46 @@
       "env": {}
     }
   },
-  "base_keymap": "VSCode",
+  "features": {
+    "edit_prediction_provider": "copilot"
+  },
+
   "file_types": {
     "vue": ["*.vue"],
     "postcss": ["*.css"],
     "html": ["*.tmpl", "*.tpl"],
     "asp": ["*.asp"]
   },
-  "show_whitespaces": "boundary",
-  "show_edit_predictions": true,
-  "preferred_line_length": 100,
-  "soft_wrap": "editor_width",
-  "hard_tabs": false,
-  "tab_size": 4,
-  "minimap": {
-    "show": "auto"
-  },
-  "cursor_shape": "bar",
-  "vim_mode": true,
-  "agent": {
-    "profiles": {
-      "agent": {
-        "name": "Agent",
-        "tools": {
-          "terminal": true,
-          "read_file": true,
-          "project_notifications": true,
-          "open": true,
-          "now": true,
-          "move_path": true,
-          "list_directory": true,
-          "find_path": true,
-          "grep": true,
-          "fetch": true,
-          "edit_file": true,
-          "diagnostics": true,
-          "delete_path": true,
-          "create_directory": true,
-          "copy_path": true,
-          "thinking": true
-        },
-        "enable_all_context_servers": true
+
+  "languages": {
+    "JavaScript": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
       }
     },
-    "play_sound_when_agent_done": true,
-    "always_allow_tool_actions": true,
-    "default_profile": "agent",
-    "model_parameters": [],
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-5"
+    "TypeScript": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
+      }
+    },
+    "TSX": {
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true,
+        "source.organizeImports": true
+      }
     }
+  },
+
+  "base_keymap": "VSCode",
+  "cursor_shape": "bar",
+  "show_whitespaces": "boundary",
+  "soft_wrap": "editor_width",
+  "vim_mode": true,
+
+  "minimap": {
+    "show": "auto"
   },
   "ui_font_size": 16,
   "buffer_font_size": 14,
