@@ -6,18 +6,10 @@
 // To see the default key bindings run `zed: open default keymap`
 // from the command palette.
 [
-    {
-        "context": "Workspace",
-        "bindings": {
-            // "shift shift": "file_finder::Toggle"
-        }
-    },
-    {
-        "context": "Editor",
-        "bindings": {
-            // "j k": ["workspace::SendKeystrokes", "escape"]
-            "ctrl-9": null,
-            "ctrl-j": null
-        }
+  {
+    "bindings": {
+      "ctrl-9": null,
+      "ctrl-j": null
     }
+  }
 ]
