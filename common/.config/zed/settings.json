@@ -34,14 +34,22 @@
     },
     "play_sound_when_agent_done": true,
     "always_allow_tool_actions": true,
-    "default_profile": "ask",
+    "default_profile": "agent",
     "model_parameters": [],
     "default_model": {
       "provider": "copilot_chat",
       "model": "gpt-5"
     }
   },
-  "agent_servers": {},
+  "agent_servers": {
+    "Codex": {
+      "command": "codex-acp",
+      "args": [],
+      "env": {
+        "RUST_LOG": "info"
+      }
+    }
+  },
   "context_servers": {
     "Serena": {
       "source": "custom",
@@ -96,20 +104,17 @@
   "languages": {
     "JavaScript": {
       "code_actions_on_format": {
-        "source.fixAll.eslint": true,
-        "source.organizeImports": true
+        "source.fixAll.eslint": true
       }
     },
     "TypeScript": {
       "code_actions_on_format": {
-        "source.fixAll.eslint": true,
-        "source.organizeImports": true
+        "source.fixAll.eslint": true
       }
     },
     "TSX": {
       "code_actions_on_format": {
-        "source.fixAll.eslint": true,
-        "source.organizeImports": true
+        "source.fixAll.eslint": true
       }
     }
   },
@@ -129,5 +134,6 @@
     "mode": "system",
     "light": "VSCode Light+",
     "dark": "One Dark"
-  }
+  },
+  "use_system_window_tabs": true
 }
