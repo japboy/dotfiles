@@ -7,6 +7,11 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "auto_update": true,
+  "telemetry": {
+    "diagnostics": true,
+    "metrics": true
+  },
   "agent": {
     "profiles": {
       "agent": {
@@ -42,17 +47,69 @@
     }
   },
   "agent_servers": {
-    "Codex": {
-      "command": "codex-acp",
-      "args": [],
-      "env": {
-        "RUST_LOG": "info"
-      }
+    "claude": {
+      "default_mode": "plan"
+    },
+    "Goose": {
+      "command": "goose",
+      "args": ["acp"],
+      "env": {}
     }
   },
   "context_servers": {
+    "ChromeDevtools": {
+      "enabled": false,
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
+      "env": {}
+    },
+    "Context7": {
+      "enabled": true,
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
+      "env": {
+        "API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    },
+    "Figma": {
+      "enabled": true,
+      "url": "http://127.0.0.1:3845/mcp"
+    },
+    "Filesystem": {
+      "enabled": true,
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/Users"
+      ],
+      "env": {}
+    },
+    "Playwright": {
+      "enabled": true,
+      "command": "mise",
+      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
     "Serena": {
-      "source": "custom",
       "enabled": true,
       "command": "mise",
       "args": [
@@ -64,28 +121,6 @@
         "git+https://github.com/oraios/serena",
         "serena",
         "start-mcp-server"
-      ],
-      "env": {}
-    },
-    "Playwright": {
-      "source": "custom",
-      "enabled": true,
-      "command": "mise",
-      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"],
-      "env": {}
-    },
-    "Filesystem": {
-      "source": "custom",
-      "enabled": true,
-      "command": "mise",
-      "args": [
-        "exec",
-        "node@22",
-        "--",
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-filesystem@latest",
-        "/Users"
       ],
       "env": {}
     }
@@ -105,17 +140,20 @@
     "JavaScript": {
       "code_actions_on_format": {
         "source.fixAll.eslint": true
-      }
+      },
+      "format_on_save": "on"
     },
     "TypeScript": {
       "code_actions_on_format": {
         "source.fixAll.eslint": true
-      }
+      },
+      "format_on_save": "on"
     },
     "TSX": {
       "code_actions_on_format": {
         "source.fixAll.eslint": true
-      }
+      },
+      "format_on_save": "on"
     }
   },
 
