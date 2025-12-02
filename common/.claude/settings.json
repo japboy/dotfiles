@@ -1,0 +1,41 @@
+{
+  "env": {
+    "ANTHROPIC_API_KEY": "",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp"
+  },
+  "includeCoAuthoredBy": true,
+  "permissions": {
+    "allow": [
+      "Bash",
+      "WebFetch",
+      "WebSearch",
+      "mcp__ChromeDevtools",
+      "mcp__Context7",
+      "mcp__Figma",
+      "mcp__Filesystem",
+      "mcp__Playwright",
+      "mcp__Serena"
+    ],
+    "ask": [
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(touch:*)",
+      "Edit",
+      "NotebookEdit",
+      "SlashCommand",
+      "Write",
+      "mcp__Filesystem__write_file",
+      "mcp__Filesystem__edit_file",
+      "mcp__Filesystem__create_directory",
+      "mcp__Filesystem__move_file",
+      "mcp__Serena__create_text_file",
+      "mcp__Serena__execute_shell_command",
+      "mcp__Serena__remove_project"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}
