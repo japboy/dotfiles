@@ -10,7 +10,7 @@ if has('nvim')
 endif
 
 " Let NeoVim choose Python runtime wisely
-let g:python3_host_prog = expand('$HOME/.anyenv/envs/pyenv/shims/python')
+let g:python3_host_prog = expand('$HOME/.local/share/mise/installs/python/3.13.7/bin/python')
 
 
 ""
