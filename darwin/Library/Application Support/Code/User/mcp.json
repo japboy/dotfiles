@@ -1,0 +1,39 @@
+{
+  "servers": {
+    "Filesystem": {
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/Users"
+      ]
+    },
+    "Figma": {
+      "url": "http://127.0.0.1:3845/mcp",
+      "type": "http"
+    },
+    "Playwright": {
+      "command": "mise",
+      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"]
+    },
+    "Serena": {
+      "command": "mise",
+      "args": [
+        "exec",
+        "python@3",
+        "--",
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ],
+      "type": "stdio"
+    }
+  },
+  "inputs": []
+}
