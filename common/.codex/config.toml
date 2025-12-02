@@ -1,33 +1,4 @@
-model = "gpt-5-codex"
-
-[mcp_servers.Serena]
-command = "mise"
-args = [
-  "exec",
-  "python@3",
-  "--",
-  "uvx",
-  "--from",
-  "git+https://github.com/oraios/serena",
-  "serena",
-  "start-mcp-server"
-]
-env = {}
-
-[mcp_servers.Playwright]
-command = "mise"
-args = ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"]
-env = {}
-
-[mcp_servers.Filesystem]
-command = "mise"
-args = [
-  "exec",
-  "node@22",
-  "--",
-  "npx",
-  "-y",
-  "@modelcontextprotocol/server-filesystem@latest",
-  "/Users"
-]
-env = {}
+approval_policy = "on-request"
+file_opener="none"
+model = "gpt-5.1-codex"
+model_reasoning_effort = "high"
