@@ -339,6 +339,7 @@ unset BREW BREWS
 brew cleanup
 
 # `mise` for **env
+mise use -g bun@latest
 mise use -g deno@latest
 mise use -g golang@latest
 mise use -g node@latest
