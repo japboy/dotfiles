@@ -346,15 +346,24 @@ mise use -g python@latest
 mise use -g ruby@latest
 mise use -g rust@latest
 
+##
+# Aikido Safe Chain
+# @see https://github.com/AikidoSec/safe-chain
+
+curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/main/install-scripts/install-safe-chain.sh | sh -s -- --include-python
+npm install safe-chain-test
+pip install safe-chain-pi-test
+
 # Node.js NPMs
-if which corepack &> /dev/null
+if ! which corepack &> /dev/null
 then
-    # @see https://pnpm.io/installation
-    # @see https://yarnpkg.com/getting-started/install
-    corepack enable
-    corepack prepare pnpm@latest --activate
-    corepack prepare yarn@stable --activate
+    npm install -g corepack
 fi
+# @see https://pnpm.io/installation
+# @see https://yarnpkg.com/getting-started/install
+corepack enable
+corepack prepare pnpm@latest --activate
+corepack prepare yarn@stable --activate
 
 # Python PyPIs
 if which pip &> /dev/null
