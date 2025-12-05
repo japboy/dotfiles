@@ -303,6 +303,7 @@ BREWS=(
     'mcrypt'
     'mise'
     'neovim'
+    'ngrok'
     'openssl@1.1'
     'pango'
     'pcre'

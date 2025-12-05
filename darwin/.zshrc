@@ -54,3 +54,12 @@ then
     precmd () { __git_ps1 "%n" ":%~$ " "|%s" }
 fi
 [ -f "$(brew --prefix git-extras)/share/git-extras/git-extras-completion.zsh" ] && source "$(brew --prefix git-extras)/share/git-extras/git-extras-completion.zsh"
+
+##
+# ngrok
+# @see https://ngrok.com/docs/agent/cli#ngrok-completion
+
+if command -v ngrok &> /dev/null
+then
+    eval "$(ngrok completion)"
+fi
