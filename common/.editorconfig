@@ -21,6 +21,6 @@ tab_width = 4
 trim_trailing_whitespace = false
 
 # Web frontend coding
-[*.{css,html,json,js,cjs,mjs,jsx,ts,tsx,vue}]
+[*.{css,graphql,html,json,js,cjs,mjs,jsx,ts,tsx,vue}]
 indent_size = 2
 indent_style = space
