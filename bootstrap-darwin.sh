@@ -111,7 +111,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '28.3.2' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! which docker &> /dev/null || [[ '29.0.1' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
@@ -127,10 +127,10 @@ then
 fi
 
 # iTerm2
-if is_older_app ~/Applications/iTerm.app '3.5.14'
+if is_older_app ~/Applications/iTerm.app '3.6.6'
 then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_5_14.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_5_14.zip
+    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_6_6.zip
+    unzip -o -d ~/Applications/ ./iTerm2-3_6_6.zip
 fi
 
 # MonitorControl
@@ -143,17 +143,17 @@ then
 fi
 
 # PowerShell
-if is_older_app /Applications/PowerShell.app '7.5.2'
+if is_older_app /Applications/PowerShell.app '7.5.4'
 then
     cd ${HOME}/Downloads
     if [[ "${ARCH}" = 'arm64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/powershell-7.5.2-osx-arm64.pkg
-        sudo installer -pkg ./powershell-7.5.2-osx-arm64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/powershell-7.5.4-osx-arm64.pkg
+        sudo installer -pkg ./powershell-7.5.4-osx-arm64.pkg -target /
     elif [[ "${ARCH}" = 'x86_64' ]]
     then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/powershell-7.5.2-osx-x64.pkg
-        sudo installer -pkg ./powershell-7.5.2-osx-x64.pkg -target /
+        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/powershell-7.5.4-osx-x64.pkg
+        sudo installer -pkg ./powershell-7.5.4-osx-x64.pkg -target /
     fi
     cd ${CWD}
 fi
