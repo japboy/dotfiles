@@ -167,31 +167,6 @@ then
     hdiutil detach /Volumes/XQuartz-2.8.5
 fi
 
-
-# Check if QuickLook directory exists
-if [ ! -d ${HOME}/Library/QuickLook ]
-then
-    mkdir -p ${HOME}/Library/QuickLook
-fi
-
-# QuickLook qlImageSize
-if [ ! -d ${HOME}/Library/QuickLook/qlImageSize.qlgenerator ]
-then
-    curl -LO https://github.com/Nyx0uf/qlImageSize/releases/download/2.6.1/qlImageSize.qlgenerator.zip
-    unzip qlImageSize.qlgenerator.zip -d ${HOME}/Library/QuickLook/
-fi
-
-# QuickLook qlstephen
-if [ ! -d ${HOME}/Library/QuickLook/QLStephen.qlgenerator ]
-then
-    curl -LO https://github.com/whomwah/qlstephen/releases/download/1.5.1/QLStephen.qlgenerator.1.5.1.zip
-    unzip QLStephen.qlgenerator.1.5.1.zip -d ${HOME}/Library/QuickLook/
-fi
-
-# Restart QuickLook
-qlmanage -r
-qlmanage -r cache
-
 # Reset current working directory
 cd ${CWD}
 
@@ -292,6 +267,7 @@ BREWS=(
     'giflib'
     'git-extras'
     'git'
+    'glance-chamburr'
     'grc'
     'highway'
     'jpeg'
