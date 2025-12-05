@@ -1,4 +1,27 @@
-approval_policy = "on-request"
-file_opener="none"
-model = "gpt-5.1-codex"
+model = "gpt-5.1-codex-max"
 model_reasoning_effort = "high"
+approval_policy = "on-request"
+
+[mcp_servers.ChromeDevtools]
+command = "mise"
+args = ["exec", "node@22", "--", "npx", "-y", "chrome-devtools-mcp@latest"]
+[mcp_servers.Context7]
+url = "https://mcp.context7.com/mcp"
+http_headers = { "CONTEXT7_API_KEY" = "${CONTEXT7_API_KEY}" }
+[mcp_servers.Figma]
+url = "http://127.0.0.1:3845/mcp"
+[mcp_servers.Filesystem]
+command = "mise"
+args = ["exec", "node@22", "--", "npx", "-y", "@modelcontextprotocol/server-filesystem@latest", "/Users"]
+[mcp_servers.Playwright]
+command = "mise"
+args = ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"]
+[mcp_servers.Serena]
+command = "mise"
+args = ["exec", "python@3", "--", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
+
+# FIXME: Internal error: "server shut down unexpectedly"
+#[features]
+#web_search_request = true
+
+file_opener="none"

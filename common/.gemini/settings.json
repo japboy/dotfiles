@@ -1,0 +1,79 @@
+{
+  "general": {
+    "preferredEditor": "zed",
+    "checkpointing": {
+      "enabled": true
+    },
+    "enablePromptCompletion": true
+  },
+  "tools": {
+    "autoAccept": true
+  },
+  "mcp": {
+    "allowed": [
+      "ChromeDevtools",
+      "Context7",
+      "Figma",
+      "Filesystem",
+      "Playwright",
+      "Serena"
+    ],
+    "excluded": []
+  },
+  "mcpServers": {
+    "ChromeDevtools": {
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ]
+    },
+    "Context7": {
+      "httpUrl": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    },
+    "Figma": {
+      "httpUrl": "http://127.0.0.1:3845/mcp"
+    },
+    "Filesystem": {
+      "command": "mise",
+      "args": [
+        "exec",
+        "node@22",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/Users"
+      ]
+    },
+    "Playwright": {
+      "command": "mise",
+      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"]
+    },
+    "Serena": {
+      "command": "mise",
+      "args": [
+        "exec",
+        "python@3",
+        "--",
+        "uvx",
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ]
+    }
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  }
+}
