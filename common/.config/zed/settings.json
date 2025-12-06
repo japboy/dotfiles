@@ -48,9 +48,6 @@
     }
   },
   "agent_servers": {
-    "claude": {
-      "default_mode": "plan"
-    },
     "Goose": {
       "type": "custom",
       "command": "goose",
