@@ -13,6 +13,13 @@
     "diagnostics": true,
     "metrics": true
   },
+  "git_hosting_providers": [
+    {
+      "provider": "github",
+      "name": "GitHub",
+      "base_url": "https://github.com"
+    }
+  ],
   "agent": {
     "profiles": {
       "agent": {
