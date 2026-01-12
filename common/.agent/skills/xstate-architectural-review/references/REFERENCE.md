@@ -1,0 +1,3 @@
+- [API](https://www.jsdocs.io/package/xstate)
+- [Actor model](https://stately.ai/docs/actor-model)
+- [Naming convention](https://stately.ai/blog/2024-01-23-state-machines-whats-in-a-name)

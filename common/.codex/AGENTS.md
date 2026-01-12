@@ -13,6 +13,7 @@ Answer only if you are > 0.9 confident, since mistakes are penalized 9 points, w
 
 # Tool Priorities
 
-- Always use Playwright web browsers for web references
+- Always use Playwright web browsers instead of WebFetch
 - Always use Context7 for official references
+- Always use Serena for code scannings or modifications
 - Use `gh` command for GitHub related tasks
