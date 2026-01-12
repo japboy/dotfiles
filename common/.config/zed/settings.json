@@ -7,18 +7,25 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "ssh_connections": [
+    {
+      "host": "github.com",
+      "args": [],
+      "projects": []
+    }
+  ],
   "colorize_brackets": true,
   "auto_update": true,
   "telemetry": {
     "diagnostics": true,
-    "metrics": true
+    "metrics": true,
   },
   "git_hosting_providers": [
     {
       "provider": "github",
       "name": "GitHub",
-      "base_url": "https://github.com"
-    }
+      "base_url": "https://github.com",
+    },
   ],
   "agent": {
     "profiles": {
@@ -40,10 +47,10 @@
           "delete_path": true,
           "create_directory": true,
           "copy_path": true,
-          "thinking": true
+          "thinking": true,
         },
-        "enable_all_context_servers": true
-      }
+        "enable_all_context_servers": true,
+      },
     },
     "play_sound_when_agent_done": true,
     "always_allow_tool_actions": true,
@@ -51,16 +58,16 @@
     "model_parameters": [],
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gpt-5"
-    }
+      "model": "gpt-5",
+    },
   },
   "agent_servers": {
     "Goose": {
       "type": "custom",
       "command": "goose",
       "args": ["acp"],
-      "env": {}
-    }
+      "env": {},
+    },
   },
   "context_servers": {
     "ChromeDevtools": {
@@ -72,20 +79,20 @@
         "--",
         "npx",
         "-y",
-        "chrome-devtools-mcp@latest"
+        "chrome-devtools-mcp@latest",
       ],
-      "env": {}
+      "env": {},
     },
     "Context7": {
       "enabled": true,
       "url": "https://mcp.context7.com/mcp",
       "headers": {
-        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
-      }
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}",
+      },
     },
     "Figma": {
       "enabled": true,
-      "url": "http://127.0.0.1:3845/mcp"
+      "url": "http://127.0.0.1:3845/mcp",
     },
     "Filesystem": {
       "enabled": true,
@@ -97,19 +104,19 @@
         "npx",
         "-y",
         "@modelcontextprotocol/server-filesystem@latest",
-        "/Users"
+        "/Users",
       ],
-      "env": {}
+      "env": {},
     },
     "Miro": {
       "enabled": false,
-      "url": "https://mcp.miro.com"
+      "url": "https://mcp.miro.com",
     },
     "Playwright": {
       "enabled": true,
       "command": "mise",
       "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"],
-      "env": {}
+      "env": {},
     },
     "Serena": {
       "enabled": true,
@@ -122,41 +129,41 @@
         "--from",
         "git+https://github.com/oraios/serena",
         "serena",
-        "start-mcp-server"
+        "start-mcp-server",
       ],
-      "env": {}
-    }
+      "env": {},
+    },
   },
   "features": {
-    "edit_prediction_provider": "copilot"
+    "edit_prediction_provider": "copilot",
   },
 
   "file_types": {
     "vue": ["*.vue"],
     "postcss": ["*.css"],
     "html": ["*.tmpl", "*.tpl"],
-    "asp": ["*.asp"]
+    "asp": ["*.asp"],
   },
 
   "languages": {
     "JavaScript": {
       "code_actions_on_format": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": true,
       },
-      "format_on_save": "on"
+      "format_on_save": "on",
     },
     "TypeScript": {
       "code_actions_on_format": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": true,
       },
-      "format_on_save": "on"
+      "format_on_save": "on",
     },
     "TSX": {
       "code_actions_on_format": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": true,
       },
-      "format_on_save": "on"
-    }
+      "format_on_save": "on",
+    },
   },
 
   "base_keymap": "VSCode",
@@ -166,14 +173,14 @@
   "vim_mode": true,
 
   "minimap": {
-    "show": "auto"
+    "show": "auto",
   },
   "ui_font_size": 16,
   "buffer_font_size": 14,
   "theme": {
     "mode": "system",
     "light": "VSCode Light+",
-    "dark": "One Dark"
+    "dark": "One Dark",
   },
-  "use_system_window_tabs": true
+  "use_system_window_tabs": true,
 }
