@@ -17,7 +17,7 @@ Organize and persist the current conversation context using MFR (Model-First-Rea
 
 ```
 ~/Desktop/
-└── YYYY-MM-DD-HHmm-[summary-title].md
+└── summary-YYYYMMDDHHmm-[summary-title].md
 ```
 
 ### MFR Categories
@@ -38,7 +38,26 @@ Organize and persist the current conversation context using MFR (Model-First-Rea
 
 ## Actions
 
-### 1. Analyze Conversation
+### 1. Check for Previous Summary
+
+Before analyzing the conversation, check if a previous context summary exists at the beginning of the conversation context window:
+
+- Look for a markdown file matching the pattern `summary-YYYYMMDDHHmm-*.md` loaded at the start of the context
+- Only files following this exact naming convention should be considered for inheritance
+- If found, note the **Entities** and **Constraints** sections for potential inheritance
+
+**Inheritance Rules:**
+
+| Category | Inheritance Behavior |
+|----------|---------------------|
+| **Entities** | Inherit unless explicitly removed or replaced in the current session |
+| **States** | Update based on current session progress (do NOT inherit as-is) |
+| **Actions** | Fresh for each session (completed actions become historical context) |
+| **Constraints** | Inherit unless explicitly changed or resolved in the current session |
+
+> **Important**: Entities and Constraints represent stable context that should persist across sessions unless there is clear evidence of change. States and Actions are session-specific and should reflect current progress.
+
+### 2. Analyze Conversation
 
 Review the current conversation to identify:
 - Main objectives and goals discussed
@@ -47,11 +66,11 @@ Review the current conversation to identify:
 - Files or components modified
 - Outstanding questions or blockers
 
-### 2. Model with MFR
+### 3. Model with MFR
 
 Organize extracted information into the four MFR categories:
 
-**Entities**: List all significant objects
+**Entities**: List all significant objects (inherit from previous summary if available)
 
 ```markdown
 ## Entities
@@ -59,6 +78,8 @@ Organize extracted information into the four MFR categories:
 - **[Entity Name]**: [Brief description and current relevance]
 - **[File Path]**: [Purpose and modifications made]
 ```
+
+> If a previous summary exists, include all entities from it unless they were explicitly removed or are no longer relevant to the project.
 
 **States**: Document current conditions
 
@@ -87,7 +108,7 @@ Organize extracted information into the four MFR categories:
 1. [Prioritized next action]
 ```
 
-**Constraints**: Note limitations and requirements
+**Constraints**: Note limitations and requirements (inherit from previous summary if available)
 
 ```markdown
 ## Constraints
@@ -97,7 +118,9 @@ Organize extracted information into the four MFR categories:
 - **Dependencies**: [External requirements]
 ```
 
-### 3. Generate Summary File
+> If a previous summary exists, include all constraints from it unless they were explicitly resolved or changed during the current session.
+
+### 4. Generate Summary File
 
 Create a markdown file with the following structure:
 
@@ -128,7 +151,7 @@ Create a markdown file with the following structure:
 [Any context that does not fit the above categories]
 ```
 
-### 4. Save to Desktop
+### 5. Save to Desktop
 
 Pipe the summary content to the script, which saves it to Desktop with a timestamped filename:
 
@@ -168,13 +191,13 @@ echo '# Context Summary: API Refactoring
 ## Constraints
 
 - Must maintain backward compatibility' | ./scripts/save-summary.sh api-refactoring-progress
-# Output: /Users/username/Desktop/2025-01-19-1430-api-refactoring-progress.md
+# Output: /Users/username/Desktop/summary-202501191430-api-refactoring-progress.md
 ```
 
 The script:
 
 - Reads content from stdin
-- Generates timestamp in `YYYY-MM-DD-HHmm` format automatically
+- Generates timestamp in `YYYYMMDDHHmm` format automatically
 - Validates title contains only lowercase letters, numbers, and hyphens
 - Ensures title is 50 characters or less
 - Saves file to Desktop and outputs the filepath

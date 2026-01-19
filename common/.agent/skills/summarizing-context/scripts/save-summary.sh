@@ -3,7 +3,7 @@
 # Usage: echo "content" | ./save-summary.sh <summary-title>
 #    or: ./save-summary.sh <summary-title> < content.md
 # Example: echo "# Summary" | ./save-summary.sh api-refactoring-progress
-# Output: Saves to ~/Desktop/2025-01-19-1430-api-refactoring-progress.md
+# Output: Saves to ~/Desktop/summary-202501191430-api-refactoring-progress.md
 #
 # Cross-platform support:
 #   - macOS: ~/Desktop
@@ -51,11 +51,11 @@ if [[ ! -d "${desktop_dir}" ]]; then
     exit 1
 fi
 
-# Generate timestamp in YYYY-MM-DD-HHmm format
-timestamp=$(date +"%Y-%m-%d-%H%M")
+# Generate timestamp in YYYYMMDDHHmm format
+timestamp=$(date +"%Y%m%d%H%M")
 
-# Generate full filepath
-filepath="${desktop_dir}/${timestamp}-${title}.md"
+# Generate full filepath with summary- prefix
+filepath="${desktop_dir}/summary-${timestamp}-${title}.md"
 
 # Read from stdin and write to file
 cat > "${filepath}"
