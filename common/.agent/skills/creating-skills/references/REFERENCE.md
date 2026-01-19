@@ -10,6 +10,11 @@
 - [Example Skills](https://github.com/anthropics/skills) - Official example repository
 - [skills-ref Library](https://github.com/agentskills/agentskills/tree/main/skills-ref) - Validation tool
 
+### Claude Code Documentation
+
+- [Agent Skills - Claude Code Docs](https://code.claude.com/docs/en/skills) - Claude Code specific usage and examples
+- [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) - Naming conventions, description writing, progressive disclosure patterns
+
 ### Claude Code Plugin Development
 
 - [Claude Code Skills](https://github.com/anthropics/claude-code/tree/main/plugins/plugin-dev/skills) - Claude Code specific extensions
