@@ -26,6 +26,8 @@
       "mcp__Serena"
     ],
     "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
       "Bash(mkdir:*)",
       "Bash(rm:*)",
       "Bash(touch:*)",
@@ -37,7 +39,23 @@
       "mcp__Serena__execute_shell_command",
       "mcp__Serena__remove_project"
     ],
-    "deny": [],
-    "defaultMode": "default"
-  }
+    "defaultMode": "default",
+    "additionalDirectories": [
+      "~/.claude/plans/"
+    ]
+  },
+  "enabledPlugins": {
+    "compound-engineering@every-marketplace": false,
+    "code-review@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "every-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "EveryInc/every-marketplace"
+      }
+    }
+  },
+  "language": "japanese"
 }
