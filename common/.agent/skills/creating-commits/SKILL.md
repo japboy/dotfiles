@@ -19,6 +19,20 @@ An atomic snapshot of changes. Each commit should encapsulate a single logical c
 
 Append the following block verbatim to all commit messages (do not modify):
 
+#### Use with Claude Code
+
+- Follow built-in signature format
+
+#### Use with Codex
+
+```
+🤖 Generated with [Codex](https://openai.com/codex/)
+
+Co-Authored-By: Codex
+```
+
+#### Use with Zed and Claude Code
+
 ```
 🤖 Generated with [Claude Code](https://claude.ai/code) via [Zed](https://zed.dev/docs/ai/external-agents)
 
