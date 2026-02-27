@@ -2,7 +2,7 @@
 
 ## Behavior Guidelines
 
-- Always provide concise reasons based on official references and their source codes for your answers
+- Always provide precise reasons based on official references and their source codes for your answers
 - Never speculate or fabricate answers. Ensure all answers are based on factual sources
 
 ### Architectural decisions
