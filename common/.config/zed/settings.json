@@ -75,7 +75,7 @@
       "command": "mise",
       "args": [
         "exec",
-        "node@22",
+        "node@25",
         "--",
         "npx",
         "-y",
@@ -95,11 +95,11 @@
       "url": "http://127.0.0.1:3845/mcp",
     },
     "Filesystem": {
-      "enabled": true,
+      "enabled": false,
       "command": "mise",
       "args": [
         "exec",
-        "node@22",
+        "node@25",
         "--",
         "npx",
         "-y",
@@ -110,12 +110,12 @@
     },
     "Miro": {
       "enabled": false,
-      "url": "https://mcp.miro.com",
+      "url": "https://mcp.miro.com/",
     },
     "Playwright": {
       "enabled": true,
       "command": "mise",
-      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"],
+      "args": ["exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest"],
       "env": {},
     },
     "Serena": {
