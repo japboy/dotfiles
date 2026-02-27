@@ -1,0 +1,2 @@
+foundation_element,subtopic,evidence_source,evidence_ref,file_key,node_id,source_url,batch_id,notion_page_url,section_path,notion_last_edited_time,evidence_level,state,platform,theme,locale,direction,structure_fit,content_validity,non_applicable_reason
+motion,interaction_transition,code,src/animations/transition.ts:33,,,,,,,,na,default,web,light,en,ltr,fit,valid,

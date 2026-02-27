@@ -1,0 +1,7 @@
+source_type,source_locator,source_section,evidence_level,priority,notes
+figma,https://www.figma.com/design/AbCdEf1234567890/Design-System?node-id=100-200,components/button/primary,l1,high,Design source for button states
+code,src/components/Button.tsx:48,components/button/primary,l1,high,Implementation evidence
+notion,https://www.notion.so/workspace/Button-rules-1234567890abcdef1234567890abcdef,components/button/language,l1,medium,Approved writing and behavior rules
+doc,https://spectrum.adobe.com/page/states/,foundation/states,official,medium,Structure reference only
+api,https://www.figma.com/developers/api#get-file-nodes-endpoint,tooling/figma-api,official,low,Extraction contract reference
+other,legacy-design-audit-spreadsheet-v1,inventory/intake,na,low,Legacy notes for manual follow-up

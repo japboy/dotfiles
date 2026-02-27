@@ -1,0 +1,29 @@
+structure:
+  principles: Principles
+  foundation:
+    - design_tokens
+    - platform_scale
+    - theming
+    - color
+    - typography
+    - object_styles
+    - motion
+    - states
+    - iconography
+    - illustration
+    - inclusive_design
+    - international_design
+    - bi_directionality
+    - data_visualization
+  content:
+    - voice_and_tone
+    - grammar_and_mechanics
+    - language_and_inclusivity
+    - in_product_word_list
+    - writing_for_errors
+    - writing_for_onboarding
+  language_and_inclusivity_subtopics:
+    - inclusive_ux_writing
+    - writing_about_people
+    - writing_for_readability
+    - writing_with_visuals
