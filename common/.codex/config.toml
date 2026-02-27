@@ -1,25 +1,44 @@
-model = "gpt-5.2"
-model_reasoning_effort = "high"
+model = "gpt-5.3-codex"
+model_reasoning_effort = "xhigh"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
+personality = "pragmatic"
+
+[mcp_servers.Asana]
+url = "https://mcp.asana.com/v2/mcp"
+enabled = true
 
 [mcp_servers.ChromeDevtools]
 command = "mise"
-args = ["exec", "node@22", "--", "npx", "-y", "chrome-devtools-mcp@latest"]
+args = [ "exec", "node@25", "--", "npx", "-y", "chrome-devtools-mcp@latest" ]
+
 [mcp_servers.Context7]
 url = "https://mcp.context7.com/mcp"
 http_headers = { "CONTEXT7_API_KEY" = "${CONTEXT7_API_KEY}" }
 [mcp_servers.Figma]
 url = "http://127.0.0.1:3845/mcp"
+
 [mcp_servers.Filesystem]
 command = "mise"
-args = ["exec", "node@22", "--", "npx", "-y", "@modelcontextprotocol/server-filesystem@latest", "/Users"]
+args = [ "exec", "node@25", "--", "npx", "-y", "@modelcontextprotocol/server-filesystem@latest", "/Users" ]
+enabled = false
+
+[mcp_servers.Miro]
+url = "https://mcp.miro.com/"
+enabled = true
+
+[mcp_servers.Notion]
+url = "https://mcp.notion.com/mcp"
+enabled = true
+
 [mcp_servers.Playwright]
 command = "mise"
-args = ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"]
+args = [ "exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest" ]
+
 [mcp_servers.Serena]
 command = "mise"
-args = ["exec", "python@3", "--", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
+args = [ "exec", "python@3", "--", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server" ]
+file_opener = "none"
 
 # FIXME: Internal error: "server shut down unexpectedly"
 #[features]
