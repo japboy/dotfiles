@@ -44,6 +44,11 @@
       "~/.claude/plans/"
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "npx -y ccusage statusline",
+    "padding": 0
+  },
   "enabledPlugins": {
     "compound-engineering@every-marketplace": false,
     "code-review@claude-plugins-official": true,
