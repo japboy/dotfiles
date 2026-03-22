@@ -45,13 +45,3 @@ args = [ "exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest" ]
 [mcp_servers.Serena]
 command = "mise"
 args = [ "exec", "python@3", "--", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server" ]
-
-[mcp_servers.pencil]
-command = "/Users/yu.inao/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64"
-args = [ "--app", "desktop" ]
-
-[projects."/Users/yu.inao/Workspace/qs_front"]
-trust_level = "trusted"
-
-[projects."/Users/yu.inao/Workspace/com.github.japboy.dotfiles"]
-trust_level = "trusted"
