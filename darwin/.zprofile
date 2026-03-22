@@ -74,6 +74,9 @@ export PATH="~/Applications/Visual Studio Code.app/Contents/Resources/app/bin:${
 # yarn
 export PATH="${HOME}/.yarn/bin:${PATH}"
 
+# Bun
+export PATH="${HOME}/.bun/bin:${PATH}"
+
 
 ##
 # Additional settings

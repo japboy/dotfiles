@@ -63,3 +63,8 @@ if command -v ngrok &> /dev/null
 then
     eval "$(ngrok completion)"
 fi
+
+##
+# Safe-chain
+
+source ~/.safe-chain/scripts/init-posix.sh # Safe-chain Zsh initialization script
