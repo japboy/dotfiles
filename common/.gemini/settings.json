@@ -25,7 +25,7 @@
       "command": "mise",
       "args": [
         "exec",
-        "node@22",
+        "node@25",
         "--",
         "npx",
         "-y",
@@ -45,7 +45,7 @@
       "command": "mise",
       "args": [
         "exec",
-        "node@22",
+        "node@25",
         "--",
         "npx",
         "-y",
@@ -55,7 +55,7 @@
     },
     "Playwright": {
       "command": "mise",
-      "args": ["exec", "node@22", "--", "npx", "-y", "@playwright/mcp@latest"]
+      "args": ["exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest"]
     },
     "Serena": {
       "command": "mise",

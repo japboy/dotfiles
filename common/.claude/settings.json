@@ -40,9 +40,7 @@
       "mcp__Serena__remove_project"
     ],
     "defaultMode": "default",
-    "additionalDirectories": [
-      "~/.claude/plans/"
-    ]
+    "additionalDirectories": ["~/.claude/plans/"]
   },
   "statusLine": {
     "type": "command",
@@ -52,7 +50,8 @@
   "enabledPlugins": {
     "compound-engineering@every-marketplace": false,
     "code-review@claude-plugins-official": true,
-    "code-simplifier@claude-plugins-official": true
+    "asana@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "every-marketplace": {

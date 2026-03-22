@@ -11,8 +11,8 @@
     {
       "host": "github.com",
       "args": [],
-      "projects": []
-    }
+      "projects": [],
+    },
   ],
   "colorize_brackets": true,
   "auto_update": true,
@@ -62,6 +62,24 @@
     },
   },
   "agent_servers": {
+    "gemini": {
+      "type": "registry"
+    },
+    "codex-acp": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    },
+    "Copilot": {
+      "type": "custom",
+      "command": "copilot",
+      "args": ["--acp", "--model=gpt-5"],
+      "env": {},
+      "favorite_models": [],
+      "default_config_options": {},
+      "favorite_config_option_values": {},
+    },
     "Goose": {
       "type": "custom",
       "command": "goose",

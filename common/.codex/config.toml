@@ -1,16 +1,23 @@
-model = "gpt-5.3-codex"
-model_reasoning_effort = "xhigh"
+file_opener = "none"
+model = "gpt-5.4"
+model_reasoning_effort = "high"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 personality = "pragmatic"
 
+[features]
+codex_hooks = true
+multi_agent = true
+js_repl = true
+
 [mcp_servers.Asana]
 url = "https://mcp.asana.com/v2/mcp"
-enabled = true
+enabled = false
 
 [mcp_servers.ChromeDevtools]
 command = "mise"
 args = [ "exec", "node@25", "--", "npx", "-y", "chrome-devtools-mcp@latest" ]
+enabled = false
 
 [mcp_servers.Context7]
 url = "https://mcp.context7.com/mcp"
@@ -25,11 +32,11 @@ enabled = false
 
 [mcp_servers.Miro]
 url = "https://mcp.miro.com/"
-enabled = true
+enabled = false
 
 [mcp_servers.Notion]
 url = "https://mcp.notion.com/mcp"
-enabled = true
+enabled = false
 
 [mcp_servers.Playwright]
 command = "mise"
@@ -38,10 +45,13 @@ args = [ "exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest" ]
 [mcp_servers.Serena]
 command = "mise"
 args = [ "exec", "python@3", "--", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server" ]
-file_opener = "none"
 
-# FIXME: Internal error: "server shut down unexpectedly"
-#[features]
-#web_search_request = true
+[mcp_servers.pencil]
+command = "/Users/yu.inao/Applications/Pencil.app/Contents/Resources/app.asar.unpacked/out/mcp-server-darwin-arm64"
+args = [ "--app", "desktop" ]
 
-file_opener="none"
+[projects."/Users/yu.inao/Workspace/qs_front"]
+trust_level = "trusted"
+
+[projects."/Users/yu.inao/Workspace/com.github.japboy.dotfiles"]
+trust_level = "trusted"
