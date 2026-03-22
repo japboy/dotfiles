@@ -18,6 +18,8 @@ Always follow these principles:
 7. **Exhaustive (網羅的)**
 8. **Predictable (予測可能)**
 
+Always classify proposals into local (symptomatic) fixes and fundamental (root-cause) solutions
+
 ## Tool Priorities
 
 - Always use Playwright web browsers instead of WebFetch
