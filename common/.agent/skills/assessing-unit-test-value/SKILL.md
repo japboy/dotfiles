@@ -78,8 +78,14 @@ Use these references for added criteria:
 - Pact docs: https://docs.pact.io/
 - Pact JS source: https://github.com/pact-foundation/pact-js
 - Test fidelity (Google Testing Blog): https://testing.googleblog.com/2024/02/increase-test-fidelity-by-avoiding-mocks.html
-- Mutation testing (Stryker JS): https://stryker-mutator.io/docs/stryker-js/introduction/
-- Stryker JS source: https://github.com/stryker-mutator/stryker-js
+- Mutation testing (tool-agnostic examples):
+  - StrykerJS docs: https://stryker-mutator.io/docs/stryker-js/introduction/
+  - PIT quickstart: https://pitest.org/quickstart/quickstart/
+  - mutmut docs: https://mutmut.readthedocs.io/
+- Mutation testing tool sources (select according to target stack):
+  - StrykerJS source: https://github.com/stryker-mutator/stryker-js
+  - PIT source: https://github.com/hcoles/pitest
+  - mutmut source: https://github.com/boxed/mutmut
 - Flaky/non-deterministic tests (Fowler): https://martinfowler.com/articles/nonDeterminism.html
 
 ## Entities
@@ -98,7 +104,7 @@ Use these references for added criteria:
 - Corresponding source-code predicates and branches
 - Public behavior observable from UI boundaries
 - Contract artifacts (OpenAPI/Pact/schema snapshots)
-- Mutation report (for example, Stryker score)
+- Mutation report (for example, killed/survived counts and mutation score from StrykerJS, PIT, or mutmut)
 - Flakiness signals (rerun instability, quarantine history)
 
 ## States

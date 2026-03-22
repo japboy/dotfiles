@@ -72,9 +72,14 @@ Non-deterministic tests reduce trust and erode release confidence.
   - https://github.com/pact-foundation/pact-js
 - Test fidelity and mock overuse:
   - https://testing.googleblog.com/2024/02/increase-test-fidelity-by-avoiding-mocks.html
-- Mutation testing:
-  - https://stryker-mutator.io/docs/stryker-js/introduction/
-  - https://github.com/stryker-mutator/stryker-js
+- Mutation testing (tool-agnostic examples):
+  - StrykerJS docs: https://stryker-mutator.io/docs/stryker-js/introduction/
+  - PIT quickstart: https://pitest.org/quickstart/quickstart/
+  - mutmut docs: https://mutmut.readthedocs.io/
+- Mutation testing tool sources (select according to target stack):
+  - StrykerJS source: https://github.com/stryker-mutator/stryker-js
+  - PIT source: https://github.com/hcoles/pitest
+  - mutmut source: https://github.com/boxed/mutmut
 
 ## Evidence Protocol
 
