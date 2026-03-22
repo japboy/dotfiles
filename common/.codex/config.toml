@@ -22,6 +22,7 @@ enabled = false
 [mcp_servers.Context7]
 url = "https://mcp.context7.com/mcp"
 http_headers = { "CONTEXT7_API_KEY" = "${CONTEXT7_API_KEY}" }
+
 [mcp_servers.Figma]
 url = "http://127.0.0.1:3845/mcp"
 
