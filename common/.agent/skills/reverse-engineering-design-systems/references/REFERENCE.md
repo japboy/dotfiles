@@ -49,6 +49,24 @@ Identifier contracts derived from official APIs:
 Policy:
 - Treat Spectrum as structure taxonomy only.
 - Treat project evidence (code/design/knowledge) as content authority.
+- Apply source truth hierarchy: knowledge MUST rules > design intent > ADR technical intent > code implementation facts.
+
+## 1.1 Source truth hierarchy for documentation
+
+When generating final design system documentation, sources are prioritized by their proximity to design intent:
+
+| Priority | Source | Classification | Documentation role |
+|---|---|---|---|
+| 1 | Knowledge bases (Notion MUST/SHOULD rules, product requirements) | **Intent: product-level** | Answers "why does this design exist?" |
+| 2 | Design files (Figma annotations, structure, naming) | **Intent: design-level** | Answers "what was the designer's structural decision?" |
+| 3 | ADR (Architecture Decision Records) | **Intent: technical-level** | Answers "why is this technical approach chosen to realize intent?" |
+| 4 | Code implementation | **Fact: implementation** | Answers "what is currently built?" — validation only, not authority |
+
+Rules for documentation generation:
+- Every design system rule must lead with its **intent** (priority 1-2 source), not its **implementation** (priority 4 source).
+- A rule supported only by code evidence must be flagged as "implementation-only, design intent unverified."
+- When intent and implementation diverge, document the intent as authoritative and flag the implementation gap.
+- `source_truth_priority` is tracked alongside `evidence_level` in all observation and rule schemas.
 
 ## 2. Source collection contract
 

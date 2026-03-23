@@ -24,6 +24,24 @@ Use this skill to infer a project-specific design system from existing code, des
 - Maintain deterministic pipelines with explicit finite states.
 - Keep missing values explicit as `unknown` or `na`; do not leave semantic gaps as blank.
 - Record evidence links for every decision.
+- **Intent over implementation**: design intent (why) takes precedence over implementation facts (what). When intent and implementation diverge, flag the divergence and treat intent as authoritative.
+
+## Source truth hierarchy
+
+Sources are classified into **intent sources** (design meaning and purpose) and **fact sources** (implementation reality). Intent sources have higher authority for design system documentation.
+
+| Priority | Source Type | Authority | Role |
+|---|---|---|---|
+| 1 (highest) | Knowledge bases (Notion, docs) with MUST/SHOULD rules | **Design intent** | Product requirements and design constraints that govern all other decisions |
+| 2 | Design files (Figma) with annotations and structure | **Design intent** | Designer's structural decisions, visual semantics, and component relationships |
+| 3 | Architecture Decision Records (ADR) | **Technical intent** | Rationale for how intent is realized in code; bridges intent and implementation |
+| 4 (lowest) | Code implementation | **Implementation fact** | Current state of the codebase; used for validation, not as source of truth |
+
+Rules:
+- A code-only observation without intent backing is an **implementation detail**, not a design rule.
+- A Notion/Figma observation without code backing is a **design intent gap** to be flagged, not dismissed.
+- When Notion MUST rules and code implementation conflict, the Notion rule is authoritative and the code is flagged for remediation.
+- `evidence_level` classifies evidence reliability; `source_truth_priority` classifies authority for design decisions. Both are tracked independently.
 
 ## Architecture principles
 
@@ -215,6 +233,44 @@ Allowed transitions:
 
 ### Phase 6: Documentation
 
+Publish intent-first design system documentation. Every section follows the **Intent → Rule → Evidence** structure, not the reverse.
+
+#### 6.1 Intent-first section structure
+
+Each Foundation element, Content element, and Component category must be documented in this order:
+
+1. **Design Intent** (Why) — The design purpose derived from priority-1/2 sources (Notion MUST rules, Figma structure). Answers "why does this exist?" and "what problem does it solve for users?"
+2. **Usage Guidelines** (When) — Do/Don't rules that tell practitioners when to use and when not to use. Derived from intent + cross-source conflict resolutions.
+3. **Token/Rule Specification** (What) — The concrete values, scales, and schemas. Derived from all sources, validated against intent.
+4. **Evidence** — Source pills indicating which sources support each rule, with priority-tagged references.
+
+Anti-pattern: listing implementation facts (token values, component props) without explaining why they exist or when to use them.
+
+#### 6.2 Source attribution
+
+Every rule and intent statement must include source attribution using source pills:
+
+- `[Notion]` for knowledge base / MUST/SHOULD rules (priority 1)
+- `[Figma]` for design file observations (priority 2)
+- `[ADR]` for architecture decision records (priority 3)
+- `[Code]` for implementation evidence (priority 4)
+
+When a rule is supported by multiple sources, list all with their priorities. When only code evidence exists, explicitly flag it as "implementation-only, intent unverified."
+
+#### 6.3 Connecting Principles to specifics
+
+Each Principle must include:
+- A **"Why" block** explaining the product requirement or design constraint it serves
+- **Connection links** to the specific Foundation elements, Components, and Content rules it governs
+- **MUST rule references** (if applicable) that this principle derives from
+
+#### 6.4 Divergence documentation
+
+When intent (Notion/Figma) and implementation (code) diverge:
+- Document the intent as the authoritative rule
+- Flag the implementation as a known gap
+- Include remediation guidance where possible
+
 Publish:
 
 - `design-system/principles.md`
@@ -224,7 +280,8 @@ Publish:
 ## Output requirements
 
 - Output structure must remain `Principles/Foundation/Content`.
-- Include evidence links for every normative rule.
+- **Every section must lead with design intent (why), not implementation facts (what).**
+- Include evidence links for every normative rule, with source truth priority visible.
 - Keep structure references and project-content evidence separated.
 - Keep conflict logs and decision logs as first-class deliverables.
 - Include layout abstraction artifacts as first-class outputs:
