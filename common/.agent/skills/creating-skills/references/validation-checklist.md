@@ -1,175 +1,170 @@
 # Skill Validation Checklist
 
-Based on [Agent Skills Specification](https://agentskills.io/specification).
+Use this checklist in layers. Do not confuse shared specification rules with
+product-specific conventions.
 
-## Automated Validation
+## Layer 1: Agent Skills Standard
 
-Use the official validation tool:
+These checks apply to any portable Agent Skill.
+
+### Structure
+
+- [ ] Skill directory exists
+- [ ] `SKILL.md` exists in the skill root
+- [ ] Optional directories are used intentionally
+- [ ] Extra files or directories, if present, are justified by the skill
+
+### Frontmatter
+
+- [ ] YAML frontmatter exists at the top of `SKILL.md`
+- [ ] `name` exists
+- [ ] `description` exists
+
+### `name`
+
+- [ ] at most 64 characters
+- [ ] lowercase letters, digits, and hyphens only
+- [ ] does not start with a hyphen
+- [ ] does not end with a hyphen
+- [ ] does not contain consecutive hyphens
+- [ ] matches the parent directory name exactly
+
+### `description`
+
+- [ ] non-empty
+- [ ] at most 1024 characters
+- [ ] explains what the skill does
+- [ ] explains when the skill should be used
+
+### Optional Standard Fields
+
+- [ ] `license`, if present, is appropriate
+- [ ] `compatibility`, if present, describes environment requirements
+- [ ] `metadata`, if present, is used intentionally
+- [ ] `allowed-tools`, if present, is intentional and supported by the target
+      client
+
+### Standard Validation Command
+
+- [ ] `skills-ref validate ./skill-name` passes
+
+## Layer 2: Shared Quality Checks for Codex and Claude Code
+
+These are strong recommendations, not standard syntax rules.
+
+### Trigger Quality
+
+- [ ] `description` is concrete rather than vague
+- [ ] `description` uses task language the client can match
+- [ ] scope boundaries are clear enough to avoid over-triggering
+
+### Progressive Disclosure
+
+- [ ] `SKILL.md` focuses on the core workflow
+- [ ] long or detailed reference material is moved into `references/`
+- [ ] repetitive or fragile operations are moved into `scripts/` when useful
+- [ ] templates or output artifacts live in `assets/` when useful
+
+### Resource Hygiene
+
+- [ ] every referenced file exists
+- [ ] supporting files are linked clearly from `SKILL.md`
+- [ ] resource directories are actually used by the workflow
+- [ ] no large duplicated content appears in both `SKILL.md` and `references/`
+
+### Writing Quality
+
+- [ ] instructions are concrete and easy to follow
+- [ ] examples exist for important tasks or edge cases
+- [ ] the document avoids unnecessary context bloat
+
+Important note:
+
+- Imperative voice is usually good practice
+- Avoiding second person is often helpful
+- Neither is a universal spec requirement by itself
+
+## Layer 3: Codex-Specific Checks
+
+Run this layer only when the skill targets Codex.
+
+### `agents/openai.yaml`
+
+- [ ] `agents/openai.yaml` exists if Codex-specific metadata is needed
+- [ ] `interface.display_name` is user-facing and accurate
+- [ ] `interface.short_description` is concise and accurate
+- [ ] `interface.default_prompt`, if present, mentions `$skill-name`
+- [ ] `policy.allow_implicit_invocation`, if present, matches the intended
+      trigger behavior
+- [ ] `dependencies.tools`, if present, reflects actual tool dependencies
+
+### Separation of Concerns
+
+- [ ] portable behavior stays in `SKILL.md`
+- [ ] Codex-only UI or policy settings stay in `agents/openai.yaml`
+- [ ] Codex extensions are not described as if they were part of the shared
+      standard
+
+## Layer 4: Claude Code-Specific Checks
+
+Run this layer only when the skill targets Claude Code.
+
+### Portable Skill vs Plugin Skill
+
+- [ ] it is clear whether the skill is a portable skill or a Claude Code plugin
+      skill
+- [ ] plugin-specific structure is used only when the user actually needs a
+      plugin
+
+### Plugin Conventions
+
+- [ ] Claude Code plugin layout is correct when applicable
+- [ ] any extra frontmatter fields are intentional and Claude Code-specific
+- [ ] any extra directories such as `examples/` are intentional and documented
+
+### Separation of Concerns
+
+- [ ] Claude Code conventions are not described as if they were standard Agent
+      Skills requirements
+
+## Severity Guide
+
+### Critical
+
+- missing `SKILL.md`
+- missing `name`
+- missing `description`
+- invalid `name`
+- `name` does not match the directory
+- invalid YAML frontmatter
+
+### Major
+
+- vague or misleading `description`
+- missing referenced files
+- product-specific conventions misrepresented as standard requirements
+- Codex or Claude Code integration requested by the user but not implemented
+
+### Minor
+
+- unnecessary verbosity
+- weak examples
+- underused supporting files
+- stale product metadata
+
+## Useful Commands
 
 ```bash
+# Standard validation
 skills-ref validate ./skill-name
-```
 
-## Structure Validation
-
-- [ ] Skill directory exists with correct name
-- [ ] `SKILL.md` file present in skill root
-- [ ] Directory structure follows specification:
-  ```
-  skill-name/
-  ├── SKILL.md         # Required
-  ├── scripts/         # Optional: executable code
-  ├── references/      # Optional: documentation
-  └── assets/          # Optional: static resources
-  ```
-- [ ] No `examples/` directory (not in spec; use `scripts/` instead)
-
-## Frontmatter Validation
-
-### Required Fields
-
-- [ ] YAML frontmatter present (between `---` delimiters)
-- [ ] `name` field defined and valid
-- [ ] `description` field defined (1-1024 chars)
-
-### `name` Field Rules
-
-- [ ] 1-64 characters
-- [ ] Only lowercase letters (`a-z`), numbers (`0-9`), hyphens (`-`)
-- [ ] Does not start with hyphen
-- [ ] Does not end with hyphen
-- [ ] No consecutive hyphens (`--`)
-- [ ] Matches parent directory name exactly
-
-```yaml
-# Valid
-name: pdf-processing
-name: code-review
-
-# Invalid
-name: PDF-Processing   # uppercase
-name: -pdf             # starts with hyphen
-name: pdf-             # ends with hyphen
-name: pdf--processing  # consecutive hyphens
-```
-
-### `description` Field Rules
-
-- [ ] 1-1024 characters
-- [ ] Describes what the skill does
-- [ ] Describes when to use it
-- [ ] Includes specific keywords for agent task matching
-
-```yaml
-# Good
-description: >
-  Extracts text and tables from PDF files, fills PDF forms,
-  and merges multiple PDFs. Use when working with PDF documents.
-
-# Poor
-description: Helps with PDFs.
-```
-
-### Optional Fields
-
-- [ ] `license` - License name or reference to bundled file
-- [ ] `compatibility` - 1-500 chars, environment requirements
-- [ ] `metadata` - Key-value mapping
-- [ ] `allowed-tools` - Space-delimited tool list (experimental)
-
-## Body Content Validation
-
-- [ ] Uses imperative or infinitive verb forms
-- [ ] No second-person pronouns ("you", "your")
-- [ ] Under 500 lines (< 5000 tokens recommended)
-- [ ] Includes step-by-step instructions
-- [ ] Includes examples of inputs/outputs
-- [ ] Covers common edge cases
-
-```markdown
-# Good
-Parse the configuration file.
-Validate input before processing.
-
-# Bad
-You should parse the configuration file.
-```
-
-## File Reference Validation
-
-- [ ] All linked files exist
-- [ ] References use relative paths from skill root
-- [ ] References are one level deep (no nested chains)
-- [ ] Markdown links are properly formatted
-
-```markdown
-# Correct
-See [reference](references/REFERENCE.md) for details.
-Run: scripts/extract.py
-
-# Avoid
-See [nested](references/advanced/deep/file.md)
-```
-
-## Directory Content Validation
-
-### scripts/
-
-- [ ] Scripts are self-contained or document dependencies
-- [ ] Include helpful error messages
-- [ ] Handle edge cases gracefully
-
-### references/
-
-- [ ] Files are focused (smaller = less context usage)
-- [ ] `REFERENCE.md` contains technical reference if present
-
-### assets/
-
-- [ ] Contains only static resources (templates, images, data)
-- [ ] No executable code
-
-## Severity Classification
-
-### Critical (Must Fix)
-
-- Missing or invalid `name` field
-- Missing `description` field
-- `name` does not match directory name
-- Second-person pronouns in body
-- Referenced files do not exist
-
-### Major (Should Fix)
-
-- `description` lacks keywords for task matching
-- SKILL.md exceeds 500 lines
-- Missing step-by-step instructions
-- Deeply nested file references
-
-### Minor (Consider Fixing)
-
-- Missing optional fields (license, metadata)
-- Suboptimal description wording
-- Style inconsistencies
-
-## Validation Commands
-
-```bash
-# Check directory structure
-ls -la skill-name/
-
-# Verify name matches directory
+# Inspect frontmatter quickly
 grep '^name:' skill-name/SKILL.md
+grep '^description:' -n skill-name/SKILL.md
 
 # Count lines
 wc -l skill-name/SKILL.md
 
-# Find second-person pronouns
-grep -in '\byou\b\|\byour\b' skill-name/SKILL.md
-
-# Verify name format (should return nothing if valid)
-grep '^name:' skill-name/SKILL.md | grep -E '[A-Z]|^name: -|--|- *$'
-
-# List all referenced files
-grep -oE '(scripts|references|assets)/[^)\"]+' skill-name/SKILL.md
+# Find references from SKILL.md
+grep -oE '(scripts|references|assets|agents)/[^)\"]+' skill-name/SKILL.md
 ```

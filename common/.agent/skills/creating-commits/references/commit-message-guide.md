@@ -5,7 +5,17 @@
 ```
 <type>(<scope>): <subject>
 
-<body>
+Problem:
+- <what is wrong with the current state>
+
+Change:
+- <what this commit changes>
+
+Rationale:
+- <why this result or approach is better>
+
+Alternatives:
+- <optional trade-off or rejected option>
 
 <footer>
 ```
@@ -33,11 +43,15 @@ Optional. Indicates the affected module or component (e.g., `auth`, `api`, `ui`)
 
 ### Body
 
-Explain:
-- What changed before and after the modification
-- Why this change is necessary
-- Reasoning for the chosen approach
-- Alternative solutions considered (if any)
+Write the body as labeled sections with bullet lists:
+- Use the section headers `Problem:`, `Change:`, and `Rationale:`
+- Add `Alternatives:` only when trade-offs or rejected options matter
+- Start each bullet with `- `
+- Keep each bullet focused on one concrete point
+- Explain what is wrong with the current state in `Problem:`
+- Explain what this commit changes in `Change:`
+- Explain why this result or approach is better in `Rationale:`
+- Mention alternative solutions considered in `Alternatives:` when relevant
 
 Wrap at 72 characters per line.
 
@@ -54,13 +68,23 @@ Wrap at 72 characters per line.
 ```
 fix(auth): prevent token from remaining valid after password reset
 
-Previously, password reset tokens were not invalidated after use,
-allowing reuse within the expiration window. This posed a security risk
-if tokens were intercepted.
+Problem:
+- Password reset tokens remained valid after use, allowing reuse within
+  the expiration window and increasing replay risk.
 
-Added token invalidation logic immediately after successful password
-reset. Considered using a token blacklist but opted for direct deletion
-for simplicity.
+Change:
+- Invalidate the token immediately after a successful password reset so
+  each token becomes single-use.
+
+Rationale:
+- Reused reset tokens weaken the recovery flow and create avoidable
+  security exposure if a token is intercepted.
+- Direct deletion keeps the lifecycle explicit and deterministic without
+  adding new persistence or background cleanup paths.
+
+Alternatives:
+- Considered a token blacklist, but rejected it because it adds more
+  state management for no practical gain in this flow.
 
 Fixes #789
 
@@ -94,7 +118,10 @@ Before committing, verify:
 
 - [ ] Subject uses imperative mood
 - [ ] Subject is under 50 characters
+- [ ] Body uses labeled sections with bullet points
+- [ ] Body includes `Problem:`, `Change:`, and `Rationale:`
 - [ ] Body explains what changed and why
 - [ ] Body includes rationale for the approach
+- [ ] `Alternatives:` is included when trade-offs matter
 - [ ] Footer includes co-author signatures
 - [ ] Commit is atomic (single logical change)

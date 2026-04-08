@@ -1,107 +1,208 @@
 # References
 
-## Official Documentation
+## Source Hierarchy
 
-### Agent Skills Specification (Primary)
+Use sources in this order when authoring or reviewing skills:
 
-- [Agent Skills Specification](https://agentskills.io/specification) - **Authoritative format specification**
-- [What are Skills?](https://agentskills.io/what-are-skills) - Concept overview
-- [Integrate Skills](https://agentskills.io/integrate-skills) - Integration guide
-- [Example Skills](https://github.com/anthropics/skills) - Official example repository
-- [skills-ref Library](https://github.com/agentskills/agentskills/tree/main/skills-ref) - Validation tool
+1. **Agent Skills standard**
+2. **Product-specific documentation**
+3. **Product-maintained example repositories**
 
-### Claude Code Documentation
+This order matters. Product examples are useful implementation references, but
+they do not override the shared specification unless the product explicitly says
+so.
 
-- [Agent Skills - Claude Code Docs](https://code.claude.com/docs/en/skills) - Claude Code specific usage and examples
-- [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) - Naming conventions, description writing, progressive disclosure patterns
+## Standard Agent Skills Sources
 
-### Claude Code Plugin Development
+These are the baseline references for any portable skill:
 
-- [Claude Code Skills](https://github.com/anthropics/claude-code/tree/main/plugins/plugin-dev/skills) - Claude Code specific extensions
-- [Skill Development Guide](https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/skill-development/SKILL.md) - Claude Code authoring patterns
+- [Agent Skills Specification](https://agentskills.io/specification) -
+  authoritative shared format and validation rules
+- [What are Skills?](https://agentskills.io/what-are-skills) - concept overview
+- [Integrate Skills](https://agentskills.io/integrate-skills) - client-side
+  integration guidance
+- [skills-ref Library](https://github.com/agentskills/agentskills/tree/main/skills-ref) -
+  reference validator and prompt-generation tooling
+- [Agent Skills spec source](https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx) -
+  canonical source text for the public spec
 
-## Frontmatter Specification
+## Codex Sources
 
-### Required Fields
+Use these for Codex-specific behavior:
 
-| Field | Constraints |
-|-------|-------------|
-| `name` | 1-64 chars, lowercase `a-z`, `0-9`, `-` only. No leading/trailing/consecutive hyphens. Must match directory name. |
-| `description` | 1-1024 chars. Describe what the skill does AND when to use it. |
+- [OpenAI Codex: Agent Skills](https://developers.openai.com/codex/skills) -
+  Codex support for local skills, progressive disclosure, and
+  `agents/openai.yaml`
 
-### Optional Fields
+Key Codex-only topics:
 
-| Field | Constraints |
-|-------|-------------|
-| `license` | License name or reference to bundled file |
-| `compatibility` | 1-500 chars. Environment requirements (products, packages, network) |
-| `metadata` | Key-value mapping for additional properties |
-| `allowed-tools` | Space-delimited pre-approved tools (experimental) |
+- `agents/openai.yaml`
+- `policy.allow_implicit_invocation`
+- `dependencies.tools`
+- UI metadata such as `display_name`, `short_description`, and `default_prompt`
 
-### Name Validation Rules
+## Claude Code Sources
 
-Valid:
-```yaml
-name: pdf-processing
-name: data-analysis
-name: code-review
-```
+Use these for Claude Code-specific behavior:
 
-Invalid:
-```yaml
-name: PDF-Processing   # uppercase not allowed
-name: -pdf             # cannot start with hyphen
-name: pdf--processing  # consecutive hyphens not allowed
-```
+- [Claude Code skills docs](https://code.claude.com/docs/en/skills)
+- [Anthropic skills repository](https://github.com/anthropics/skills) -
+  Anthropic-maintained skill examples
+- [Claude Code plugin-dev skills](https://github.com/anthropics/claude-code/tree/main/plugins/plugin-dev/skills) -
+  plugin-oriented implementation examples
+- [Claude Code plugin-dev skill-development](https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/skill-development/SKILL.md) -
+  plugin-oriented authoring guidance
+- [Claude Code plugin-dev plugin-structure](https://github.com/anthropics/claude-code/blob/main/plugins/plugin-dev/skills/plugin-structure/SKILL.md) -
+  Claude Code plugin layout guidance
 
-## Directory Structure
+Important note:
 
-```
+- Anthropic plugin-dev examples often show valid Claude Code conventions
+- They may include extra frontmatter such as `version`
+- They may use extra directories such as `examples/`
+- Those conventions are not the shared Agent Skills baseline unless separately
+  defined by the Agent Skills spec
+
+## Standard Baseline Summary
+
+### Required Files
+
+```text
 skill-name/
-├── SKILL.md              # Required
-├── scripts/              # Executable code
-├── references/           # Additional documentation
-│   └── REFERENCE.md      # Technical reference
-└── assets/               # Static resources
+└── SKILL.md
 ```
 
-**Note:** `examples/` is NOT part of the official spec. Use `scripts/` for executable examples.
+### Common Optional Directories
 
-## Progressive Disclosure
-
-Token budget guidelines:
-
-| Level | Content | Budget |
-|-------|---------|--------|
-| Metadata | `name` + `description` | ~100 tokens |
-| Instructions | SKILL.md body | < 5000 tokens |
-| Resources | scripts/, references/, assets/ | As needed |
-
-Recommendation: Keep SKILL.md under 500 lines.
-
-## Writing Style
-
-### Correct: Imperative Form
-
-```markdown
-Parse the frontmatter using sed.
-Extract fields with grep.
-Validate values before use.
+```text
+skill-name/
+├── scripts/
+├── references/
+├── assets/
+└── ...
 ```
 
-### Incorrect: Second-Person
+The spec explicitly allows additional files or directories beyond the common
+ones above.
 
-```markdown
-You should parse the frontmatter.
-You can extract fields with grep.
+### Frontmatter Fields
+
+Required:
+
+- `name`
+- `description`
+
+Optional standard fields:
+
+- `license`
+- `compatibility`
+- `metadata`
+- `allowed-tools`
+
+### Validation Rules
+
+`name`
+
+- at most 64 characters
+- lowercase letters, digits, hyphens
+- no leading hyphen
+- no trailing hyphen
+- no consecutive hyphens
+- must match the parent directory name
+
+`description`
+
+- non-empty
+- at most 1024 characters
+- should explain what the skill does and when to use it
+
+## Shared Practices for Codex and Claude Code
+
+These are recommendations that work well in both products:
+
+- Keep `description` concrete and trigger-oriented
+- Keep `SKILL.md` focused on the core workflow
+- Use progressive disclosure
+- Move detailed material into `references/`
+- Put deterministic helpers in `scripts/`
+- Put templates and output resources in `assets/`
+- Link supporting files directly from `SKILL.md`
+- Validate referenced files and executable scripts, not just frontmatter
+
+These are useful practices, not specification requirements.
+
+## Codex-Specific Practices
+
+Codex extends the baseline with `agents/openai.yaml`.
+
+Representative structure:
+
+```text
+skill-name/
+├── SKILL.md
+└── agents/
+    └── openai.yaml
 ```
 
-## Common Anti-Patterns
+Representative Codex fields:
 
-1. **Vague descriptions** - Missing specific keywords for task matching
-2. **Bloated SKILL.md** - Too much detail in main file
-3. **Second-person language** - Using "you" in body
-4. **Name mismatch** - `name` field differs from directory name
-5. **Invalid name format** - Uppercase, consecutive hyphens, etc.
-6. **Orphaned references** - Links to non-existent files
-7. **Deep nesting** - Reference chains beyond one level
+```yaml
+interface:
+  display_name: "Optional user-facing name"
+  short_description: "Optional user-facing description"
+  default_prompt: "Use $skill-name to help with this task."
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "github"
+      description: "GitHub MCP server"
+      transport: "streamable_http"
+      url: "https://example.invalid/mcp"
+```
+
+This file is a Codex extension, not part of the shared Agent Skills spec.
+
+## Claude Code-Specific Practices
+
+Claude Code examples commonly show:
+
+- skills inside plugin `skills/` directories
+- plugin auto-discovery
+- plugin-specific structure and manifests
+- extra frontmatter fields in some examples
+- extra directories such as `examples/`
+
+Treat these as Claude Code implementation practices when relevant, especially
+for plugin development. Do not automatically copy them into a portable skill
+without labeling them as Claude Code-specific.
+
+## Repository-Specific Codex Helpers
+
+This repository includes Codex-oriented tooling under:
+
+```text
+common/.agent/skills/.system/skill-creator/
+```
+
+Useful files:
+
+- `scripts/init_skill.py`
+- `scripts/generate_openai_yaml.py`
+- `scripts/quick_validate.py`
+- `references/openai_yaml.md`
+
+These are repository-specific helpers. They are not the Agent Skills standard.
+
+## Common Mistakes
+
+1. Treating `agents/openai.yaml` as standard instead of Codex-specific
+2. Treating Claude Code plugin-dev examples as if they define the standard
+3. Claiming `examples/` is forbidden when the standard allows extra
+   files/directories
+4. Treating style preferences such as imperative voice as hard spec rules
+5. Omitting product-specific metadata when the user explicitly wants Codex or
+   Claude Code integration
