@@ -153,39 +153,11 @@ Attach concrete references for every framework-bound claim:
 - Official documentation URL
 - Framework source code permalink (repository path + commit + line)
 
-Use these references for added criteria:
+Do not treat repository home pages or package root URLs as sufficient source evidence.
+Resolve the exact API- or behavior-level source permalink before finalizing a review.
 
-- Testing Trophy primary source:
-  - https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications
-- User-centric testing guidance:
-  - Testing Library introduction: https://testing-library.com/docs/dom-testing-library/intro/
-  - Testing Library query priority: https://testing-library.com/docs/queries/about/#priority
-- Frontend test type and layer guidance:
-  - Cypress testing types: https://docs.cypress.io/app/core-concepts/testing-types
-  - Playwright browsers/projects: https://playwright.dev/docs/browsers
-  - Playwright locators: https://playwright.dev/docs/locators
-- Storybook story writing and story reuse guidance:
-  - Storybook AI best practices: https://storybook.js.org/docs/ai/best-practices
-  - Storybook writing stories: https://storybook.js.org/docs/writing-stories
-  - Storybook writing tests: https://storybook.js.org/docs/writing-tests
-  - Storybook stories in unit tests: https://storybook.js.org/docs/writing-tests/integrations/stories-in-unit-tests
-  - Storybook portable stories in Vitest: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest
-  - Storybook React portable stories source: https://github.com/storybookjs/storybook/blob/370524faae96a30d27e36efcaa2fc39cd65fab29/code/renderers/react/src/portable-stories.tsx#L46-L159
-  - Storybook core portable stories source: https://github.com/storybookjs/storybook/blob/370524faae96a30d27e36efcaa2fc39cd65fab29/code/core/src/preview-api/modules/store/csf/portable-stories.ts#L73-L233
-- Accessibility semantics:
-  - W3C Accessible Name and Description Computation: https://www.w3.org/TR/accname-1.1/
-- Boundary contracts:
-  - Martin Fowler consumer-driven contracts: https://martinfowler.com/articles/consumerDrivenContracts.html
-  - Pact docs: https://docs.pact.io/
-  - Pact JS source: https://github.com/pact-foundation/pact-js
-- Visual regression:
-  - Playwright screenshot assertions: https://playwright.dev/docs/test-snapshots
-- Test fidelity and mock overuse:
-  - Google Testing Blog: https://testing.googleblog.com/2024/02/increase-test-fidelity-by-avoiding-mocks.html
-- Mutation testing (supplementary evidence only when reports already exist):
-  - StrykerJS docs: https://stryker-mutator.io/docs/stryker-js/introduction/
-- Flaky or non-deterministic tests:
-  - Martin Fowler: https://martinfowler.com/articles/nonDeterminism.html
+See [reference](references/REFERENCE.md) for the evidence protocol and approved
+source categories.
 
 ## Entities
 
@@ -303,7 +275,7 @@ Output sections in this order:
 - Preserve a minimal regression safety net when removing or relocating tests.
 - Follow declarative, self-describing, deterministic, explicit-state, finite-state, self-documenting, exhaustive, and predictable reasoning.
 
-## Additional Rubric
+## Supporting Files
 
 Use [evaluation rubric](references/evaluation-rubric.md) for routing and override rules.
 Use [reference](references/REFERENCE.md) for evidence protocol and source anchors.

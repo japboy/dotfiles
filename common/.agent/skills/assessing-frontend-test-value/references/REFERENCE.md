@@ -106,8 +106,6 @@ These checks refine `KEEP` versus `REWRITE`, but they do not replace the Trophy 
   - https://testing-library.com/docs/dom-testing-library/intro/
 - Testing Library query priority:
   - https://testing-library.com/docs/queries/about/#priority
-- DOM Testing Library source:
-  - https://github.com/testing-library/dom-testing-library
 
 ### Frontend Layer Selection
 
@@ -117,8 +115,6 @@ These checks refine `KEEP` versus `REWRITE`, but they do not replace the Trophy 
   - https://playwright.dev/docs/browsers
 - Playwright locators:
   - https://playwright.dev/docs/locators
-- Playwright source:
-  - https://github.com/microsoft/playwright
 
 ### Storybook Stories and Portable Stories
 
@@ -148,8 +144,6 @@ These checks refine `KEEP` versus `REWRITE`, but they do not replace the Trophy 
   - https://martinfowler.com/articles/consumerDrivenContracts.html
 - Pact docs:
   - https://docs.pact.io/
-- Pact JS source:
-  - https://github.com/pact-foundation/pact-js
 
 ### Visual Regression
 
@@ -174,6 +168,10 @@ These checks refine `KEEP` versus `REWRITE`, but they do not replace the Trophy 
 ## Evidence Protocol
 
 Attach explicit evidence for every claim.
+
+Repository home pages are not valid source evidence. When citing framework
+implementation behavior, resolve the exact source file permalink with commit
+and line numbers for the API or behavior under review.
 
 1. Trophy routing claim:
 - current layer

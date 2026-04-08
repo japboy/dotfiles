@@ -84,14 +84,15 @@ git commit
 - Make minimal, atomic commits (one logical change per commit)
 - Use `git` command for Git operations
 - Write commit messages that:
-  - Use a sectioned bullet-list body instead of prose paragraphs
-  - Use the section headers `Problem:`, `Change:`, and `Rationale:`
-  - Add `Alternatives:` when trade-offs or rejected options matter
+  - Follow the format: `<type>(<scope>): <subject>` with footer
+  - Keep the subject imperative, concise, and without a trailing period
+  - Keep the body concise and easier to scan than prose paragraphs
+  - Use bullet-list sections when a body is needed
+  - Prefer the section headers `Problem:`, `Change:`, and `Rationale:`
+  - Add `Alternatives:` only when a rejected option or trade-off matters
+  - Omit any section that would be empty or redundant
+  - Avoid repeating the same point across multiple sections
   - Start each body entry with `- ` and keep each bullet concrete
-  - Describe the current problem in `Problem:`
-  - Describe what the commit changes and the resulting behavior in `Change:`
-  - Enable reviewers to understand the intent without reading code
-  - State purpose and justification in explicit `Rationale:` sections
-  - Follow the format: `<type>(<scope>): <subject>` with sectioned bullet-list body and footer
+  - Explain why the change exists without forcing a long explanation for trivial commits
 
 See [commit-message-guide.md](references/commit-message-guide.md) for detailed examples.
