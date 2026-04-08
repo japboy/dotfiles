@@ -18,6 +18,7 @@ Primary target:
 - Frontend implementation tests across static checks, unit tests, integration tests, and end-to-end tests
 - Frontend behaviors with direct user impact, including accessibility semantics, visual regressions, browser/device behavior, and boundary compatibility
 - React hooks and component tests only insofar as they compete with higher-ROI layers for the same risk
+- Storybook stories and portable stories only insofar as they define canonical public component scenarios for review or reuse in tests
 
 Out of primary scope:
 
@@ -47,6 +48,7 @@ Treat these as mandatory:
 - Write tests. Not too many. Mostly integration.
 - React hook tests and isolated component tests are not preferred destinations by default. They are exceptions when they uniquely protect local logic or semantics at lower cost.
 - Tool choice does not define layer by itself. A Playwright test can be integration or end-to-end depending on runtime and mocking. A component test can be unit or integration depending on how much behavior and collaboration it exercises.
+- Storybook does not create a new Trophy layer. Story-driven component tests are only an implementation pattern to use when a component test is already justified.
 
 ## Evaluation Basis
 
@@ -126,6 +128,12 @@ Use these criteria after the Trophy routing decision.
 10. Framework Responsibility:
 - Avoid spending product-test budget on guarantees already owned by framework internals.
 
+11. Scenario Canonicality:
+- Prefer component tests whose setup comes from canonical public scenarios already defined as stories, rather than bespoke duplicated fixtures or internal state matrices.
+
+12. Story/Test Synchronization:
+- Prefer Storybook-based component tests that reuse stories through `composeStories` or `composeStory` with project annotations applied, so args, decorators, globals, and play-related setup do not drift.
+
 ## Default Biases
 
 These biases are deliberate and should be applied unless concrete evidence overrides them.
@@ -134,6 +142,8 @@ These biases are deliberate and should be applied unless concrete evidence overr
 - Bias toward browser-based Playwright integration or end-to-end tests when the real contract is user behavior, browser behavior, layout, focus, storage, timing, or navigation.
 - Bias against direct React hook tests when the same risk is better expressed through user-visible behavior.
 - Bias against isolated component tests that only verify props, state wiring, or callback plumbing.
+- Bias toward story-defined public use cases over hand-written component-test fixtures when a component test is unavoidable.
+- Bias against treating Storybook stories as exhaustive internal state tables. Prefer one concept or use case per story.
 - Bias toward `Static` when the defect can be prevented before runtime.
 
 ## Official References Requirement
@@ -154,6 +164,14 @@ Use these references for added criteria:
   - Cypress testing types: https://docs.cypress.io/app/core-concepts/testing-types
   - Playwright browsers/projects: https://playwright.dev/docs/browsers
   - Playwright locators: https://playwright.dev/docs/locators
+- Storybook story writing and story reuse guidance:
+  - Storybook AI best practices: https://storybook.js.org/docs/ai/best-practices
+  - Storybook writing stories: https://storybook.js.org/docs/writing-stories
+  - Storybook writing tests: https://storybook.js.org/docs/writing-tests
+  - Storybook stories in unit tests: https://storybook.js.org/docs/writing-tests/integrations/stories-in-unit-tests
+  - Storybook portable stories in Vitest: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest
+  - Storybook React portable stories source: https://github.com/storybookjs/storybook/blob/370524faae96a30d27e36efcaa2fc39cd65fab29/code/renderers/react/src/portable-stories.tsx#L46-L159
+  - Storybook core portable stories source: https://github.com/storybookjs/storybook/blob/370524faae96a30d27e36efcaa2fc39cd65fab29/code/core/src/preview-api/modules/store/csf/portable-stories.ts#L73-L233
 - Accessibility semantics:
   - W3C Accessible Name and Description Computation: https://www.w3.org/TR/accname-1.1/
 - Boundary contracts:
@@ -182,6 +200,7 @@ Use these references for added criteria:
 
 - Static rule definitions or compiler diagnostics
 - Assertions, locators, fixtures, and helpers in test code
+- Story files, exported story names, args, decorators, parameters, globals, loaders, and play functions when story-driven tests are involved
 - Corresponding source predicates, rendering paths, and integration seams
 - User-visible and assistive-technology-visible outcomes
 - Cross-browser or device execution evidence
@@ -199,6 +218,7 @@ Capture:
 - The regression risk that must remain protected
 - The current test layer
 - The runtime used by the current test
+- Whether a Storybook story already defines the public scenario under review
 - The highest-value replacement layer if the current one is wrong
 
 ### 2. Determine the Best Trophy Layer
@@ -217,6 +237,10 @@ Apply these routing rules in order:
 - An isolated component test should be treated as `Unit` when it mostly checks props, state, or callback wiring.
 - An isolated component test may count as `Integration` only when it exercises multiple collaborating units through user-visible DOM behavior and realistic interactions.
 - If the same behavior is better covered through page-level or browser-level interaction, prefer `MOVE_TO_INTEGRATION` or `MOVE_TO_E2E`.
+- If a component test is still justified, prefer a story-driven pattern where each story represents a public use case or meaningful visible state, not an exhaustive internal state matrix.
+- When using Storybook stories as test fixtures, prefer `composeStories` or `composeStory` and apply project annotations via `setProjectAnnotations` so decorators, globals, parameters, and related setup remain synchronized with Storybook.
+- Reusing a story in a component test improves maintainability, but does not by itself upgrade the Trophy layer. Route the test by protected risk and runtime realism first.
+- If a component test duplicates props, args, decorators, or providers that are already represented by an equivalent story, prefer `REWRITE_AT_SAME_LAYER` unless there is a concrete runtime reason not to reuse the story.
 
 ### 4. Evaluate In-Layer Quality
 
@@ -227,6 +251,7 @@ Once the best layer is chosen, judge whether the current test:
 - exercises realistic runtime behavior
 - covers accessibility, contract, or visual guarantees when relevant
 - is stable and maintainable
+- reuses canonical story scenarios instead of duplicating component setup when Storybook is already the source of truth
 
 ### 5. Produce a Final Status
 
@@ -273,6 +298,7 @@ Output sections in this order:
 
 - Cite official documentation and relevant framework source code for every framework-bound claim.
 - Cite concrete production and test file paths for every finding.
+- Cite story file paths and export names when a Storybook story is treated as canonical test setup or evidence.
 - Avoid speculation; mark unknowns explicitly.
 - Preserve a minimal regression safety net when removing or relocating tests.
 - Follow declarative, self-describing, deterministic, explicit-state, finite-state, self-documenting, exhaustive, and predictable reasoning.

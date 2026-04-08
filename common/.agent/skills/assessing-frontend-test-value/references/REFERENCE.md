@@ -15,6 +15,8 @@ Interpret it as a guide to confidence-per-cost:
 
 For this skill, layer selection comes before in-layer quality scoring.
 
+Storybook stories and portable stories do not add a new layer to the Testing Trophy. They are a way to define canonical component scenarios and, when component tests are justified, to reuse those scenarios without duplicating setup.
+
 ## Primary Source Understanding
 
 Kent C. Dodds describes the Testing Trophy as a return-on-investment guide for testing JavaScript applications, not a neutral taxonomy. He further explains:
@@ -70,6 +72,16 @@ Direct hook tests and isolated component tests are not top-level strategic desti
 - multiple frontend units through user-visible DOM behavior -> `INTEGRATION`
 - mere plumbing or implementation detail -> usually low ROI
 
+### 6. Story-Driven Component Tests Are Exception Patterns
+
+When a component test is justified, Storybook may be the best place to define the canonical public scenarios for that component.
+
+- Treat a story as a public use case or meaningful visible state, not as an exhaustive matrix of internal implementation states.
+- Prefer one concept or use case per story, with enough description to explain why the scenario matters.
+- Prefer reusing stories in tests through `composeStories` or `composeStory` and applying `.storybook/preview` annotations through `setProjectAnnotations`.
+- Reusing stories improves synchronization and maintainability, but does not change Trophy routing by itself.
+- If a component test hand-recreates props, decorators, or providers that an equivalent story already defines, treat that duplication as lower quality unless the test requires a materially different runtime.
+
 ## Secondary Quality Checks
 
 After choosing the best Trophy layer, evaluate quality with these secondary checks:
@@ -107,6 +119,23 @@ These checks refine `KEEP` versus `REWRITE`, but they do not replace the Trophy 
   - https://playwright.dev/docs/locators
 - Playwright source:
   - https://github.com/microsoft/playwright
+
+### Storybook Stories and Portable Stories
+
+- Storybook AI best practices:
+  - https://storybook.js.org/docs/ai/best-practices
+- Storybook writing stories:
+  - https://storybook.js.org/docs/writing-stories
+- Storybook writing tests:
+  - https://storybook.js.org/docs/writing-tests
+- Storybook stories in unit tests:
+  - https://storybook.js.org/docs/writing-tests/integrations/stories-in-unit-tests
+- Storybook portable stories in Vitest:
+  - https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest
+- Storybook React portable stories source:
+  - https://github.com/storybookjs/storybook/blob/370524faae96a30d27e36efcaa2fc39cd65fab29/code/renderers/react/src/portable-stories.tsx#L46-L159
+- Storybook core portable stories source:
+  - https://github.com/storybookjs/storybook/blob/370524faae96a30d27e36efcaa2fc39cd65fab29/code/core/src/preview-api/modules/store/csf/portable-stories.ts#L73-L233
 
 ### Accessibility Semantics
 
@@ -158,6 +187,7 @@ Attach explicit evidence for every claim.
 3. Product behavior claim:
 - production file path and symbol
 - test file path and assertion lines
+- story file path and export name when the test reuses Storybook state
 
 4. Accessibility claim:
 - role, name, focus, or keyboard expectation
@@ -179,6 +209,11 @@ Attach explicit evidence for every claim.
 - optional mutation report excerpt
 - flaky evidence
 
+9. Storybook reuse claim:
+- evidence that `composeStories` or `composeStory` is used
+- evidence that `setProjectAnnotations` or equivalent project-level annotation setup is applied when required
+- evidence that the story represents a public use case rather than internal state enumeration
+
 ## Recommended Higher-Value Scenario Shapes
 
 1. Static rule or schema validation prevents the defect before runtime.
@@ -186,3 +221,4 @@ Attach explicit evidence for every claim.
 3. Browser-level flow validates navigation, persistence, timing, and backend response in a real engine.
 4. Accessible interaction validates role, name, focus, and keyboard semantics.
 5. Visual regression validates layout, theming, overflow, or responsive behavior through a visual oracle.
+6. Story-driven component test reuses a canonical story scenario to verify component-specific behavior that is not better protected by higher Trophy layers.
