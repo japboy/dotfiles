@@ -334,7 +334,7 @@ pip install safe-chain-pi-test
 # Node.js NPMs
 if ! which corepack &> /dev/null
 then
-    npm install -g corepack
+    npm install -g corepack@latest
 fi
 # @see https://pnpm.io/installation
 # @see https://yarnpkg.com/getting-started/install
