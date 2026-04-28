@@ -1,9 +1,12 @@
 file_opener = "none"
-model = "gpt-5.4"
-model_reasoning_effort = "high"
-approval_policy = "on-request"
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+approval_policy = "never"
 sandbox_mode = "workspace-write"
 personality = "pragmatic"
+
+[shell_environment_policy]
+inherit = "all"
 
 [features]
 codex_hooks = true
@@ -16,7 +19,7 @@ enabled = false
 
 [mcp_servers.ChromeDevtools]
 command = "mise"
-args = [ "exec", "node@25", "--", "npx", "-y", "chrome-devtools-mcp@latest" ]
+args = ["exec", "node@25", "--", "npx", "-y", "chrome-devtools-mcp@latest"]
 enabled = false
 
 [mcp_servers.Context7]
@@ -28,7 +31,15 @@ url = "http://127.0.0.1:3845/mcp"
 
 [mcp_servers.Filesystem]
 command = "mise"
-args = [ "exec", "node@25", "--", "npx", "-y", "@modelcontextprotocol/server-filesystem@latest", "/Users" ]
+args = [
+    "exec",
+    "node@25",
+    "--",
+    "npx",
+    "-y",
+    "@modelcontextprotocol/server-filesystem@latest",
+    "/Users",
+]
 enabled = false
 
 [mcp_servers.Miro]
@@ -41,8 +52,25 @@ enabled = false
 
 [mcp_servers.Playwright]
 command = "mise"
-args = [ "exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest" ]
+args = ["exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest"]
+default_tools_approval_mode = "approve"
 
 [mcp_servers.Serena]
 command = "mise"
-args = [ "exec", "python@3", "--", "uvx", "--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server" ]
+args = [
+    "exec",
+    "python@3",
+    "--",
+    "uvx",
+    "--refresh",
+    "--from",
+    "git+https://github.com/oraios/serena",
+    "serena",
+    "start-mcp-server",
+]
+default_tools_approval_mode = "approve"
+disabled_tools = ["execute_shell_command"]
+
+[sandbox_workspace_write]
+network_access = true
+writable_roots = ["/tmp", "~/.cache", "~/.codex/worktrees/", "~/.local"]
