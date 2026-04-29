@@ -287,9 +287,10 @@ characters), folding in:
 - For `SUGGESTION` / `NIT`: enough context that the user can
   reopen the finding later if they change their mind.
 
-Section template:
+Section template (the outer fence uses four backticks so the
+inner three-backtick block renders correctly inside the example):
 
-```markdown
+````markdown
 ### Finding <#> — <SEVERITY>
 
 **Sources**:
@@ -305,7 +306,7 @@ why. Cite the relevant span of the issue body when useful.>
 <Optional code block. Include only when the explanation requires
 it (diff, command, snippet, schema, etc.).>
 ```
-```
+````
 
 Length and content rules:
 
