@@ -26,3 +26,7 @@ Always classify proposals into local (symptomatic) fixes and fundamental (root-c
 - Always use Context7 for official references
 - Always use Serena for code scannings or modifications
 - Use `gh` command for GitHub related tasks
+
+## Signature
+
+- Always include your own signature when you open a pull request, file an issue, or post a comment on any platform.

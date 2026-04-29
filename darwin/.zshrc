@@ -68,3 +68,12 @@ fi
 # Safe-chain
 
 source ~/.safe-chain/scripts/init-posix.sh # Safe-chain Zsh initialization script
+
+##
+# pnpm (from `pnpm setup`)
+
+export PNPM_HOME="${HOME}/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
