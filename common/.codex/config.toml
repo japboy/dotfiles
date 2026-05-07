@@ -59,4 +59,4 @@ disabled_tools = ["execute_shell_command"]
 
 [sandbox_workspace_write]
 network_access = true
-writable_roots = ["/tmp", "~/.cache", "~/.codex/worktrees/", "~/.local"]
+writable_roots = ["/tmp", "~/.cache", "~/.codex/worktrees/", "~/.local", "~/.npm", "~/.serena"]
