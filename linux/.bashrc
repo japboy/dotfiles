@@ -79,6 +79,13 @@ fi
 command -v direnv &> /dev/null && eval "$(direnv hook bash)"
 
 
+##
+# Safe-chain
+# @see https://github.com/AikidoSec/safe-chain
+
+[ -d "${HOME}/.safe-chain" ] && source "${HOME}/.safe-chain/scripts/init-posix.sh"
+
+
 # Load extra settings
 [ -f ${HOME}/.bash_extras ] && source ${HOME}/.bash_extras
 

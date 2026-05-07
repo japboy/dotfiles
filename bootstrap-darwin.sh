@@ -298,10 +298,7 @@ fi
 # Aikido Safe Chain
 # @see https://github.com/AikidoSec/safe-chain
 
-if [ ! -d "${HOME}/.safe-chain" ]
-then
-    curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/main/install-scripts/install-safe-chain.sh | sh -s -- --include-python
-fi
+curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh
 
 # Setup default lagunage
 #sudo languagesetup

@@ -86,4 +86,10 @@ else
     echo "${TEXT_RED}Linux dotfiles path not found at ${LINUX_DOTFILES_PATH}. Skipping package installation.${TEXT_RESET}"
 fi
 
+##
+# Aikido Safe Chain
+# @see https://github.com/AikidoSec/safe-chain
+
+curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh
+
 echo "${TEXT_BOLD}${TEXT_GREEN}WSL Nix Bootstrap completed.${TEXT_RESET}"
