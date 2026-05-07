@@ -155,6 +155,8 @@
             lua
             mcrypt
             neovim
+            nil
+            nixd
             ngrok
             openssl
             pango
@@ -189,6 +191,12 @@
             ruby
             rustup
             yarn
+
+            # AI coding CLIs
+            claude-code
+            codex
+            gemini-cli
+            github-copilot-cli
 
             # MCP servers
             mcpPackages.chromeDevtoolsMcp
