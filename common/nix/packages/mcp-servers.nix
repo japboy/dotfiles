@@ -16,6 +16,69 @@ let
     };
   });
 
+  pyobjc-framework-UniformTypeIdentifiers = pythonPackages.buildPythonPackage rec {
+    pname = "pyobjc-framework-UniformTypeIdentifiers";
+    version = "11.1";
+    pyproject = true;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "ronaldoussoren";
+      repo = "pyobjc";
+      tag = "v${version}";
+      hash = "sha256-2qPGJ/1hXf3k8AqVLr02fVIM9ziVG9NMrm3hN1de1Us=";
+    };
+
+    sourceRoot = "${src.name}/pyobjc-framework-UniformTypeIdentifiers";
+
+    build-system = [
+      pythonPackages.setuptools
+    ];
+
+    buildInputs = [
+      pkgs.darwin.libffi
+    ];
+
+    nativeBuildInputs = [
+      pkgs.darwin.DarwinTools
+    ];
+
+    postPatch = ''
+      substituteInPlace pyobjc_setup.py \
+        --replace-fail "-buildversion" "-buildVersion" \
+        --replace-fail "-productversion" "-productVersion" \
+        --replace-fail "/usr/bin/sw_vers" "sw_vers" \
+        --replace-fail "/usr/bin/xcrun" "xcrun"
+    '';
+
+    dependencies = with pythonPackages; [
+      pyobjc-core
+      pyobjc-framework-Cocoa
+    ];
+
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-I${pkgs.darwin.libffi.dev}/include"
+      "-Wno-error=unused-command-line-argument"
+    ];
+
+    pythonImportsCheck = [
+      "UniformTypeIdentifiers"
+      "PyObjCTools"
+    ];
+
+    meta = with lib; {
+      description = "PyObjC wrappers for the UniformTypeIdentifiers framework on macOS";
+      homepage = "https://github.com/ronaldoussoren/pyobjc";
+      license = licenses.mit;
+      platforms = platforms.darwin;
+    };
+  };
+
+  pywebview = pythonPackages.pywebview.overridePythonAttrs (oldAttrs: {
+    dependencies = oldAttrs.dependencies ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+      pyobjc-framework-UniformTypeIdentifiers
+    ];
+  });
+
   chromeDevtoolsMcp = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "chrome-devtools-mcp";
     version = "0.25.0";

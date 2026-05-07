@@ -21,12 +21,12 @@ export TIMEFMT=$'\n========================\njob    : %J\ncpu       : %P\nuser  
 
 # Prevent file/directory lost
 alias mv='mv -i'
-if ! which trash &> /dev/null
+if [ -x /usr/bin/trash ]
 then
-    alias rm='rm -i'
+    alias rm='/usr/bin/trash'
+    alias rmdir='/usr/bin/trash'
 else
-    alias rm='trash'
-    alias rmdir='trash'
+    alias rm='rm -i'
 fi
 
 # OS X Wi-Fi utility

@@ -28,45 +28,6 @@
         let
           mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { inherit pkgs; };
 
-          macosTrash = pkgs.stdenv.mkDerivation rec {
-            pname = "macos-trash";
-            version = "0.9.2";
-
-            src = pkgs.fetchFromGitHub {
-              owner = "ali-rantakari";
-              repo = "trash";
-              rev = "v${version}";
-              hash = "sha256-6HOck9cQrE2nIeFoeOdpMBnToq19is2Bf0FCZgFhAIM=";
-            };
-
-            postPatch = ''
-              substituteInPlace Makefile --replace-fail "-force_cpusubtype_ALL" ""
-            '';
-
-            buildPhase = ''
-              runHook preBuild
-              make
-              make docs
-              runHook postBuild
-            '';
-
-            installPhase = ''
-              runHook preInstall
-              mkdir -p "$out/bin" "$out/share/man/man1"
-              install -m 0755 trash "$out/bin/trash"
-              install -m 0644 trash.1 "$out/share/man/man1/trash.1"
-              runHook postInstall
-            '';
-
-            meta = with pkgs.lib; {
-              description = "CLI tool that moves files or folders to the macOS Trash";
-              homepage = "https://hasseg.org/trash/";
-              license = licenses.mit;
-              mainProgram = "trash";
-              platforms = platforms.darwin;
-            };
-          };
-
           highway = pkgs.stdenv.mkDerivation rec {
             pname = "highway";
             version = "1.1.0";
@@ -75,7 +36,7 @@
               owner = "tkengo";
               repo = "highway";
               rev = "v${version}";
-              hash = "sha256-e0MpCfXN01yzk6N4qe5U7gbI8FPjOy435BXHwnYY7Po=";
+              hash = "sha256-Vd5ZcZx8z0HWAL5e0zXAM5j8lOwksV969A4YL0u+Yo4=";
             };
 
             nativeBuildInputs = with pkgs; [
@@ -107,8 +68,9 @@
 
             sourceRoot = ".";
 
+            # Glance DMG uses APFS, which is not supported by undmg.
             nativeBuildInputs = with pkgs; [
-              undmg
+              _7zz
             ];
 
             installPhase = ''
@@ -191,7 +153,6 @@
             libtiff
             libwebp
             lua
-            macosTrash
             mcrypt
             neovim
             ngrok
