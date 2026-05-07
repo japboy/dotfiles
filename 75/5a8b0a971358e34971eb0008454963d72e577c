@@ -1,0 +1,27 @@
+common/nix/packages/mcp-servers.nix
+  7b4092f4d8c1f935 19-81
+darwin/flake.nix
+  7b4092f4d8c1f935 39,71,73
+darwin/.zshrc
+  7b4092f4d8c1f935 24,26-27,29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "755a8b0a971358e34971eb0008454963d72e577c",
+  "prompts": {
+    "7b4092f4d8c1f935": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e0448-7c34-7b11-aec8-37a1721ac0ff",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I.",
+      "messages": [],
+      "total_additions": 352,
+      "total_deletions": 113,
+      "accepted_lines": 306,
+      "overriden_lines": 0
+    }
+  }
+}
