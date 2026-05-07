@@ -22,15 +22,8 @@
   },
   "mcpServers": {
     "ChromeDevtools": {
-      "command": "mise",
-      "args": [
-        "exec",
-        "node@25",
-        "--",
-        "npx",
-        "-y",
-        "chrome-devtools-mcp@latest"
-      ]
+      "command": "chrome-devtools-mcp",
+      "args": []
     },
     "Context7": {
       "httpUrl": "https://mcp.context7.com/mcp",
@@ -42,33 +35,16 @@
       "httpUrl": "http://127.0.0.1:3845/mcp"
     },
     "Filesystem": {
-      "command": "mise",
-      "args": [
-        "exec",
-        "node@25",
-        "--",
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-filesystem@latest",
-        "/Users"
-      ]
+      "command": "mcp-server-filesystem",
+      "args": ["/Users"]
     },
     "Playwright": {
-      "command": "mise",
-      "args": ["exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest"]
+      "command": "playwright-mcp",
+      "args": []
     },
     "Serena": {
-      "command": "mise",
-      "args": [
-        "exec",
-        "python@3",
-        "--",
-        "uvx",
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server"
-      ]
+      "command": "serena",
+      "args": ["start-mcp-server"]
     }
   },
   "security": {

@@ -23,13 +23,8 @@ extensions:
     enabled: false
     type: stdio
     name: fetch
-    cmd: mise
-    args:
-    - exec
-    - python@3
-    - --
-    - uvx
-    - mcp-server-fetch
+    cmd: mcp-server-fetch
+    args: []
     envs: {}
     env_keys: []
     timeout: 300
@@ -40,14 +35,8 @@ extensions:
     enabled: true
     type: stdio
     name: playwright
-    cmd: mise
-    args:
-    - exec
-    - node@22
-    - --
-    - npx
-    - -y
-    - '@playwright/mcp@latest'
+    cmd: playwright-mcp
+    args: []
     envs: {}
     env_keys: []
     timeout: 300
@@ -58,15 +47,9 @@ extensions:
     enabled: false
     type: stdio
     name: filesystem
-    cmd: mise
+    cmd: mcp-server-filesystem
     args:
-    - exec
-    - node@22
-    - --
-    - npx
-    - -y
-    - '@modelcontextprotocol/server-filesystem@latest'
-    - /Users/yu.inao
+    - /Users
     envs: {}
     env_keys: []
     timeout: 300
@@ -86,15 +69,8 @@ extensions:
     enabled: false
     type: stdio
     name: speechinterface
-    cmd: mise
-    args:
-    - exec
-    - python@3
-    - --
-    - uvx
-    - -p
-    - 3.10.14
-    - speech-mcp@latest
+    cmd: speech-mcp
+    args: []
     envs: {}
     env_keys:
     - CFLAGS
@@ -137,15 +113,8 @@ extensions:
     enabled: true
     type: stdio
     name: serena
-    cmd: mise
+    cmd: serena
     args:
-    - exec
-    - python@3
-    - --
-    - uvx
-    - --from
-    - git+https://github.com/oraios/serena
-    - serena
     - start-mcp-server
     envs: {}
     env_keys: []

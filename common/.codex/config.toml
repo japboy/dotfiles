@@ -18,8 +18,8 @@ url = "https://mcp.asana.com/v2/mcp"
 enabled = false
 
 [mcp_servers.ChromeDevtools]
-command = "mise"
-args = ["exec", "node@25", "--", "npx", "-y", "chrome-devtools-mcp@latest"]
+command = "chrome-devtools-mcp"
+args = []
 enabled = false
 
 [mcp_servers.Context7]
@@ -30,14 +30,8 @@ http_headers = { "CONTEXT7_API_KEY" = "${CONTEXT7_API_KEY}" }
 url = "http://127.0.0.1:3845/mcp"
 
 [mcp_servers.Filesystem]
-command = "mise"
+command = "mcp-server-filesystem"
 args = [
-    "exec",
-    "node@25",
-    "--",
-    "npx",
-    "-y",
-    "@modelcontextprotocol/server-filesystem@latest",
     "/Users",
 ]
 enabled = false
@@ -51,21 +45,13 @@ url = "https://mcp.notion.com/mcp"
 enabled = false
 
 [mcp_servers.Playwright]
-command = "mise"
-args = ["exec", "node@25", "--", "npx", "-y", "@playwright/mcp@latest"]
+command = "playwright-mcp"
+args = []
 default_tools_approval_mode = "approve"
 
 [mcp_servers.Serena]
-command = "mise"
+command = "serena"
 args = [
-    "exec",
-    "python@3",
-    "--",
-    "uvx",
-    "--refresh",
-    "--from",
-    "git+https://github.com/oraios/serena",
-    "serena",
     "start-mcp-server",
 ]
 default_tools_approval_mode = "approve"

@@ -18,7 +18,11 @@ TEXT_RED=$(tput setaf 1)
 TEXT_GREEN=$(tput setaf 2)
 TEXT_RESET=$(tput sgr0)
 
-DOTFILES_DARWIN_PATH="${HOME}/.dotfiles/darwin"
+DOTFILES_PATH="${HOME}/.dotfiles"
+DOTFILES_REAL_PATH=$(cd "${DOTFILES_PATH}" 2>/dev/null && pwd -P)
+[ -z "${DOTFILES_REAL_PATH}" ] && DOTFILES_REAL_PATH="${DOTFILES_PATH}"
+DOTFILES_DARWIN_PATH="${DOTFILES_PATH}/darwin"
+DOTFILES_DARWIN_FLAKE="path:${DOTFILES_REAL_PATH}?dir=darwin"
 
 
 ##
@@ -46,6 +50,16 @@ function is_specific_serial () {
     ACTUAL_SERIAL=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
     [ ${TARGET_SERIAL} = ${ACTUAL_SERIAL} ] && return 0
     return 1
+}
+
+function source_nix () {
+    if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]
+    then
+        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    elif [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]
+    then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+    fi
 }
 
 
@@ -209,178 +223,68 @@ then
     softwareupdate --install-rosetta
 fi
 
-# Check if JDK is installed
-if ! javac -version &> /dev/null
+# Nix if not exists
+source_nix
+
+if ! command -v nix &> /dev/null
 then
-    open "http://www.oracle.com/technetwork/java/javase/downloads/index.html"
-    echo "${TEXT_RED}JDK must be installed first. Aborted.${TEXT_RESET}"
+    echo "${TEXT_BOLD}Installing Nix via official installer...${TEXT_RESET}"
+    curl -L https://nixos.org/nix/install | sh -s -- --daemon
+    source_nix
+fi
+
+if ! command -v nix &> /dev/null
+then
+    echo "${TEXT_RED}Nix installation failed or not in PATH. Aborted.${TEXT_RESET}"
     exit 1
 fi
 
-# Homebrew if not exists
-HOMEBREW="${HOME}/.homebrew"
-
-if ! which brew &> /dev/null
+# Enable Flakes and nix-command for the current user profile.
+mkdir -p "${HOME}/.config/nix"
+if ! grep -q '^experimental-features = .*nix-command.*flakes' "${HOME}/.config/nix/nix.conf" 2>/dev/null
 then
-    export HOMEBREW_CELLAR="${HOMEBREW}/Cellar"
-    export HOMEBREW_PREFIX=${HOMEBREW}
-    export PATH="${HOMEBREW}/bin:${PATH}"
+    echo 'experimental-features = nix-command flakes' >> "${HOME}/.config/nix/nix.conf"
 fi
 
-if [ ! -d ${HOMEBREW} ]
+NIX_FLAKE_FLAGS=(
+    --extra-experimental-features
+    'nix-command flakes'
+)
+
+echo "${TEXT_BOLD}Installing packages via Nix Flake from ${DOTFILES_DARWIN_FLAKE}...${TEXT_RESET}"
+
+if [ -d "${DOTFILES_DARWIN_PATH}" ]
 then
-    mkdir -p ${HOMEBREW}
-    curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C ${HOMEBREW}
+    echo "Validating flake package..."
+    if ! nix build "${DOTFILES_DARWIN_FLAKE}" --no-link "${NIX_FLAKE_FLAGS[@]}"
+    then
+        echo "${TEXT_RED}Nix package evaluation failed. Aborted.${TEXT_RESET}"
+        exit 1
+    fi
+
+    for PROFILE_NAME in darwin darwin-packages
+    do
+        echo "Removing existing profile entry if present: ${PROFILE_NAME}"
+        nix profile remove "${PROFILE_NAME}" "${NIX_FLAKE_FLAGS[@]}" > /dev/null 2>&1 || true
+    done
+    unset PROFILE_NAME
+
+    if ! nix profile add "${DOTFILES_DARWIN_FLAKE}" "${NIX_FLAKE_FLAGS[@]}"
+    then
+        echo "${TEXT_RED}Failed to add Nix flake profile. Aborted.${TEXT_RESET}"
+        exit 1
+    fi
+else
+    echo "${TEXT_RED}Darwin dotfiles path not found at ${DOTFILES_DARWIN_PATH}. Skipping package installation.${TEXT_RESET}"
 fi
-
-unset HOMEBREW
-
-# Add Homebrew 3rd party repositories
-TAPS=(
-    'universal-ctags/universal-ctags'
-    'tkengo/highway'
-)
-
-for TAP in "${TAPS[@]}"
-do
-    if ! brew tap | grep ${TAP} &> /dev/null
-    then
-        brew tap ${TAP}
-    fi
-done
-
-unset TAP TAPS
-
-# fundamental dependencies through Homebrew
-brew update
-brew upgrade
-
-BREWS=(
-    'autoconf'
-    'automake'
-    'cairo'
-    'ccache'
-    'cmake'
-    'direnv'
-    'gettext'
-    'gh'
-    'giflib'
-    'git-extras'
-    'git'
-    'glance-chamburr'
-    'grc'
-    'highway'
-    'jpeg'
-    'libjpeg'
-    'libpng'
-    'librsvg'
-    'libtiff'
-    'lua'
-    'mcrypt'
-    'mise'
-    'neovim'
-    'ngrok'
-    'openssl@1.1'
-    'pango'
-    'pcre'
-    'pkg-config'
-    're2c'
-    'readline'
-    'scons'
-    'the_platinum_searcher'
-    'the_silver_searcher'
-    'trash'
-    'universal-ctags --HEAD'
-    'webp'
-    'xz'
-    'zsh-autosuggestions'
-    'zsh-completions'
-    'zsh-syntax-highlighting'
-)
-
-for BREW in "${BREWS[@]}"
-do
-    FORMULA=$(echo ${BREW} | cut -d ' ' -f 1)
-
-    if ! brew list | grep ${FORMULA} &> /dev/null
-    then
-        brew install ${BREW}
-    fi
-
-    unset FORMULA
-done
-
-unset BREW BREWS
-
-brew cleanup
-
-# `mise` for **env
-mise use -g bun@latest
-mise use -g deno@latest
-mise use -g golang@latest
-mise use -g node@latest
-mise use -g python@latest
-mise use -g ruby@latest
-mise use -g rust@latest
 
 ##
 # Aikido Safe Chain
 # @see https://github.com/AikidoSec/safe-chain
 
-curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/main/install-scripts/install-safe-chain.sh | sh -s -- --include-python
-npm install safe-chain-test
-pip install safe-chain-pi-test
-
-# Node.js NPMs
-if ! which corepack &> /dev/null
+if [ ! -d "${HOME}/.safe-chain" ]
 then
-    npm install -g corepack@latest
-fi
-# @see https://pnpm.io/installation
-# @see https://yarnpkg.com/getting-started/install
-corepack enable
-corepack prepare pnpm@latest --activate
-corepack prepare yarn@stable --activate
-
-# Python PyPIs
-if which pip &> /dev/null
-then
-    PIPS=(
-        'neovim'
-        'pip'
-        'uv'
-        'wheel'
-    )
-
-    for PIP in "${PIPS[@]}"
-    do
-        pip install --upgrade ${PIP}
-    done
-
-    unset PIPS PIP
-fi
-
-# RubyGems
-if which gem &> /dev/null
-then
-    GEMS=(
-        'bundler'
-        'neovim'
-    )
-
-    for GEM in "${GEMS[@]}"
-    do
-        if ! gem list --local | grep ${GEM} &> /dev/null
-        then
-            gem install ${GEM}
-        else
-            gem update ${GEM}
-        fi
-    done
-
-    gem cleanup
-
-    unset GEMS
+    curl -fsSL https://raw.githubusercontent.com/AikidoSec/safe-chain/main/install-scripts/install-safe-chain.sh | sh -s -- --include-python
 fi
 
 # Setup default lagunage
@@ -394,9 +298,14 @@ unset \
     TEXT_RED \
     TEXT_GREEN \
     TEXT_RESET \
-    DOTFILES_DARWIN_PATH
+    DOTFILES_PATH \
+    DOTFILES_REAL_PATH \
+    DOTFILES_DARWIN_PATH \
+    DOTFILES_DARWIN_FLAKE \
+    NIX_FLAKE_FLAGS
 
 unset -f \
     is_older_app \
     is_older_os \
-    is_specific_serial
+    is_specific_serial \
+    source_nix

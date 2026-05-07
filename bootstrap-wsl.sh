@@ -11,7 +11,14 @@ TEXT_GREEN=$(tput setaf 2)
 TEXT_RESET=$(tput sgr0)
 
 DOTFILES_PATH="${HOME}/.dotfiles"
+DOTFILES_REAL_PATH=$(cd "${DOTFILES_PATH}" 2>/dev/null && pwd -P)
+[ -z "${DOTFILES_REAL_PATH}" ] && DOTFILES_REAL_PATH="${DOTFILES_PATH}"
 LINUX_DOTFILES_PATH="${DOTFILES_PATH}/linux"
+LINUX_DOTFILES_FLAKE="path:${DOTFILES_REAL_PATH}?dir=linux"
+NIX_FLAKE_FLAGS=(
+    --extra-experimental-features
+    "nix-command flakes"
+)
 
 echo "${TEXT_BOLD}Starting WSL Bootstrap with Nix Flakes...${TEXT_RESET}"
 
@@ -51,17 +58,29 @@ then
 fi
 
 # 3. Install packages via Nix Flake
-echo "${TEXT_BOLD}Installing packages via Nix Flake from ${LINUX_DOTFILES_PATH}...${TEXT_RESET}"
+echo "${TEXT_BOLD}Installing packages via Nix Flake from ${LINUX_DOTFILES_FLAKE}...${TEXT_RESET}"
 
-# We install or upgrade the default package from the flake located in the linux directory
+# We install or upgrade the default package from the linux flake in this repository.
 if [ -d "${LINUX_DOTFILES_PATH}" ]
 then
-    if nix profile list --extra-experimental-features "nix-command flakes" | grep -q 'Name:.*linux'
+    echo "Validating flake package..."
+    if ! nix build "${LINUX_DOTFILES_FLAKE}" --no-link "${NIX_FLAKE_FLAGS[@]}"
     then
-        echo "Flake already added. Upgrading..."
-        nix profile upgrade linux --extra-experimental-features "nix-command flakes"
-    else
-        nix profile add "${LINUX_DOTFILES_PATH}" --extra-experimental-features "nix-command flakes"
+        echo "${TEXT_RED}Nix package evaluation failed. Aborted.${TEXT_RESET}"
+        exit 1
+    fi
+
+    for PROFILE_NAME in linux wsl-packages
+    do
+        echo "Removing existing profile entry if present: ${PROFILE_NAME}"
+        nix profile remove "${PROFILE_NAME}" "${NIX_FLAKE_FLAGS[@]}" > /dev/null 2>&1 || true
+    done
+    unset PROFILE_NAME
+
+    if ! nix profile add "${LINUX_DOTFILES_FLAKE}" "${NIX_FLAKE_FLAGS[@]}"
+    then
+        echo "${TEXT_RED}Failed to add Nix flake profile. Aborted.${TEXT_RESET}"
+        exit 1
     fi
 else
     echo "${TEXT_RED}Linux dotfiles path not found at ${LINUX_DOTFILES_PATH}. Skipping package installation.${TEXT_RESET}"

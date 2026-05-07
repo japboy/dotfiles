@@ -52,44 +52,46 @@ setopt HIST_REDUCE_BLANKS
 setopt NO_CLOBBER
 setopt SHARE_HISTORY
 
-# @see https://formulae.brew.sh/formula/zsh-autosuggestions
-[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-# @see https://formulae.brew.sh/formula/zsh-completions
-if type brew &> /dev/null
+NIX_PROFILE="${HOME}/.nix-profile"
+
+# @see https://github.com/zsh-users/zsh-autosuggestions
+[ -f "${NIX_PROFILE}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "${NIX_PROFILE}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+# @see https://github.com/zsh-users/zsh-completions
+if [ -d "${NIX_PROFILE}/share/zsh/site-functions" ]
 then
-    FPATH="$(brew --prefix)/share/zsh-completions:${FPATH}"
+    FPATH="${NIX_PROFILE}/share/zsh/site-functions:${FPATH}"
     autoload -Uz compinit
     compinit
 fi
-# @see https://formulae.brew.sh/formula/zsh-syntax-highlighting
-[ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+# @see https://github.com/zsh-users/zsh-syntax-highlighting
+[ -f "${NIX_PROFILE}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "${NIX_PROFILE}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 
 ##
 # direnv
 # @see https://direnv.net/
 
-eval "$(direnv hook zsh)"
+command -v direnv &> /dev/null && eval "$(direnv hook zsh)"
 
 
 ##
 # mise
 # @see https://mise.jdx.dev/installing-mise.html#zsh
 
-eval "$(mise activate zsh)"
+command -v mise &> /dev/null && eval "$(mise activate zsh)"
 
 
 ##
 # Generic Colouriser
 # @see https://github.com/garabik/grc#zsh
 
-[ -f "$(brew --prefix)/etc/grc.zsh" ] && source "$(brew --prefix)/etc/grc.zsh"
+[ -f "${NIX_PROFILE}/etc/grc.zsh" ] && source "${NIX_PROFILE}/etc/grc.zsh"
 
 
 ##
 # Git
 # @see https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
-# @see https://formulae.brew.sh/formula/git-extras
+# @see https://github.com/tj/git-extras
 
 if [ -f "${HOME}/.git-prompt.sh" ]
 then
@@ -97,7 +99,6 @@ then
     GIT_PS1_SHOWCOLORHINTS=1
     precmd () { __git_ps1 "%n" ":%~$ " "|%s" }
 fi
-[ -f "$(brew --prefix git-extras)/share/git-extras/git-extras-completion.zsh" ] && source "$(brew --prefix git-extras)/share/git-extras/git-extras-completion.zsh"
 
 
 ##
@@ -117,3 +118,5 @@ export PATH="${HOME}/Applications/Visual Studio Code.app/Contents/Resources/app/
 
 # Load extra settings
 [ -f "${HOME}/.shell_extras" ] && source "${HOME}/.shell_extras"
+
+unset NIX_PROFILE

@@ -9,8 +9,12 @@ if has('nvim')
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
-" Let NeoVim choose Python runtime wisely
-let g:python3_host_prog = expand('$HOME/.local/share/mise/installs/python/3.13.7/bin/python')
+" Use the Python runtime provided by the active Nix profile.
+let s:python3_host_prog = expand('$HOME/.nix-profile/bin/python3')
+if executable(s:python3_host_prog)
+  let g:python3_host_prog = s:python3_host_prog
+endif
+unlet s:python3_host_prog
 
 
 ""
