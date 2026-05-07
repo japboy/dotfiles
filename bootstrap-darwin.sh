@@ -28,21 +28,37 @@ DOTFILES_DARWIN_FLAKE="path:${DOTFILES_REAL_PATH}?dir=darwin"
 ##
 # Functions
 
+function is_older_version () {
+    local target_version="${1}"
+    local actual_version="${2}"
+
+    [ -z "${actual_version}" ] && return 0
+
+    autoload -Uz is-at-least
+    is-at-least "${target_version}" "${actual_version}" && return 1
+
+    return 0
+}
+
 function is_older_app () {
-    TARGET_PATH="${1}"
-    [ ! -d "${TARGET_PATH}" ] && return 0
-    TARGET_VERSION=${2}
-    ACTUAL_VERSION=$(mdls -name kMDItemVersion "${TARGET_PATH}" | sed -e 's/^kMDItemVersion = "\([0-9\.]*\)"$/\1/g')
-    # TODO: should compare the version sizes
-    [ ${TARGET_VERSION} != ${ACTUAL_VERSION} ] && return 0
-    return 1
+    local target_path="${1}"
+    local target_version="${2}"
+    local actual_version
+
+    [ ! -d "${target_path}" ] && return 0
+
+    actual_version=$(mdls -raw -name kMDItemVersion "${target_path}" 2>/dev/null)
+    [ "${actual_version}" = "(null)" ] && return 0
+
+    is_older_version "${target_version}" "${actual_version}"
 }
 
 function is_older_os () {
-    TARGET_VERSION=${1}
-    ACTUAL_VERSION=$(system_profiler SPSoftwareDataType | grep 'System Version' | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | cut -c -5)
-    [ $(echo "${TARGET_VERSION} >= ${ACTUAL_VERSION}" | bc) -eq 1 ] && return 0
-    return 1
+    local target_version="${1}"
+    local actual_version
+
+    actual_version=$(sw_vers --productVersion 2>/dev/null)
+    is_older_version "${target_version}" "${actual_version}"
 }
 
 function is_specific_serial () {
@@ -125,7 +141,7 @@ then
 fi
 
 # Docker
-if ! which docker &> /dev/null || [[ '29.0.1' != $(docker --version | tr -ds ',' ' ' | awk 'NR==1{print $(3)}') ]]
+if ! command -v docker &> /dev/null || is_older_version '29.0.1' "$(docker version --format '{{.Client.Version}}' 2>/dev/null)"
 then
     if [[ "${ARCH}" = 'arm64' ]]
     then
@@ -306,6 +322,7 @@ unset \
 
 unset -f \
     is_older_app \
+    is_older_version \
     is_older_os \
     is_specific_serial \
     source_nix
