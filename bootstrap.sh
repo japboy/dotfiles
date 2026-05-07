@@ -110,10 +110,18 @@ then
     make_link 'darwin'
 fi
 
-# Setup Linux environment
-if [[ 'Linux' = ${OS} ]]
+# Setup WSL environment
+if [[ "${OS}" =~ 'WSL' ]]
 then
-    echo "${TEXT_BOLD}Installing for Linux...${TEXT_RESET}"
+    echo "${TEXT_BOLD}Installing for WSL...${TEXT_RESET}"
+
+    # Run `bootstrap-wsl.sh`
+    if ! bash ${DOTFILES_PATH}/bootstrap-wsl.sh
+    then
+        echo "${TEXT_RED}Error occurred. Aborted.${TEXT_RESET}"
+        exit 1
+    fi
+
     make_link 'linux'
 fi
 
