@@ -60,4 +60,32 @@ disabled_tools = ["execute_shell_command"]
 
 [sandbox_workspace_write]
 network_access = true
-writable_roots = ["/tmp", "~/.cache", "~/.codex/worktrees/", "~/.local", "~/.npm", "~/.serena"]
+writable_roots = [
+    "/tmp",
+    "~/.cache",
+    "~/.codex/sessions",
+    "~/.codex/worktrees",
+    "~/.local",
+    "~/.npm",
+    "~/.portless",
+    "~/.serena",
+    "~/.yarn/berry/cache",
+]
+
+[plugins."google-calendar@openai-curated"]
+enabled = true
+
+[plugins."gmail@openai-curated"]
+enabled = true
+
+[plugins."figma@openai-curated"]
+enabled = true
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[projects."/home/ubuntu/Workspace/com.github.japboy.dotfiles"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 1

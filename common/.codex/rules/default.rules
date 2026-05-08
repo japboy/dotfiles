@@ -1,4 +1,16 @@
 prefix_rule(
+    pattern = ["claude"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gemini"],
+    decision = "allow",
+)
+prefix_rule(
     pattern = ["gh"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git"],
     decision = "allow",
 )
