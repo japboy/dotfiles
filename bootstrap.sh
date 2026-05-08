@@ -40,10 +40,8 @@ function make_link {
         exit 1
     fi
 
-    find "${DOTFILES_PATH}/${TARGET_PARENT}" -type f \
-        -not -name '.DS_Store' \
-        -not -name 'flake.nix' \
-        -not -name 'flake.lock' | \
+    find "${DOTFILES_PATH}/${TARGET_PARENT}" \( -type f -o -type l \) \
+        -not -name '.DS_Store' | \
     grep --invert-match --regexp='\/Services\/.*\.workflow\/' |
     {
         while read ACTUAL_PATH
