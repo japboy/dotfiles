@@ -2,64 +2,70 @@
   description = "WSL environment packages";
 
   inputs = {
-    commonNix = {
+    common-nix = {
       url = "path:../common/nix";
       flake = false;
     };
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-ai-clis.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, commonNix, nixpkgs }:
+  outputs = inputs@{ self, ... }:
     let
+      commonNix = inputs."common-nix";
+      nixpkgsEssentials = inputs."nixpkgs-essentials";
+      nixpkgsAiClis = inputs."nixpkgs-ai-clis";
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-      mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { inherit pkgs; };
-      python = pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+      essentialPkgs = import nixpkgsEssentials {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      aiCliPkgs = import nixpkgsAiClis {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      aiCliPackages = import "${commonNix}/packages/ai-clis.nix" { pkgs = aiCliPkgs; };
+      mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = essentialPkgs; };
+      python = essentialPkgs.python3.withPackages (pythonPackages: with pythonPackages; [
         pip
         pynvim
         wheel
       ]);
+      essentialPackages = with essentialPkgs; [
+        # Fundamental tools
+        blesh
+        cmake
+        curl
+        direnv
+        fzf
+        gcc
+        gh
+        git
+        gnumake
+        neovim
+        nil
+        nixd
+        ripgrep
+        unzip
+        wget
+
+        # Language runtimes
+        bun
+        deno
+        go
+        mise
+        nodejs_22
+        python
+        ruby
+        rustup
+        uv
+      ];
     in
     {
-      packages.${system}.default = pkgs.buildEnv {
+      packages.${system}.default = essentialPkgs.buildEnv {
         name = "wsl-packages";
-        paths = with pkgs; [
-          # Fundamental tools
-          blesh
-          cmake
-          curl
-          direnv
-          fzf
-          gcc
-          gh
-          git
-          gnumake
-          neovim
-          nil
-          nixd
-          ripgrep
-          unzip
-          wget
-
-          # Language runtimes
-          bun
-          deno
-          go
-          mise
-          nodejs_22
-          python
-          ruby
-          rustup
-          uv
-
-          # MCP servers
-          mcpPackages.chromeDevtoolsMcp
-          mcpPackages.mcpServerFetch
-          mcpPackages.mcpServerFilesystem
-          mcpPackages.playwrightMcp
-          mcpPackages.serena
-        ];
+        paths = essentialPackages ++ aiCliPackages ++ mcpPackages;
       };
     };
 }

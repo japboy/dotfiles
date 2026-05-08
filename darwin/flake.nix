@@ -2,53 +2,63 @@
   description = "macOS environment packages";
 
   inputs = {
-    commonNix = {
+    common-nix = {
       url = "path:../common/nix";
       flake = false;
     };
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-ai-clis.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, commonNix, nixpkgs }:
+  outputs = inputs@{ self, ... }:
     let
+      commonNix = inputs."common-nix";
+      nixpkgsEssentials = inputs."nixpkgs-essentials";
+      nixpkgsAiClis = inputs."nixpkgs-ai-clis";
       systems = [
         "aarch64-darwin"
         "x86_64-darwin"
       ];
 
-      forAllSystems = nixpkgs.lib.genAttrs systems;
+      forAllSystems = nixpkgsEssentials.lib.genAttrs systems;
 
-      mkPkgs = system: import nixpkgs {
+      mkEssentialPkgs = system: import nixpkgsEssentials {
         inherit system;
         config.allowUnfree = true;
       };
 
-      mkPackages = pkgs:
-        let
-          mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { inherit pkgs; };
+      mkAiCliPkgs = system: import nixpkgsAiClis {
+        inherit system;
+        config.allowUnfree = true;
+      };
 
-          highway = pkgs.stdenv.mkDerivation rec {
+      mkPackages = essentialPkgs: aiCliPkgs:
+        let
+          aiCliPackages = import "${commonNix}/packages/ai-clis.nix" { pkgs = aiCliPkgs; };
+          mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = essentialPkgs; };
+
+          highway = essentialPkgs.stdenv.mkDerivation rec {
             pname = "highway";
             version = "1.1.0";
 
-            src = pkgs.fetchFromGitHub {
+            src = essentialPkgs.fetchFromGitHub {
               owner = "tkengo";
               repo = "highway";
               rev = "v${version}";
               hash = "sha256-Vd5ZcZx8z0HWAL5e0zXAM5j8lOwksV969A4YL0u+Yo4=";
             };
 
-            nativeBuildInputs = with pkgs; [
+            nativeBuildInputs = with essentialPkgs; [
               autoreconfHook
               pkg-config
             ];
 
-            buildInputs = with pkgs; [
+            buildInputs = with essentialPkgs; [
               gperftools
             ];
 
-            meta = with pkgs.lib; {
+            meta = with essentialPkgs.lib; {
               description = "High performance source code search tool";
               homepage = "https://github.com/tkengo/highway/";
               license = licenses.mit;
@@ -57,11 +67,11 @@
             };
           };
 
-          glanceChamburr = pkgs.stdenvNoCC.mkDerivation rec {
+          glanceChamburr = essentialPkgs.stdenvNoCC.mkDerivation rec {
             pname = "glance-chamburr";
             version = "1.5.4";
 
-            src = pkgs.fetchurl {
+            src = essentialPkgs.fetchurl {
               url = "https://github.com/chamburr/glance/releases/download/v${version}/Glance-${version}.dmg";
               hash = "sha256-8t8RToO4uDTC2p1M+9TTMHqPBWOp5hO/3Yi0s7/+Ya0=";
             };
@@ -69,7 +79,7 @@
             sourceRoot = ".";
 
             # Glance DMG uses APFS, which is not supported by undmg.
-            nativeBuildInputs = with pkgs; [
+            nativeBuildInputs = with essentialPkgs; [
               _7zz
             ];
 
@@ -80,7 +90,7 @@
               runHook postInstall
             '';
 
-            meta = with pkgs.lib; {
+            meta = with essentialPkgs.lib; {
               description = "Quick Look previews for files that are not natively supported";
               homepage = "https://github.com/chamburr/glance";
               license = licenses.mit;
@@ -88,20 +98,20 @@
             };
           };
 
-          thePlatinumSearcher = pkgs.stdenvNoCC.mkDerivation rec {
+          thePlatinumSearcher = essentialPkgs.stdenvNoCC.mkDerivation rec {
             pname = "the_platinum_searcher";
             version = "2.2.0";
 
             # Upstream only publishes darwin_amd64 assets for v2.2.0.
             # Apple Silicon hosts use Rosetta, which bootstrap-darwin.sh installs.
-            src = pkgs.fetchurl {
+            src = essentialPkgs.fetchurl {
               url = "https://github.com/monochromegane/the_platinum_searcher/releases/download/v${version}/pt_darwin_amd64.zip";
               hash = "sha256-d/LBuIsTuemSRt9rEZ81tY1hfyg0SjQNaJfDbJ0jr3U=";
             };
 
             sourceRoot = "pt_darwin_amd64";
 
-            nativeBuildInputs = with pkgs; [
+            nativeBuildInputs = with essentialPkgs; [
               unzip
             ];
 
@@ -112,7 +122,7 @@
               runHook postInstall
             '';
 
-            meta = with pkgs.lib; {
+            meta = with essentialPkgs.lib; {
               description = "Code search tool similar to ack and ag";
               homepage = "https://github.com/monochromegane/the_platinum_searcher";
               license = licenses.mit;
@@ -121,15 +131,13 @@
             };
           };
 
-          python = pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
+          python = essentialPkgs.python3.withPackages (pythonPackages: with pythonPackages; [
             pip
             pynvim
             wheel
           ]);
-        in
-        pkgs.buildEnv {
-          name = "darwin-packages";
-          paths = with pkgs; [
+
+          essentialPackages = with essentialPkgs; [
             # Fundamental tools
             autoconf
             automake
@@ -191,28 +199,24 @@
             ruby
             rustup
             yarn
+          ];
 
-            # AI coding CLIs
-            claude-code
-            codex
-            gemini-cli
-            github-copilot-cli
-
-            # MCP servers
-            mcpPackages.chromeDevtoolsMcp
-            mcpPackages.mcpServerFetch
-            mcpPackages.mcpServerFilesystem
-            mcpPackages.playwrightMcp
-            mcpPackages.serena
-
-            # macOS applications
+          appPackages = [
             glanceChamburr
           ];
+        in
+        essentialPkgs.buildEnv {
+          name = "darwin-packages";
+          paths =
+            essentialPackages
+            ++ aiCliPackages
+            ++ mcpPackages
+            ++ appPackages;
         };
     in
     {
       packages = forAllSystems (system: {
-        default = mkPackages (mkPkgs system);
+        default = mkPackages (mkEssentialPkgs system) (mkAiCliPkgs system);
       });
     };
 }

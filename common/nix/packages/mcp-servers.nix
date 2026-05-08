@@ -195,12 +195,10 @@ let
     };
   };
 in
-{
-  inherit
-    chromeDevtoolsMcp
-    serena;
-
-  mcpServerFetch = pkgs.mcp-server-fetch;
-  mcpServerFilesystem = pkgs.mcp-server-filesystem;
-  playwrightMcp = pkgs.playwright-mcp;
-}
+[
+  chromeDevtoolsMcp
+  pkgs.mcp-server-fetch
+  pkgs.mcp-server-filesystem
+  pkgs.playwright-mcp
+  serena
+]

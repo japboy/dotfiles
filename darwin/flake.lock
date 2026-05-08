@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "commonNix": {
+    "common-nix": {
       "flake": false,
       "locked": {
         "path": "../common/nix",
@@ -12,7 +12,23 @@
       },
       "parent": []
     },
-    "nixpkgs": {
+    "nixpkgs-ai-clis": {
+      "locked": {
+        "lastModified": 1778124196,
+        "narHash": "sha256-pYEytCNic/czazbV9r3tbQ6BZzqRBg/41x2dIC5ymOo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "68a8af93ff4297686cb68880845e61e5e2e41d92",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-essentials": {
       "locked": {
         "lastModified": 1777954456,
         "narHash": "sha256-hGdgeU2Nk87RAuZyYjyDjFL6LK7dAZN5RE9+hrDTkDU=",
@@ -30,8 +46,9 @@
     },
     "root": {
       "inputs": {
-        "commonNix": "commonNix",
-        "nixpkgs": "nixpkgs"
+        "common-nix": "common-nix",
+        "nixpkgs-ai-clis": "nixpkgs-ai-clis",
+        "nixpkgs-essentials": "nixpkgs-essentials"
       }
     }
   },
