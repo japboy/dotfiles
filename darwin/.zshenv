@@ -2,9 +2,7 @@
 # COMMON PROCESS SHELL CUSTOMISATION
 
 ##
-# Fundamental environment paths
-
-typeset -U path PATH
+# Nix
 
 if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]
 then
@@ -13,6 +11,12 @@ elif [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]
 then
     source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
 fi
+
+
+##
+# Fundamental environment paths
+
+typeset -U path PATH
 
 path=(
     # Private
