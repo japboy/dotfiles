@@ -35,6 +35,7 @@
       essentialPackages = with essentialPkgs; [
         # Fundamental tools
         blesh
+        chromium
         cmake
         curl
         direnv
