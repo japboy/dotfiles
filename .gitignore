@@ -1,2 +1,4 @@
+.envrc
 .shell_extras
+common/.agent/skills/.*
 darwin/.ssh
