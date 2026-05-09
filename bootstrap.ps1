@@ -1,165 +1,364 @@
-#!/usr/local/bin/powershell
-#Requires -Version 5.0
-
 #
-# WINDOWS 10 BOOTSTRAP
+# WINDOWS 11 BOOTSTRAP
 #
-# This script will be run directly if using Windows 10
-
-# TODO: Run as administrator
-#Set-ExecutionPolicy RemoteSigned
-
+# This script links files under WSL's ~/.dotfiles/windows/ directory into the
+# Windows user profile. It expects the repository to exist in WSL and does not
+# clone or download repository files into Windows. Linux symlinks under windows/
+# are resolved in WSL before Windows symlinks are created.
 #
-# Functions
+# From PowerShell:
+# & ([scriptblock]::Create((
+#     wsl.exe --distribution Ubuntu --exec bash -lc 'cat ~/.dotfiles/bootstrap.ps1'
+# ) -join [Environment]::NewLine))
 
-function SetUserEnv ($key, $value)
+[CmdletBinding()]
+param ()
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+if ($PSVersionTable.PSVersion -lt [Version]'5.1')
 {
-    Write-Host "Setting $key as user-level environment variable"
-    [Environment]::SetEnvironmentVariable($key, $value, 'User')
+    throw 'PowerShell 5.1 or later is required.'
 }
 
-function Download ([string] $url, [string] $dest, [string] $filename = $null)
+# Windows PowerShell 5.1's New-Item -ItemType SymbolicLink does not honor
+# Developer Mode, so call CreateSymbolicLinkW with the unprivileged flag directly.
+if (-not ('DotfilesSymbolicLink' -as [type]))
 {
-    # Follow redirect
-    Write-Host "Requesting to $url"
-    $req = Invoke-WebRequest `
-        -Uri $url `
-        -MaximumRedirection 0 `
-        -ErrorAction Ignore `
-        -UserAgent 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36'
-    If ($req.StatusDescription -eq 'Moved Temporarily') { $url = $req.Headers.Location }
-    # Download if not exist
-    If (!$filename) { $filename = Split-Path $url -Leaf }
-    $destFile = "$dest\$filename"
-    If (!(Test-Path -Path $destFile -PathType Leaf)) {
-        Write-Host "Downloading $filename"
-        Invoke-WebRequest -Uri $url -OutFile $destFile
-    }
-}
+    Add-Type -TypeDefinition @'
+using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 
-function Run ([string] $path, [string] $argv = $null)
+public static class DotfilesSymbolicLink
 {
-    $filename = Split-Path $path -Leaf
-    Write-Output "Running $filename"
-    If (!$argv)
+    private const int SYMBOLIC_LINK_FLAG_DIRECTORY = 0x1;
+    private const int SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE = 0x2;
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, EntryPoint = "CreateSymbolicLinkW", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.I1)]
+    private static extern bool CreateSymbolicLink(string linkPath, string targetPath, int flags);
+
+    public static void Create(string linkPath, string targetPath, bool isDirectory)
     {
-        Start-Process -FilePath $path -Wait
-        Return
+        int flags = SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE;
+
+        if (isDirectory)
+        {
+            flags |= SYMBOLIC_LINK_FLAG_DIRECTORY;
+        }
+
+        if (!CreateSymbolicLink(linkPath, targetPath, flags))
+        {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
     }
-    Start-Process -FilePath $path -ArgumentList $($argv -split '; ') -Wait
-    #Invoke-Expression -Command "$path [string]$argv"
+}
+'@
 }
 
-function RunAs ([string] $path, [string] $argv = $null)
+function Get-ErrorMessage ([Exception] $exception)
 {
-    $filename = Split-Path $path -Leaf
-    Write-Output "Running $filename"
-    If (!$argv)
+    $currentException = $exception
+
+    while (($null -ne $currentException) -and ($null -ne $currentException.InnerException))
     {
-        Start-Process -FilePath $path -Verb runas -Wait
-        Return
+        $currentException = $currentException.InnerException
     }
-    Start-Process -FilePath $path -ArgumentList $($argv -split '; ') -Verb runas -Wait
+
+    if ($null -eq $currentException)
+    {
+        return ''
+    }
+
+    return $currentException.Message
 }
 
-function Mklink ([string] $src, [string] $dst)
+function Join-TargetPath ([string] $basePath, [string] $relativePath)
 {
-    Write-Host "Creating symbolic link $dst"
-    Start-Process `
-        -FilePath 'powershell' `
-        -ArgumentList $("New-Item -Path $dst -ItemType SymbolicLink -Value $src" -split '; ') `
-        -Verb runas `
-        -Wait
+    $targetPath = $basePath
+
+    foreach ($relativePathSegment in ($relativePath -split '/'))
+    {
+        if ([string]::IsNullOrWhiteSpace($relativePathSegment))
+        {
+            continue
+        }
+
+        $targetPath = Join-Path -Path $targetPath -ChildPath $relativePathSegment
+    }
+
+    return $targetPath
 }
 
-function Extract ([string] $inpath, [string] $outpath)
+function Test-CopyRelativePath ([string] $relativePath, [string[]] $prefixes)
 {
-    Write-Host "Extracting to $outpath"
-    Expand-Archive -Path $inpath -DestinationPath $outpath
+    foreach ($prefix in $prefixes)
+    {
+        if ($relativePath.StartsWith($prefix, [StringComparison]::Ordinal))
+        {
+            return $true
+        }
+    }
+
+    return $false
 }
 
+Write-Host 'Starting Windows bootstrap...'
 
-#
-# Set common variables
+$homePath = [Environment]::GetFolderPath('UserProfile')
 
-$cwd = Get-Location
-$develPath = "$env:USERPROFILE\Developer"
-$downloadPath = "$env:HOMEPATH\Downloads"
-#Set-Location -Path $cwd
-
-
-#
-# Create ~/Developer directory for common use cases
-
-If (!(Test-Path -Path $develPath -PathType Container))
+if ([string]::IsNullOrWhiteSpace($homePath))
 {
-    New-Item -ItemType Directory -Path $develPath
-    New-Item -ItemType Directory -Path "$develPath\bin"
-    New-Item -ItemType Directory -Path "$develPath\opt"
+    throw 'Windows user profile path could not be resolved.'
 }
-SetUserEnv 'Path' "$env:Path;$develPath\bin"
 
+$wslDistribution = 'Ubuntu'
 
-#
-# Software installation
+Write-Host "Resolving dotfiles path from WSL distribution: $wslDistribution..."
 
-If (!(Test-Path -Path $downloadPath -PathType Container))
+if (-not (Get-Command 'wsl.exe' -ErrorAction SilentlyContinue))
 {
-    New-Item -ItemType Directory -Path $downloadPath
+    throw "wsl.exe was not found. This bootstrap expects the $wslDistribution WSL distribution with ~/.dotfiles."
 }
 
-# .NET Core SDK for Windows
-#Download `
-#    'https://go.microsoft.com/fwlink/?LinkID=827524' `
-#    $downloadPath `
-#    'DotNetCore.1.0.1-SDK.1.0.0.Preview2-003133-x64.exe'
-#Run "$downloadPath\DotNetCore.1.0.1-SDK.1.0.0.Preview2-003133-x64.exe"
+$wslListScript = @'
+set -eu
 
-# 7-Zip
-#Download 'http://www.7-zip.org/a/7z1604-x64.msi' $downloadPath
-#Run "$downloadPath\7z1604-x64.msi" '/promptrestart'
+dotfiles_path="$(cd "$HOME/.dotfiles" 2>/dev/null && pwd -P)"
+windows_path="$dotfiles_path/windows"
 
-# Git for Windows
-Download `
-    'https://github.com/git-for-windows/git/releases/download/v2.10.1.windows.1/Git-2.10.1-64-bit.exe' `
-    $downloadPath
-Run "$downloadPath\Git-2.10.1-64-bit.exe"
+[ -d "$windows_path" ]
 
-# ConEmu
-# FIXME: Impossible to download
-#Download 'https://www.fosshub.com/ConEmu.html/ConEmuSetup.161009a.exe' $downloadPath 'ConEmuSetup.161009a.exe'
-#Run "$downloadPath\ConEmuSetup.161009a.exe"
-$conemuXml = "$env:APPDATA\ConEmu.xml"
-If (Test-Path -Path $conemuXml -PathType Leaf) { Remove-Item $conemuXml }
-Mklink "$cwd\windows\AppData\Roaming\ConEmu.xml" $conemuXml
+printf 'ROOT\t%s\n' "$(wslpath -w "$dotfiles_path")"
 
-# Docker
-RunAs 'powershell' 'Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All'
-Download 'https://download.docker.com/win/stable/InstallDocker.msi' $downloadPath
-Run "$downloadPath\InstallDocker.msi"
+cd "$windows_path"
 
-# Visual Studio Code
-Download 'https://go.microsoft.com/fwlink/?LinkID=623230' $downloadPath 'VSCodeSetup-stable.exe'
-Run "$downloadPath\VSCodeSetup-stable.exe"
-$vscodeSettingJson = "$env:APPDATA\Code\User\settings.json"
-If (Test-Path -Path $vscodeSettingJson -PathType Leaf) { Remove-Item $vscodeSettingJson }
-Mklink "$cwd\windows\AppData\Roaming\Code\User\settings.json" $vscodeSettingJson
-Run 'code' @"
-    --install-extension
-    christian-kohler.path-intellisense
-    dbaeumer.vscode-eslint
-    EditorConfig.EditorConfig
-    ilich8086.classic-asp
-    ms-vscode.csharp
-    ms-vscode.PowerShell
-    shinnn.stylelint
-    vscodevim.vim
-"@
+find . \( -type f -o -type l \) -print | sort | while IFS= read -r source_path
+do
+    relative_path="${source_path#./}"
+    resolved_path="$(readlink -f "$source_path")"
+    if [ -d "$resolved_path" ]; then source_type='Directory'; else source_type='File'; fi
+    source_windows_path="$(wslpath -w "$resolved_path")"
+    printf 'ENTRY\t%s\t%s\t%s\n' "$relative_path" "$source_type" "$source_windows_path"
+done
+'@
 
-# Selenium
-Download `
-    'http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.0.jar' `
-    "$develPath\opt"
-Mklink "$cwd\windows\Developer\bin\selenium.bat" "$develPath\bin\selenium.bat"
-Download 'http://chromedriver.storage.googleapis.com/2.24/chromedriver_win32.zip' $downloadPath
-Extract "$downloadPath\chromedriver_win32.zip" "$develPath\bin"
+# Windows PowerShell writes CRLF to native command stdin; remove CR before Bash parses the script.
+$wslOutput = $wslListScript | & wsl.exe --distribution $wslDistribution --exec bash -c "tr -d '\r' | bash -s"
+
+if ($LASTEXITCODE -ne 0)
+{
+    throw "Windows dotfiles could not be listed from the $wslDistribution distribution. Ensure ~/.dotfiles/windows exists in WSL."
+}
+
+$dotfilesPath = ''
+$linkEntries = @()
+
+foreach ($wslOutputLine in $wslOutput)
+{
+    if ([string]::IsNullOrWhiteSpace($wslOutputLine))
+    {
+        continue
+    }
+
+    $wslOutputFields = $wslOutputLine.Replace("`r", "") -split "`t", 4
+
+    if ($wslOutputFields[0] -eq 'ROOT')
+    {
+        if ($wslOutputFields.Count -ne 2)
+        {
+            throw "Invalid WSL root output: $wslOutputLine"
+        }
+
+        $dotfilesPath = $wslOutputFields[1]
+        continue
+    }
+
+    if ($wslOutputFields[0] -eq 'ENTRY')
+    {
+        if ($wslOutputFields.Count -ne 4)
+        {
+            throw "Invalid WSL entry output: $wslOutputLine"
+        }
+
+        if (($wslOutputFields[2] -ne 'File') -and ($wslOutputFields[2] -ne 'Directory'))
+        {
+            throw "Invalid WSL entry type: $wslOutputLine"
+        }
+
+        $linkEntries += [PSCustomObject] @{
+            RelativePath = $wslOutputFields[1]
+            IsDirectory = ($wslOutputFields[2] -eq 'Directory')
+            SourcePath = $wslOutputFields[3]
+        }
+        continue
+    }
+
+    throw "Unexpected WSL output: $wslOutputLine"
+}
+
+if ([string]::IsNullOrWhiteSpace($dotfilesPath))
+{
+    throw "WSL returned an empty dotfiles path. Ensure ~/.dotfiles exists in the $wslDistribution distribution."
+}
+
+$sourceRoot = "$dotfilesPath\windows"
+
+Write-Host "Using WSL dotfiles path: $dotfilesPath"
+Write-Host "Link source: $sourceRoot"
+Write-Host "Link target: $homePath"
+
+# Codex Desktop may read files through WSL's /mnt/c path. That path can fail
+# on Windows symlinks whose targets are WSL UNC paths, so materialize .codex.
+# @see https://github.com/openai/codex/issues/18506
+$copyRelativePathPrefixes = @(
+    '.codex/'
+)
+
+$linkPreflightEntries = @($linkEntries | Where-Object { -not (Test-CopyRelativePath $_.RelativePath $copyRelativePathPrefixes) })
+
+if ($linkPreflightEntries.Count -gt 0)
+{
+    $preflightDirectory = Join-Path -Path ([IO.Path]::GetTempPath()) -ChildPath "dotfiles-bootstrap-$([Guid]::NewGuid().ToString('N'))"
+    $preflightEntries = @()
+    $preflightEntries += @($linkPreflightEntries | Where-Object { -not $_.IsDirectory } | Select-Object -First 1)
+    $preflightEntries += @($linkPreflightEntries | Where-Object { $_.IsDirectory } | Select-Object -First 1)
+
+    New-Item -ItemType Directory -Path $preflightDirectory -Force | Out-Null
+
+    try
+    {
+        $preflightIndex = 0
+
+        foreach ($preflightEntry in $preflightEntries)
+        {
+            if ($null -eq $preflightEntry)
+            {
+                continue
+            }
+
+            $preflightLinkPath = Join-Path -Path $preflightDirectory -ChildPath "symlink-test-$preflightIndex"
+            $preflightSourcePath = $preflightEntry.SourcePath
+            $preflightIsDirectory = $preflightEntry.IsDirectory
+            [DotfilesSymbolicLink]::Create($preflightLinkPath, $preflightSourcePath, $preflightIsDirectory)
+            $preflightIndex += 1
+        }
+    }
+    catch
+    {
+        $preflightErrorMessage = Get-ErrorMessage $_.Exception
+        throw "Symbolic link preflight failed before modifying files. Enable Developer Mode or run PowerShell as Administrator. Source: $preflightSourcePath. Error: $preflightErrorMessage"
+    }
+    finally
+    {
+        Remove-Item -LiteralPath $preflightDirectory -Force -Recurse -ErrorAction SilentlyContinue
+    }
+}
+
+foreach ($linkEntry in $linkEntries)
+{
+    $relativePath = $linkEntry.RelativePath
+    $sourcePath = $linkEntry.SourcePath
+    $isDirectory = $linkEntry.IsDirectory
+    $shouldCopy = Test-CopyRelativePath $relativePath $copyRelativePathPrefixes
+    $targetPath = Join-TargetPath $homePath $relativePath
+
+    $targetParentPath = Split-Path -Path $targetPath -Parent
+
+    if ((-not [string]::IsNullOrWhiteSpace($targetParentPath)) -and (-not (Test-Path -LiteralPath $targetParentPath -PathType Container)))
+    {
+        New-Item -ItemType Directory -Path $targetParentPath -Force | Out-Null
+    }
+
+    $targetItem = Get-Item -LiteralPath $targetPath -Force -ErrorAction SilentlyContinue
+
+    if ($shouldCopy)
+    {
+        if ($null -ne $targetItem)
+        {
+            $isTargetLink = (($targetItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0)
+
+            if ($isTargetLink)
+            {
+                Remove-Item -LiteralPath $targetPath -Force -Recurse
+                Write-Host "Existing symlink removed: $targetPath"
+            }
+            elseif ($isDirectory)
+            {
+                if ($targetItem.PSIsContainer)
+                {
+                    Remove-Item -LiteralPath $targetPath -Force -Recurse
+                    Write-Host "Existing directory removed: $targetPath"
+                }
+                else
+                {
+                    $backupPath = "$targetPath.orig"
+
+                    if (Test-Path -LiteralPath $backupPath)
+                    {
+                        Remove-Item -LiteralPath $targetPath -Force
+                    }
+                    else
+                    {
+                        Move-Item -LiteralPath $targetPath -Destination $backupPath
+                        Write-Host "Existing item moved: $targetPath -> $backupPath"
+                    }
+                }
+            }
+            elseif ($targetItem.PSIsContainer)
+            {
+                throw "Directory exists where file should be copied: $targetPath"
+            }
+        }
+
+        if ($isDirectory)
+        {
+            Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force -Recurse
+            Write-Host "Directory copied: $targetPath <- $sourcePath"
+        }
+        else
+        {
+            Copy-Item -LiteralPath $sourcePath -Destination $targetPath -Force
+            Write-Host "File copied: $targetPath <- $sourcePath"
+        }
+
+        continue
+    }
+
+    if ($null -ne $targetItem)
+    {
+        $isTargetLink = (($targetItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0)
+
+        if ((-not $targetItem.PSIsContainer) -and (-not $isTargetLink))
+        {
+            $backupPath = "$targetPath.orig"
+
+            if (Test-Path -LiteralPath $backupPath)
+            {
+                throw "Backup path already exists: $backupPath"
+            }
+
+            Move-Item -LiteralPath $targetPath -Destination $backupPath
+            Write-Host "Existing item moved: $targetPath -> $backupPath"
+        }
+        else
+        {
+            continue
+        }
+    }
+
+    try
+    {
+        [DotfilesSymbolicLink]::Create($targetPath, $sourcePath, $isDirectory)
+        Write-Host "Symlink created: $targetPath -> $sourcePath"
+    }
+    catch
+    {
+        $linkErrorMessage = Get-ErrorMessage $_.Exception
+        throw "Failed to create symbolic link: $targetPath -> $sourcePath. Error: $linkErrorMessage"
+    }
+}
+
+Write-Host 'Windows bootstrap completed.'

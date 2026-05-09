@@ -21,10 +21,14 @@ in `~/.dotfiles` then;
 bash ~/.dotfiles/bootstrap.sh sync
 ```
 
-```cmd
-powershell ^
-    -ExecutionPolicy RemoteSigned ^
-    -Command "$cwd = Get-Location; Start-Process powershell -ArgumentList \"-ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -Command Push-Location -Path $cwd; $(Join-Path $cwd bootstrap.ps1)\" -Verb RunAs"
+For Windows 11 (not WSL), run from PowerShell. This expects the repository to exist at the Ubuntu WSL distribution's `~/.dotfiles` and does not clone or download repository files into Windows.
+
+Developer Mode should be enabled because this bootstrap creates symbolic links on Windows. Running PowerShell as Administrator is an alternative.
+
+```powershell
+& ([scriptblock]::Create((
+    wsl.exe --distribution Ubuntu --exec bash -lc 'cat ~/.dotfiles/bootstrap.ps1'
+) -join [Environment]::NewLine))
 ```
 
 

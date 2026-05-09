@@ -1,1 +1,0 @@
-java -jar %USERPROFILE%\Developer\opt\selenium-server-standalone-3.0.0.jar
