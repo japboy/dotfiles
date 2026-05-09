@@ -195,6 +195,7 @@
             nodejs_22
             mise
             pnpm
+            powershell
             python
             ruby
             rustup

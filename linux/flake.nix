@@ -56,6 +56,7 @@
         go
         mise
         nodejs_22
+        powershell
         python
         ruby
         rustup

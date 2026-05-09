@@ -172,22 +172,6 @@ then
     hdiutil detach /Volumes/MonitorControl.4.3.3.dmg
 fi
 
-# PowerShell
-if is_older_app /Applications/PowerShell.app '7.5.4'
-then
-    cd ${HOME}/Downloads
-    if [[ "${ARCH}" = 'arm64' ]]
-    then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/powershell-7.5.4-osx-arm64.pkg
-        sudo installer -pkg ./powershell-7.5.4-osx-arm64.pkg -target /
-    elif [[ "${ARCH}" = 'x86_64' ]]
-    then
-        curl -LO https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/powershell-7.5.4-osx-x64.pkg
-        sudo installer -pkg ./powershell-7.5.4-osx-x64.pkg -target /
-    fi
-    cd ${CWD}
-fi
-
 # XQuartz
 if is_older_app /Applications/Utilities/XQuartz.app '2.8.5'
 then
