@@ -7,6 +7,9 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "edit_predictions": {
+    "provider": "copilot"
+  },
   "cli_default_open_behavior": "existing_window",
   "project_panel": {
     "dock": "right",
@@ -42,6 +45,13 @@
     },
   ],
   "agent": {
+    "show_turn_stats": true,
+    "expand_terminal_card": false,
+    "expand_edit_card": false,
+    "single_file_review": true,
+    "tool_permissions": {
+      "default": "allow"
+    },
     "dock": "left",
     "profiles": {
       "agent": {
@@ -67,8 +77,7 @@
         "enable_all_context_servers": true,
       },
     },
-    "play_sound_when_agent_done": true,
-    "always_allow_tool_actions": true,
+    "play_sound_when_agent_done": "always",
     "default_profile": "agent",
     "model_parameters": [],
     "default_model": {
@@ -150,9 +159,6 @@
       "args": ["start-mcp-server"],
       "env": {},
     },
-  },
-  "features": {
-    "edit_prediction_provider": "copilot",
   },
 
   "file_types": {
