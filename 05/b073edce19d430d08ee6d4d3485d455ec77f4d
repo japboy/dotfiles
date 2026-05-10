@@ -1,0 +1,20 @@
+common/nix/packages/ai-clis.nix
+  s_e6f18bcf92e8a0::t_4cc7f6294e4f33 4
+  s_e6f18bcf92e8a0::t_a60fc1b01e674c 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "05b073edce19d430d08ee6d4d3485d455ec77f4d",
+  "prompts": {},
+  "sessions": {
+    "s_e6f18bcf92e8a0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "12f2ce14-9fb3-4f10-a3c9-2f217ac6491c",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
