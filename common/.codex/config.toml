@@ -1,6 +1,7 @@
 file_opener = "none"
 model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model_reasoning_effort = "high"
+service_tier = "flex"
 approval_policy = "never"
 sandbox_mode = "workspace-write"
 personality = "pragmatic"
@@ -10,6 +11,7 @@ inherit = "all"
 
 [features]
 enable_mcp_apps = true
+fast_mode = true
 goals = true
 hooks = true
 js_repl = true
