@@ -9,10 +9,11 @@ personality = "pragmatic"
 inherit = "all"
 
 [features]
-codex_hooks = true
+enable_mcp_apps = true
 goals = true
-multi_agent = true
+hooks = true
 js_repl = true
+multi_agent = true
 
 [mcp_servers.Asana]
 url = "https://mcp.asana.com/v2/mcp"
