@@ -7,7 +7,7 @@
       flake = false;
     };
 
-    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-ai-clis.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
@@ -36,7 +36,7 @@
       mkPackages = essentialPkgs: aiCliPkgs:
         let
           aiCliPackages = import "${commonNix}/packages/ai-clis.nix" { pkgs = aiCliPkgs; };
-          mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = essentialPkgs; };
+          mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = aiCliPkgs; };
 
           highway = essentialPkgs.stdenv.mkDerivation rec {
             pname = "highway";

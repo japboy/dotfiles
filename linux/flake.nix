@@ -7,7 +7,7 @@
       flake = false;
     };
 
-    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-ai-clis.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
@@ -26,7 +26,7 @@
         config.allowUnfree = true;
       };
       aiCliPackages = import "${commonNix}/packages/ai-clis.nix" { pkgs = aiCliPkgs; };
-      mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = essentialPkgs; };
+      mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = aiCliPkgs; };
       python = essentialPkgs.python3.withPackages (pythonPackages: with pythonPackages; [
         pip
         pynvim
