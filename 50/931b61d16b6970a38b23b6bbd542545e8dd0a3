@@ -1,0 +1,23 @@
+linux/flake.nix
+  s_b06695a17a5cf4::t_259dc2ef367927 29
+  s_b06695a17a5cf4::t_3d3f55ee2eddaa 10
+darwin/flake.nix
+  s_b06695a17a5cf4::t_35f8de71cd424c 10
+  s_b06695a17a5cf4::t_259dc2ef367927 39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "50931b61d16b6970a38b23b6bbd542545e8dd0a3",
+  "prompts": {},
+  "sessions": {
+    "s_b06695a17a5cf4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e04e9-daa1-7553-abb5-287a4af71f9b",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
