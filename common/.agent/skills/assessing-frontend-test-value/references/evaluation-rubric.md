@@ -43,6 +43,7 @@ Additional Storybook-specific checks when stories are part of the setup:
 
 - Scenario canonicality: `0` if the story is an internal-state dump or arbitrary fixture, `1` if partly meaningful, `2` if it represents a clear public use case or visible state.
 - Story/test synchronization: `0` if the test duplicates story setup by hand, `1` if reuse is partial or annotations are missing, `2` if the test composes the story and keeps project annotations in sync.
+- Story/spec responsibility: `0` if the story and spec duplicate arbitrary setup or blur state declaration with behavior assertions, `1` if the relationship is partially clear, `2` if the story declares the public scenario or visible state and the spec verifies behavior against that composed story.
 
 ## Phase 3: Final Status
 
@@ -70,6 +71,8 @@ Use the Phase 1 layer choice first, then Phase 2 quality to decide status.
 - Hook or component tests that only verify plumbing, state wiring, or callback forwarding should generally be `REWRITE_AT_SAME_LAYER`, `MOVE_TO_INTEGRATION`, or `REMOVE`.
 - Story-driven component tests are preferred over bespoke fixtures only when a component test is already justified.
 - A story used in tests should represent a public use case or meaningful visible state, not an exhaustive internal state matrix.
+- When Playwright-level browser or workflow realism is not required but component behavior still needs executable coverage, prefer a story-driven component behavior spec.
+- In that pattern, the story declares the public scenario or visible state, and the paired spec verifies behavior against the composed story. This is a skill policy convention, not a Storybook framework requirement.
 - Reusing stories with `composeStories` or `composeStory` and applying project annotations improves maintainability, but does not upgrade the Trophy layer by itself.
 - If an equivalent story exists and the component test duplicates its props, decorators, or providers manually, prefer `REWRITE_AT_SAME_LAYER` unless a concrete runtime reason prevents reuse.
 
@@ -104,7 +107,7 @@ Before removing or relocating a test, keep at least one higher-value check that 
 
 - <test name>: <status>
   - Quality checks: Outcome=<0-2>, A11y=<0-2>, Behavior=<0-2>, Runtime=<0-2>, Contract=<0-2>, Visual=<0-2>, Resilience=<0-2>, Stability=<0-2>, Fidelity=<0-2>
-  - Story checks when applicable: Canonicality=<0-2>, Sync=<0-2>
+  - Story checks when applicable: Canonicality=<0-2>, Sync=<0-2>, StorySpecResponsibility=<0-2>
   - Evidence: <prod path#Lx>, <test path#Ly>, <doc URL>, <source permalink>
 
 ## Recommended Moves

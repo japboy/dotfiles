@@ -134,6 +134,9 @@ Use these criteria after the Trophy routing decision.
 12. Story/Test Synchronization:
 - Prefer Storybook-based component tests that reuse stories through `composeStories` or `composeStory` with project annotations applied, so args, decorators, globals, and play-related setup do not drift.
 
+13. Story/Spec Responsibility:
+- Prefer a clear split where the story declares the public use case or meaningful visible state, and the paired spec verifies behavior against that story.
+
 ## Default Biases
 
 These biases are deliberate and should be applied unless concrete evidence overrides them.
@@ -143,6 +146,9 @@ These biases are deliberate and should be applied unless concrete evidence overr
 - Bias against direct React hook tests when the same risk is better expressed through user-visible behavior.
 - Bias against isolated component tests that only verify props, state wiring, or callback plumbing.
 - Bias toward story-defined public use cases over hand-written component-test fixtures when a component test is unavoidable.
+- Bias toward story-driven component behavior specs when Playwright-level browser, device, navigation, persistence, backend, or workflow realism is not required, but component behavior still needs executable coverage.
+- In that pattern, `*.stories.ts(x)` should declare the public use case or meaningful visible state, and the paired `*.spec.ts(x)` should verify behavior against the composed story with Testing Library-style user interactions and user-visible or assistive-technology-visible assertions.
+- Treat the `*.stories.ts(x)` to `*.spec.ts(x)` relationship as this skill's policy convention, not as a Storybook framework requirement.
 - Bias against treating Storybook stories as exhaustive internal state tables. Prefer one concept or use case per story.
 - Bias toward `Static` when the defect can be prevented before runtime.
 
@@ -173,6 +179,7 @@ source categories.
 - Static rule definitions or compiler diagnostics
 - Assertions, locators, fixtures, and helpers in test code
 - Story files, exported story names, args, decorators, parameters, globals, loaders, and play functions when story-driven tests are involved
+- Paired component behavior spec files when applying the story/spec pattern
 - Corresponding source predicates, rendering paths, and integration seams
 - User-visible and assistive-technology-visible outcomes
 - Cross-browser or device execution evidence
@@ -209,7 +216,12 @@ Apply these routing rules in order:
 - An isolated component test should be treated as `Unit` when it mostly checks props, state, or callback wiring.
 - An isolated component test may count as `Integration` only when it exercises multiple collaborating units through user-visible DOM behavior and realistic interactions.
 - If the same behavior is better covered through page-level or browser-level interaction, prefer `MOVE_TO_INTEGRATION` or `MOVE_TO_E2E`.
+- Apply the story-driven component behavior spec pattern only after static mechanisms and Playwright-level integration or end-to-end realism have been ruled out for the protected risk.
 - If a component test is still justified, prefer a story-driven pattern where each story represents a public use case or meaningful visible state, not an exhaustive internal state matrix.
+- A story used by a component behavior spec should be a declarative scenario: one public use case or meaningful visible state, expressed through args, decorators, globals, loaders, parameters, or explicit render setup.
+- The paired spec should be the behavior contract: compose or run the story, interact through user-level APIs, and assert observable DOM, accessibility, or callback outcomes that represent product behavior.
+- If a test needs many internal state permutations, first reconsider whether the risk belongs in static checks, integration, or a smaller pure unit.
+- If behavior assertions live in a Storybook `play` function instead of a paired spec, evaluate them by the same user-centric, scenario-canonical, and synchronization criteria. Do not give them higher value merely because they are colocated with the story.
 - When using Storybook stories as test fixtures, prefer `composeStories` or `composeStory` and apply project annotations via `setProjectAnnotations` so decorators, globals, parameters, and related setup remain synchronized with Storybook.
 - Reusing a story in a component test improves maintainability, but does not by itself upgrade the Trophy layer. Route the test by protected risk and runtime realism first.
 - If a component test duplicates props, args, decorators, or providers that are already represented by an equivalent story, prefer `REWRITE_AT_SAME_LAYER` unless there is a concrete runtime reason not to reuse the story.

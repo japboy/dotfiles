@@ -82,6 +82,15 @@ When a component test is justified, Storybook may be the best place to define th
 - Reusing stories improves synchronization and maintainability, but does not change Trophy routing by itself.
 - If a component test hand-recreates props, decorators, or providers that an equivalent story already defines, treat that duplication as lower quality unless the test requires a materially different runtime.
 
+### 7. Derived Storybook Component-Spec Policy
+
+This skill derives the following policy from Storybook portable stories, Storybook story best practices, Testing Library's user-centric model, and Testing Trophy routing:
+
+- When Playwright-level browser or workflow realism is not required, but component behavior still needs executable coverage, prefer a paired story/spec pattern.
+- The story declares the public use case or meaningful visible state.
+- The spec imports and composes the story, then verifies behavior through user-level interactions and observable outcomes.
+- This file-pair convention is not a Storybook framework requirement. It is a deterministic skill policy for avoiding duplicated fixtures while keeping stories declarative and tests behavior-focused.
+
 ## Secondary Quality Checks
 
 After choosing the best Trophy layer, evaluate quality with these secondary checks:
@@ -211,6 +220,7 @@ and line numbers for the API or behavior under review.
 - evidence that `composeStories` or `composeStory` is used
 - evidence that `setProjectAnnotations` or equivalent project-level annotation setup is applied when required
 - evidence that the story represents a public use case rather than internal state enumeration
+- evidence that the paired spec, when present, verifies behavior against the composed story rather than recreating equivalent setup by hand
 
 ## Recommended Higher-Value Scenario Shapes
 
@@ -219,4 +229,4 @@ and line numbers for the API or behavior under review.
 3. Browser-level flow validates navigation, persistence, timing, and backend response in a real engine.
 4. Accessible interaction validates role, name, focus, and keyboard semantics.
 5. Visual regression validates layout, theming, overflow, or responsive behavior through a visual oracle.
-6. Story-driven component test reuses a canonical story scenario to verify component-specific behavior that is not better protected by higher Trophy layers.
+6. Story-driven component behavior spec reuses a canonical story scenario to verify component-specific behavior that is not better protected by static checks, Playwright-level integration, or end-to-end coverage.
