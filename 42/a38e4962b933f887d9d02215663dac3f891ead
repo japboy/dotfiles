@@ -1,0 +1,24 @@
+common/.agent/skills/assessing-frontend-test-value/SKILL.md
+  s_ae563883261865::t_6d21ed707bce14 137-139,149-151,182,219,221-222,224
+  s_ae563883261865::t_143ccfd2aa9d96 223
+common/.agent/skills/assessing-frontend-test-value/references/evaluation-rubric.md
+  s_ae563883261865::t_6d21ed707bce14 46,74-75,110
+common/.agent/skills/assessing-frontend-test-value/references/REFERENCE.md
+  s_ae563883261865::t_6d21ed707bce14 85-93,223,232
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "42a38e4962b933f887d9d02215663dac3f891ead",
+  "prompts": {},
+  "sessions": {
+    "s_ae563883261865": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e2675-6a21-7283-a3e2-8af95517b343",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
