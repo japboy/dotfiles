@@ -8,14 +8,14 @@
     };
 
     nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
-    nixpkgs-ai-clis.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-recent-version-packages.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
   outputs = inputs@{ self, ... }:
     let
       commonNix = inputs."common-nix";
       nixpkgsEssentials = inputs."nixpkgs-essentials";
-      nixpkgsAiClis = inputs."nixpkgs-ai-clis";
+      nixpkgsRecentVersionPackages = inputs."nixpkgs-recent-version-packages";
       systems = [
         "aarch64-darwin"
         "x86_64-darwin"
@@ -28,15 +28,15 @@
         config.allowUnfree = true;
       };
 
-      mkAiCliPkgs = system: import nixpkgsAiClis {
+      mkRecentVersionPkgs = system: import nixpkgsRecentVersionPackages {
         inherit system;
         config.allowUnfree = true;
       };
 
-      mkPackages = essentialPkgs: aiCliPkgs:
+      mkPackages = essentialPkgs: recentVersionPkgs:
         let
-          aiCliPackages = import "${commonNix}/packages/ai-clis.nix" { pkgs = aiCliPkgs; };
-          mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = aiCliPkgs; };
+          recentVersionPackages = import "${commonNix}/packages/recent-version-packages.nix" { pkgs = recentVersionPkgs; };
+          mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = recentVersionPkgs; };
 
           highway = essentialPkgs.stdenv.mkDerivation rec {
             pname = "highway";
@@ -193,7 +193,6 @@
             deno
             go
             nodejs_22
-            mise
             pnpm
             powershell
             python
@@ -210,14 +209,14 @@
           name = "darwin-packages";
           paths =
             essentialPackages
-            ++ aiCliPackages
+            ++ recentVersionPackages
             ++ mcpPackages
             ++ appPackages;
         };
     in
     {
       packages = forAllSystems (system: {
-        default = mkPackages (mkEssentialPkgs system) (mkAiCliPkgs system);
+        default = mkPackages (mkEssentialPkgs system) (mkRecentVersionPkgs system);
       });
     };
 }

@@ -12,7 +12,7 @@
       },
       "parent": []
     },
-    "nixpkgs-ai-clis": {
+    "nixpkgs-recent-version-packages": {
       "locked": {
         "lastModified": 1778458615,
         "narHash": "sha256-cY07EsdhBJ8tFXPzDYevgqxRev9ZLxFonuq9wmq5kwg=",
@@ -47,7 +47,7 @@
     "root": {
       "inputs": {
         "common-nix": "common-nix",
-        "nixpkgs-ai-clis": "nixpkgs-ai-clis",
+        "nixpkgs-recent-version-packages": "nixpkgs-recent-version-packages",
         "nixpkgs-essentials": "nixpkgs-essentials"
       }
     }

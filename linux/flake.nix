@@ -8,25 +8,25 @@
     };
 
     nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-ai-clis.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-recent-version-packages.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
   outputs = inputs@{ self, ... }:
     let
       commonNix = inputs."common-nix";
       nixpkgsEssentials = inputs."nixpkgs-essentials";
-      nixpkgsAiClis = inputs."nixpkgs-ai-clis";
+      nixpkgsRecentVersionPackages = inputs."nixpkgs-recent-version-packages";
       system = "x86_64-linux";
       essentialPkgs = import nixpkgsEssentials {
         inherit system;
         config.allowUnfree = true;
       };
-      aiCliPkgs = import nixpkgsAiClis {
+      recentVersionPkgs = import nixpkgsRecentVersionPackages {
         inherit system;
         config.allowUnfree = true;
       };
-      aiCliPackages = import "${commonNix}/packages/ai-clis.nix" { pkgs = aiCliPkgs; };
-      mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = aiCliPkgs; };
+      recentVersionPackages = import "${commonNix}/packages/recent-version-packages.nix" { pkgs = recentVersionPkgs; };
+      mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = recentVersionPkgs; };
       python = essentialPkgs.python3.withPackages (pythonPackages: with pythonPackages; [
         pip
         pynvim
@@ -55,7 +55,6 @@
         bun
         deno
         go
-        mise
         nodejs_22
         powershell
         python
@@ -67,7 +66,7 @@
     {
       packages.${system}.default = essentialPkgs.buildEnv {
         name = "wsl-packages";
-        paths = essentialPackages ++ aiCliPackages ++ mcpPackages;
+        paths = essentialPackages ++ recentVersionPackages ++ mcpPackages;
       };
     };
 }
