@@ -264,7 +264,7 @@ Important distinctions:
 ### Local Codex Tooling in This Repository
 
 When working in this repository, prefer the bundled Codex-oriented helpers in
-`common/.agent/skills/.system/skill-creator/`:
+`common/.agents/skills/.system/skill-creator/`:
 
 - `scripts/init_skill.py`
 - `scripts/generate_openai_yaml.py`
@@ -369,7 +369,7 @@ When working in this repository and creating a Codex-focused skill from
 scratch, use:
 
 ```bash
-common/.agent/skills/.system/skill-creator/scripts/init_skill.py <skill-name> --path <output-directory>
+common/.agents/skills/.system/skill-creator/scripts/init_skill.py <skill-name> --path <output-directory>
 ```
 
 ### Step 5: Add Product-Specific Extensions

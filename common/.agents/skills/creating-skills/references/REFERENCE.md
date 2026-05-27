@@ -185,7 +185,7 @@ without labeling them as Claude Code-specific.
 This repository includes Codex-oriented tooling under:
 
 ```text
-common/.agent/skills/.system/skill-creator/
+common/.agents/skills/.system/skill-creator/
 ```
 
 Useful files:
