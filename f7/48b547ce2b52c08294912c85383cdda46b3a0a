@@ -1,0 +1,23 @@
+.gitignore
+  s_74403ad2547d9b::t_c401a834fd842d 3
+common/.agents/skills/creating-skills/SKILL.md
+  s_74403ad2547d9b::t_c401a834fd842d 1-437
+common/.agents/skills/creating-skills/references/REFERENCE.md
+  s_74403ad2547d9b::t_c401a834fd842d 1-208
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "f748b547ce2b52c08294912c85383cdda46b3a0a",
+  "prompts": {},
+  "sessions": {
+    "s_74403ad2547d9b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e6b5b-7ed3-7cb3-a1b3-8dda7ee9a36b",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
