@@ -1,38 +1,43 @@
 ---
 name: creating-skills
 description: >
-  Create, update, and validate Agent Skills for Codex and Claude Code. Use
-  when the user asks to "create a skill", "make a new skill", "define a
+  Create, update, validate, and review Agent Skills for Codex and Claude Code.
+  Use when the user asks to "create a skill", "make a new skill", "define a
   skill", "write SKILL.md", "improve a skill description", "set up skill
-  directories", "add Codex openai.yaml metadata", "validate skill
-  structure", or distinguish standard Agent Skills requirements from Codex-
-  or Claude Code-specific practices.
+  directories", "add Codex openai.yaml metadata", "validate skill structure",
+  apply SkillOpt-style evaluation, or distinguish standard Agent Skills
+  requirements from Codex- or Claude Code-specific practices.
 ---
 
 # Creating Skills
 
 ## Purpose
 
-Create skills by separating three layers clearly:
+Create and review skills by separating four layers clearly:
 
-1. **Agent Skills standard**: Format and validation rules that come from the
-   shared specification
-2. **Shared authoring practices**: Patterns that work well in both Codex and
-   Claude Code, but are recommendations rather than spec requirements
+1. **Agent Skills standard**: Format and validation rules from the shared
+   specification
+2. **Shared authoring practices**: Patterns that work well across clients, but
+   are recommendations rather than spec requirements
 3. **Product-specific practices**: Additional conventions that apply only to
    Codex or only to Claude Code
+4. **Evidence-based iteration**: SkillOpt-informed review criteria for updating
+   existing skills from observed successes, failures, and validation results
 
-Never present a product-specific convention as if it were part of the Agent
-Skills standard.
+Never present a product-specific convention or research-derived review practice
+as if it were part of the Agent Skills standard.
 
 ## Authoritative Sources
 
 Use these sources in this order:
 
 1. Agent Skills specification for cross-product format rules
-2. Codex docs for Codex-specific behavior and `agents/openai.yaml`
-3. Claude Code docs or Anthropic-maintained examples for Claude Code-specific
-   behavior
+2. Product documentation for Codex- or Claude Code-specific behavior
+3. Product-maintained example repositories for implementation patterns
+4. Research sources, such as SkillOpt, for evaluation and iteration practices
+
+SkillOpt is not a format specification. Use it to evaluate whether a skill
+update is evidence-backed, bounded, validated, compact, and generalizable.
 
 See [REFERENCE.md](references/REFERENCE.md) for the source map and
 cross-checking guidance.
@@ -50,8 +55,9 @@ Start each skill task by classifying the target:
 If the target product is unclear, default to:
 
 1. A standard-compliant baseline
-2. Shared practices that help both products
+2. Shared practices that help multiple clients
 3. Optional product-specific additions called out explicitly
+4. SkillOpt-informed evaluation only for non-trivial updates or reviews
 
 ## Standard Baseline
 
@@ -64,11 +70,11 @@ At minimum, create:
 
 ```text
 skill-name/
-├── SKILL.md
-├── scripts/      # Optional
-├── references/   # Optional
-├── assets/       # Optional
-└── ...           # Optional extra files or directories
+|-- SKILL.md
+|-- scripts/      # Optional
+|-- references/   # Optional
+|-- assets/       # Optional
+`-- ...           # Optional extra files or directories
 ```
 
 Important constraints:
@@ -106,8 +112,7 @@ description: >
   task language that helps the client decide when to use the skill.
 compatibility: Requires Python 3.11+ and network access
 metadata:
-  author: example-org
-  version: "1.0.0"
+  example-org/version: "1.0.0"
 ---
 ```
 
@@ -115,23 +120,47 @@ metadata:
 
 Treat these as specification-level rules:
 
-- `name` must be at most 64 characters
+- `name` must be 1-64 characters
 - `name` must use lowercase letters, digits, and hyphens
 - `name` must not start or end with a hyphen
 - `name` must not contain consecutive hyphens
 - `name` must match the parent directory name
-- `description` must be non-empty and at most 1024 characters
+- `description` must be 1-1024 characters
+- `description` should explain what the skill does and when to use it
+- `compatibility`, if present, must be 1-500 characters
+- `metadata`, if present, should be a key-value mapping with string keys and
+  string values
+- `allowed-tools` is experimental in the standard; client support can vary
 
 Validate with:
 
 ```bash
-skills-ref validate ./skill-name
+uvx --from skills-ref agentskills validate ./skill-name
 ```
+
+### Standard Progressive Disclosure
+
+Structure the skill so clients can load context progressively:
+
+1. Put trigger-critical information in `name` and `description`
+2. Keep `SKILL.md` focused on the core workflow
+3. Move detailed reference material into `references/`
+4. Store deterministic or repetitive operations in `scripts/`
+5. Store templates and output resources in `assets/`
+
+Specification-backed targets:
+
+- Keep `SKILL.md` instructions under the recommended 5,000-token guidance when
+  practical
+- Keep the main `SKILL.md` under 500 lines
+- Use relative paths from the skill root when referencing bundled files
+- Keep references close to `SKILL.md`; avoid deep reference chains
 
 ## Shared Practices for Codex and Claude Code
 
-Treat the following as strong recommendations that work well in both products.
-They are not part of the baseline specification unless stated otherwise.
+Treat the following as strong recommendations that work well in multiple
+clients. They are not part of the baseline specification unless stated
+otherwise.
 
 ### Description Quality
 
@@ -143,6 +172,8 @@ Good descriptions:
 - Say when it should be used
 - Include concrete user/task language
 - Make scope boundaries obvious
+- Front-load the strongest trigger words because some clients shorten long
+  skill descriptions in listings
 
 Good:
 
@@ -163,23 +194,6 @@ Do not force one house style as if it were required by the spec. For example,
 third-person phrasing, imperative phrasing, and exact quote-heavy trigger lists
 can all be useful, but they are authoring choices.
 
-### Progressive Disclosure
-
-Keep context efficient:
-
-1. Put trigger-critical information in `name` and `description`
-2. Keep `SKILL.md` focused on the core workflow
-3. Move detailed reference material into `references/`
-4. Store deterministic or repetitive operations in `scripts/`
-5. Store templates and output resources in `assets/`
-
-Good shared targets:
-
-- Keep `SKILL.md` materially below the point where it becomes bloated
-- Keep reference files focused by topic
-- Link supporting files directly from `SKILL.md`
-- Avoid deep reference chains when a flatter structure works
-
 ### Resource Selection
 
 Use resource directories intentionally:
@@ -199,6 +213,8 @@ Prefer instruction styles that reduce ambiguity:
 - Prefer explicit steps for fragile workflows
 - Prefer examples for trigger descriptions and edge cases
 - Avoid unnecessary explanation of things the model already knows
+- Encode procedural rules, tool policies, output constraints, and known failure
+  modes when they are supported by evidence
 
 Imperative or infinitive phrasing is usually effective, but do not treat second
 person or alternative phrasing as an automatic spec violation.
@@ -212,47 +228,34 @@ After baseline validation:
 3. Check that every referenced file exists
 4. Check that resource directories are actually used
 5. Check that supporting scripts run if the skill depends on them
+6. Check that behavior-changing updates have evidence and validation notes
 
 ## Codex-Specific Practices
 
 Apply this section only when the skill targets Codex or both products.
 
+### Codex Skill Discovery
+
+Codex reads skills from repository, user, admin, and system locations. For
+repository skills, Codex scans `.agents/skills` from the current working
+directory up to the repository root. Codex also supports user skills in
+`$HOME/.agents/skills`, admin skills in `/etc/codex/skills`, and system skills
+bundled with Codex.
+
+Important distinctions:
+
+- Direct skill folders are appropriate for local authoring and repo-scoped
+  workflows
+- Plugins are the distribution unit for reusable Codex skills and app
+  integrations
+- Codex follows symlinked skill folders when scanning skill locations
+- `~/.codex/config.toml` can disable a skill with `[[skills.config]]`
+
 ### `agents/openai.yaml`
 
-Codex supports product-specific metadata in:
-
-```text
-skill-name/
-└── agents/
-    └── openai.yaml
-```
-
-Use this file for Codex-specific additions such as:
-
-- UI-facing metadata
-- default prompts
-- implicit invocation policy
-- declared tool dependencies
-
-Representative example:
-
-```yaml
-interface:
-  display_name: "Optional user-facing name"
-  short_description: "Optional user-facing description"
-  default_prompt: "Use $skill-name to help with this task."
-
-policy:
-  allow_implicit_invocation: true
-
-dependencies:
-  tools:
-    - type: "mcp"
-      value: "github"
-      description: "GitHub MCP server"
-      transport: "streamable_http"
-      url: "https://example.invalid/mcp"
-```
+Codex supports product-specific metadata in `skill-name/agents/openai.yaml`.
+Use this file for Codex-only UI metadata, icons, brand color, default prompts,
+implicit invocation policy, and declared tool dependencies.
 
 Important distinctions:
 
@@ -260,6 +263,11 @@ Important distinctions:
 - It is a Codex product extension
 - A skill can be standard-compliant without it
 - A Codex-focused skill is usually better with it
+- `policy.allow_implicit_invocation` defaults to `true`; when set to `false`,
+  explicit `$skill` invocation still works
+
+See [REFERENCE.md](references/REFERENCE.md) for the current representative
+`openai.yaml` fields.
 
 ### Local Codex Tooling in This Repository
 
@@ -279,47 +287,93 @@ For Codex-focused skills:
 
 - Keep the standard `SKILL.md` portable
 - Put Codex-only UI or policy metadata in `agents/openai.yaml`
-- Generate or refresh `openai.yaml` when the skill title, summary, or default
-  invocation changes
-- Keep `default_prompt` short and explicitly mention `$skill-name`
+- Generate or refresh `openai.yaml` when the skill title, summary, icons,
+  brand color, default prompt, invocation policy, or tool dependencies change
+- Keep `default_prompt` short and aligned with the intended invocation
+- Test prompts against the description to confirm explicit and implicit trigger
+  behavior
 
 ## Claude Code-Specific Practices
 
 Apply this section only when the skill targets Claude Code or both products.
 
-### Plugin Context vs Portable Skill Context
+Claude Code follows the Agent Skills open standard, then adds Claude Code-only
+features such as invocation control, dynamic context injection, subagent
+execution, hooks, model/effort overrides, and additional discovery locations.
 
-Claude Code supports portable Agent Skills, but some Anthropic examples come
-from plugin development workflows. Distinguish clearly between:
+Important distinctions:
 
-- **Portable skill guidance**: useful across products
-- **Claude Code plugin conventions**: specific to Claude Code plugins
+- For portable skills, keep the standard `name` and `description` baseline
+- For Claude Code-only skills, Claude Code treats all frontmatter fields as
+  optional and recommends `description` so Claude knows when to use the skill
+- The slash command usually comes from the skill directory name, not
+  frontmatter `name`; plugin-root `SKILL.md` is the notable exception
+- Claude Code-specific fields are not portable standard fields unless the Agent
+  Skills spec separately defines them
 
-Do not lift plugin-dev conventions into the standard layer without labeling
-them.
+Common Claude Code locations:
 
-### Plugin-Dev Conventions
+- `~/.claude/skills/<skill-name>/SKILL.md`
+- `.claude/skills/<skill-name>/SKILL.md`
+- `<plugin>/skills/<skill-name>/SKILL.md`
+- enterprise-managed locations where applicable
 
-Anthropic-maintained examples may include conventions such as:
+Claude Code-specific frontmatter includes `when_to_use`, `argument-hint`,
+`arguments`, `disable-model-invocation`, `user-invocable`, `allowed-tools`,
+`disallowed-tools`, `model`, `effort`, `context`, `agent`, `hooks`, `paths`, and
+`shell`. Use these only when they intentionally change Claude Code invocation,
+execution, permissions, or context behavior.
 
-- skill directories inside a plugin `skills/` folder
-- plugin auto-discovery behavior
-- extra frontmatter such as `version`
-- extra directories such as `examples/`
+Claude Code combines `description` and `when_to_use` for listings and truncates
+that combined text at 1,536 characters. Keep the key use case first.
 
-These may be valid and useful in Claude Code, but they are not required by the
-shared Agent Skills specification.
+Claude Code supports dynamic context injection with `` !`command` `` and
+` ```! ` fenced command blocks. Treat this as Claude Code-specific behavior,
+use `${CLAUDE_SKILL_DIR}` for bundled files, keep commands deterministic, and
+account for settings that can disable skill shell execution.
 
-### Claude Code Authoring Guidance
+Use `context: fork` only for skills that contain an actionable task. A forked
+subagent receives the skill content as its prompt and does not automatically
+inherit the full main conversation.
 
-For Claude Code-focused skills:
+For detailed Claude Code checks, use
+[validation-checklist.md](references/validation-checklist.md).
 
-- Use the standard `SKILL.md` baseline first
-- Add Claude Code plugin structure only when the user is building a plugin
-- Treat Anthropic example repositories as implementation references, not as the
-  normative spec
-- If using extra directories such as `examples/`, explain their purpose from
-  `SKILL.md`
+## SkillOpt-Informed Review
+
+Use this section when updating or reviewing an existing skill. SkillOpt treats a
+skill as an external, trainable text state for a fixed target model and harness.
+Use its ideas for review discipline; do not treat them as format requirements.
+
+For non-trivial updates, check these axes:
+
+- **Fixed target**: State the target product, model or harness, and evaluator.
+  Do not attribute improvement to a skill if those variables also changed.
+- **Evidence**: Base edits on representative prompts, trajectories, logs,
+  outputs, verifier results, or reviewer judgments.
+- **Success/failure separation**: Repair systematic failures and preserve
+  reusable success patterns without merging anecdotal one-offs into rules.
+- **Bounded edits**: Prefer small add/delete/replace changes over wholesale
+  rewrites. Avoid duplicating existing guidance.
+- **Validation gate**: Compare the previous and candidate skill on
+  representative or held-out prompts before accepting behavior changes.
+- **Rejected edits**: Record rejected changes and why they were rejected when
+  the information will help future reviews.
+- **Record/runtime separation**: Put changelogs, evaluation notes, rejected
+  edits, and decision records in `references/`; promote only validated runtime
+  rules into `SKILL.md`.
+- **Traceability**: Make the evidence or rationale for accepted behavioral
+  changes recoverable without turning history into task instructions.
+- **Generalization**: Encode reusable procedures, tool policies, applicability
+  conditions, output constraints, and failure modes rather than task-specific
+  answers.
+- **Transfer**: If the skill claims portability, test or document each intended
+  product or harness.
+- **Compactness**: Keep deployed runtime instructions inspectable; keep bulky
+  evidence and reviewer rationale out of activation-time instructions.
+
+For the full checklist, use [validation-checklist.md](references/validation-checklist.md).
+This reference implementation keeps [CHANGELOG.md](references/CHANGELOG.md), [evaluation-notes.md](references/evaluation-notes.md), [rejected-edits.md](references/rejected-edits.md), and [decision-records.md](references/decision-records.md) in `references/`.
 
 ## Creation Workflow
 
@@ -377,8 +431,8 @@ common/.agents/skills/.system/skill-creator/scripts/init_skill.py <skill-name> -
 Only after the baseline is sound:
 
 - Add `agents/openai.yaml` for Codex if needed
-- Add Claude Code plugin structure if the skill is meant to live inside a
-  plugin
+- Add Claude Code frontmatter or plugin structure only when the target requires
+  Claude Code-specific behavior
 
 ### Step 6: Validate and Test
 
@@ -387,7 +441,9 @@ Validate in layers:
 1. Standard syntax and naming
 2. Shared trigger and resource quality
 3. Codex-specific metadata if targeting Codex
-4. Claude Code plugin behavior if targeting Claude Code plugins
+4. Claude Code behavior if targeting Claude Code
+5. SkillOpt-informed evidence, boundedness, validation, and traceability for
+   non-trivial updates
 
 ### Step 7: Iterate
 
@@ -397,6 +453,7 @@ Update the skill after real use:
 - move long detail from `SKILL.md` into references
 - add scripts for repeated tasks
 - remove dead files or unused resource directories
+- preserve evidence for accepted and rejected behavioral changes
 
 ## Forward-Testing
 
@@ -413,14 +470,16 @@ Use realistic tasks with minimal leaked context:
 ## What to Avoid
 
 - presenting Codex extensions as if they were part of the standard
-- presenting Claude Code plugin conventions as if they were part of the
-  standard
+- presenting Claude Code extensions as if they were part of the standard
 - claiming extra directories are forbidden when the spec allows additional
   files
 - forcing one naming style such as gerunds as if it were required
 - treating writing-style preferences as hard validation errors unless the user
   asked for that convention
 - duplicating detailed content across `SKILL.md` and `references/`
+- accepting skill rewrites without evidence, bounded scope, or validation
+- shipping optimizer/reviewer-only notes as runtime instructions unless they are
+  intentionally useful to the agent
 
 ## Quick Reference
 
@@ -428,10 +487,12 @@ Use this decision table:
 
 - **Need portable compliance**: follow the Agent Skills standard first
 - **Need better Codex UX**: add `agents/openai.yaml`
-- **Need Claude Code plugin integration**: add plugin-specific layout and
-  conventions explicitly
+- **Need Claude Code behavior**: add Claude Code frontmatter, dynamic context,
+  or plugin-specific layout explicitly
 - **Need both**: keep `SKILL.md` standard, then layer Codex and Claude Code
   additions without mixing them into the baseline
+- **Need an update review**: require evidence, bounded edits, validation, and
+  traceability before accepting behavioral changes
 
 See [validation-checklist.md](references/validation-checklist.md) for a layered
 review checklist.
