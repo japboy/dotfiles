@@ -1,7 +1,7 @@
 # Rejected Edits
 
 This file records rejected or intentionally avoided edits for the
-`creating-skills` skill. It is negative feedback for future maintenance, not
+`agent-skill-authoring` skill. It is negative feedback for future maintenance, not
 runtime instruction.
 
 ## 2026-05-30

@@ -1,5 +1,5 @@
 ---
-name: iterating-issue-review
+name: github-issue-plan-refinement
 description: >
   Iteratively refine a GitHub issue body that holds an execution plan by
   running one or more external review agents (Codex CLI or Claude Code
@@ -19,7 +19,7 @@ compatibility: >
   selected. Tested on macOS; Linux should work but is not exercised.
 ---
 
-# Iterating Issue Review
+# GitHub Issue Plan Refinement
 
 ## Purpose
 
@@ -99,7 +99,7 @@ scripts/run_batch.sh \
 Layout after the batch:
 
 ```text
-<tmpdir>/iterating-issue-review/<owner>-<repo>/issue-<N>/
+<tmpdir>/github-issue-plan-refinement/<owner>-<repo>/issue-<N>/
 ├── prior-for-batch-<K>.md      (pre-computed prior feedback)
 ├── round-<K>/                  (main reviewer)
 ├── round-<K+1>/                (main reviewer, when N >= 2)
@@ -180,7 +180,7 @@ scripts/summarize_batch.sh \
 
 Emits, in this exact order, only the header bullets:
 
-- A `# Iterating Issue Review — Batch <K>..<K+C-1>` heading
+- A `# GitHub Issue Plan Refinement — Batch <K>..<K+C-1>` heading
 - `Issue / Concurrency / Reviewer mix / Convergence / Severity
   totals / Round directory` bullets
 
@@ -427,7 +427,7 @@ and
 ## State
 
 Per-round and per-batch artifacts persist under the OS temp
-directory at `<round_root> = <tmpdir>/iterating-issue-review/<owner>-<repo>/issue-<N>/` so that:
+directory at `<round_root> = <tmpdir>/github-issue-plan-refinement/<owner>-<repo>/issue-<N>/` so that:
 
 - Each round is reproducible from its inputs
 - Each batch's prior-feedback file, consolidated report, and revised

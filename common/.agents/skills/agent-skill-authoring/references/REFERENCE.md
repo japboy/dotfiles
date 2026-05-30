@@ -352,7 +352,7 @@ Use these files as follows:
 - `references/decision-records.md`: durable maintenance decisions that explain
   why the skill is shaped a certain way, but are not task-time instructions
 
-The `creating-skills` skill itself follows this layout and can be used as a
+The `agent-skill-authoring` skill itself follows this layout and can be used as a
 reference implementation for record/runtime separation. Its `CHANGELOG.md` is
 kept as an index, not as the place for detailed evidence or decision rationale.
 

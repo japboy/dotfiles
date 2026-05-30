@@ -1,5 +1,5 @@
 ---
-name: summarizing-context
+name: handoff-context-summarization
 description: >
   Summarize current conversation context using Model-First-Reasoning (MFR)
   methodology for seamless handoff to subsequent agents. Use when ending a
@@ -7,7 +7,7 @@ description: >
   "save session state", "prepare handoff", or "document current progress".
 ---
 
-# Summarizing Context
+# Handoff Context Summarization
 
 Organize and persist the current conversation context using MFR (Model-First-Reasoning) methodology, enabling accurate understanding by subsequent agents.
 

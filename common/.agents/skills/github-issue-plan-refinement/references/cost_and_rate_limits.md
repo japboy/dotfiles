@@ -44,7 +44,7 @@ Round history grows linearly with rounds:
 - Each batch adds three batch-level files (`prior-for-batch-K.md`,
   `consolidated-for-batch-K.md`, `revised-body-for-batch-K.md`).
 
-Periodic cleanup of old `<tmpdir>/iterating-issue-review/` subtrees
+Periodic cleanup of old `<tmpdir>/github-issue-plan-refinement/` subtrees
 is fine. The OS temp directory may also be cleared by the system on
 reboot or by macOS housekeeping; do not rely on artifacts surviving
 across reboots when the audit trail matters.

@@ -1,5 +1,5 @@
 ---
-name: assessing-frontend-test-value
+name: frontend-test-value-assessment
 description: >
   Evaluate whether frontend implementation tests deliver meaningful
   defect-prevention value using the Testing Trophy as the primary decision
@@ -9,7 +9,7 @@ description: >
   existing mutation reports, or flaky test risk.
 ---
 
-# Assessing Frontend Test Value
+# Frontend Test Value Assessment
 
 ## Scope
 

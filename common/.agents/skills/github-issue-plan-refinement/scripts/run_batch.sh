@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Review batch entry point for the iterating-issue-review skill.
+# Review batch entry point for the github-issue-plan-refinement skill.
 #
 # This is the single user-facing entry point. `run_review.sh` is an
 # internal worker that this script dispatches; direct invocation of

@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# Shared helpers for the iterating-issue-review skill.
+# Shared helpers for the github-issue-plan-refinement skill.
 # This file is intended to be `source`d by other scripts in the same dir.
 # It must not be executed directly.
 
@@ -29,14 +29,14 @@ iir_detect_tmpdir() {
 }
 
 # Compose the per-issue round root path:
-#   <tmpdir>/iterating-issue-review/<repo-slug>/issue-<N>
+#   <tmpdir>/github-issue-plan-refinement/<repo-slug>/issue-<N>
 # Arguments: <tmpdir> <repo:owner/name> <issue>
 iir_round_root() {
     local tmpdir="$1"
     local repo="$2"
     local issue="$3"
     local slug="${repo//\//-}"
-    printf '%s/iterating-issue-review/%s/issue-%s' "${tmpdir%/}" "$slug" "$issue"
+    printf '%s/github-issue-plan-refinement/%s/issue-%s' "${tmpdir%/}" "$slug" "$issue"
 }
 
 # Compute how many workers should use the non-main reviewer, given a

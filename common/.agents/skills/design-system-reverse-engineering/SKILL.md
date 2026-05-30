@@ -1,5 +1,5 @@
 ---
-name: reverse-engineering-design-systems
+name: design-system-reverse-engineering
 description: >
   Reverse-engineers existing implementations, design files, and documentation
   into a reusable design system while preserving Adobe Spectrum's
@@ -13,7 +13,7 @@ metadata:
   version: "1.0.0"
 ---
 
-# Reverse Engineering Design Systems
+# Design System Reverse Engineering
 
 Use this skill to infer a project-specific design system from existing code, design artifacts, and knowledge bases, then publish outputs in Adobe Spectrum's structural taxonomy.
 

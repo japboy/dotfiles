@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Render the mechanical part of a batch summary for the
-# iterating-issue-review skill.
+# github-issue-plan-refinement skill.
 #
 # Usage:
 #   summarize_batch.sh --issue <N> --round <K> --concurrency <C>
@@ -184,7 +184,7 @@ fi
 # per-finding sections, Cross-round notes, and User decisions
 # below this header. Per-round `final.md` content is not pasted
 # here; the table's Source column links to each round's file.
-printf '# Iterating Issue Review — Batch %s..%s\n\n' "$batch_start" "$batch_end"
+printf '# GitHub Issue Plan Refinement — Batch %s..%s\n\n' "$batch_start" "$batch_end"
 printf -- '- Issue: %s#%s\n' "$repo" "$issue"
 printf -- '- Concurrency: %s\n' "$concurrency"
 printf -- '- Reviewer mix: %s\n' "$mix_parts"

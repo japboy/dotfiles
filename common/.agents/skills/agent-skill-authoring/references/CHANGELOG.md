@@ -1,7 +1,7 @@
 # Changelog
 
 This file is the high-level chronological index of accepted changes to the
-`creating-skills` skill. It is a record, not runtime instruction for creating or
+`agent-skill-authoring` skill. It is a record, not runtime instruction for creating or
 updating skills.
 
 Use this file to answer "what changed and when?" Keep evidence, rationale, and

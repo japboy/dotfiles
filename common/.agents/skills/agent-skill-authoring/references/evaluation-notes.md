@@ -1,24 +1,24 @@
 # Evaluation Notes
 
-This file records validation evidence for changes to the `creating-skills`
+This file records validation evidence for changes to the `agent-skill-authoring`
 skill. It is update/audit context, not runtime instruction.
 
 ## 2026-05-30 Validation
 
 Target:
 
-- Skill: `common/.agents/skills/creating-skills`
+- Skill: `common/.agents/skills/agent-skill-authoring`
 - Validator: current PyPI `skills-ref` package via the `agentskills` executable
 - Command:
 
   ```bash
-  uvx --from skills-ref agentskills validate common/.agents/skills/creating-skills
+  uvx --from skills-ref agentskills validate common/.agents/skills/agent-skill-authoring
   ```
 
 Result:
 
 ```text
-Valid skill: common/.agents/skills/creating-skills
+Valid skill: common/.agents/skills/agent-skill-authoring
 ```
 
 Additional checks performed:

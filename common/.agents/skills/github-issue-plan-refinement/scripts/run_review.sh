@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Internal worker for the iterating-issue-review skill.
+# Internal worker for the github-issue-plan-refinement skill.
 #
 # `run_batch.sh` is the documented entry point for users; this script
 # is the per-round worker it dispatches. Direct invocation is

@@ -1,5 +1,5 @@
 ---
-name: creating-skills
+name: agent-skill-authoring
 description: >
   Create, update, validate, and review Agent Skills for Codex and Claude Code.
   Use when the user asks to "create a skill", "make a new skill", "define a
@@ -9,7 +9,7 @@ description: >
   requirements from Codex- or Claude Code-specific practices.
 ---
 
-# Creating Skills
+# Agent Skill Authoring
 
 ## Purpose
 

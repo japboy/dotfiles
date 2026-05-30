@@ -1,6 +1,6 @@
 # Decision Records
 
-This file records durable maintenance decisions for the `creating-skills` skill.
+This file records durable maintenance decisions for the `agent-skill-authoring` skill.
 These decisions explain why the skill is shaped a certain way, but they are not
 runtime instructions unless they are promoted into `SKILL.md`.
 

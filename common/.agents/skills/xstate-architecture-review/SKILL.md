@@ -1,5 +1,5 @@
 ---
-name: reviewing-xstate-architecture
+name: xstate-architecture-review
 description: >
   Evaluate and apply XState architectural patterns and best practices.
   Use when the user asks to "review XState implementation", "evaluate state machine architecture",
@@ -7,7 +7,7 @@ description: >
   or mentions XState architectural patterns and best practices.
 ---
 
-# Reviewing XState Architecture
+# XState Architecture Review
 
 ## Entities
 

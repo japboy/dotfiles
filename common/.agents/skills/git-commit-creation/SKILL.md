@@ -1,5 +1,5 @@
 ---
-name: creating-commits
+name: git-commit-creation
 description: >
   Create atomic Git commits with proper messages and co-author signatures.
   Use when the user asks to "commit my changes", "make a commit", "save my work",
@@ -7,7 +7,7 @@ description: >
   atomic commits, and maintaining consistent co-authorship attribution.
 ---
 
-# Commit Workflow
+# Git Commit Creation
 
 ## Entities
 

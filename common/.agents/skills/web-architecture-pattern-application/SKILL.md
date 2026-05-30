@@ -1,5 +1,5 @@
 ---
-name: web-architecture-grand-design-patterns
+name: web-architecture-pattern-application
 description: >
   Apply Yu Inao's personal catalogue of web architecture grand-design patterns.
   Use when designing, reviewing, or documenting whole-system web architecture
@@ -14,7 +14,7 @@ metadata:
   commercial_use: "Commercial use requires separate permission from the author."
 ---
 
-# Web Grand Design Patterns
+# Web Architecture Pattern Application
 
 ## Purpose
 
