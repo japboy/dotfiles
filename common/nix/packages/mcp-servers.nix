@@ -81,11 +81,11 @@ let
 
   chromeDevtoolsMcp = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "chrome-devtools-mcp";
-    version = "0.25.0";
+    version = "1.1.1";
 
     src = pkgs.fetchurl {
       url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-${version}.tgz";
-      hash = "sha512-A6Zh3iH+O7lvjhUOQNxbxMy6KJhKnMtVKb+37oy4QcnDp7JEJYKkeqtsw4hFXJG5ISfNTVlaWxKsKLxRdJAAUA==";
+      hash = "sha512-Fs/ASXAkQqvYCbJjHIx/pnShjyIoZoPxdg4J3wjaA9FLkRb2ngGnisu2AGcBIXdw5qrPkOuV/cOlGOonpsE1qw==";
     };
 
     sourceRoot = "package";
@@ -120,13 +120,13 @@ let
 
   serena = pythonPackages.buildPythonApplication rec {
     pname = "serena-agent";
-    version = "1.2.0";
+    version = "1.5.3";
     pyproject = true;
 
     src = pkgs.fetchPypi {
       pname = "serena_agent";
       inherit version;
-      hash = "sha256-sisC9Ey8I+AvVV4W7NZUwWQ4uymO47xIWglBZCo7m3c=";
+      hash = "sha256-6zhGCOEbdfvCkZbdlC9toolGBgiI7lsi52ryFoJfZ44=";
     };
 
     build-system = [
