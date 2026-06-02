@@ -22,7 +22,12 @@ DOTFILES_PATH="${HOME}/.dotfiles"
 DOTFILES_REAL_PATH=$(cd "${DOTFILES_PATH}" 2>/dev/null && pwd -P)
 [ -z "${DOTFILES_REAL_PATH}" ] && DOTFILES_REAL_PATH="${DOTFILES_PATH}"
 DOTFILES_DARWIN_PATH="${DOTFILES_PATH}/darwin"
-DOTFILES_DARWIN_FLAKE="path:${DOTFILES_REAL_PATH}?dir=darwin"
+if [ -d "${DOTFILES_REAL_PATH}/.git" ]
+then
+    DOTFILES_DARWIN_FLAKE="git+file://${DOTFILES_REAL_PATH}?dir=darwin"
+else
+    DOTFILES_DARWIN_FLAKE="path:${DOTFILES_REAL_PATH}?dir=darwin"
+fi
 
 
 ##

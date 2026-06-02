@@ -14,7 +14,12 @@ DOTFILES_PATH="${HOME}/.dotfiles"
 DOTFILES_REAL_PATH=$(cd "${DOTFILES_PATH}" 2>/dev/null && pwd -P)
 [ -z "${DOTFILES_REAL_PATH}" ] && DOTFILES_REAL_PATH="${DOTFILES_PATH}"
 LINUX_DOTFILES_PATH="${DOTFILES_PATH}/linux"
-LINUX_DOTFILES_FLAKE="path:${DOTFILES_REAL_PATH}?dir=linux"
+if [ -d "${DOTFILES_REAL_PATH}/.git" ]
+then
+    LINUX_DOTFILES_FLAKE="git+file://${DOTFILES_REAL_PATH}?dir=linux"
+else
+    LINUX_DOTFILES_FLAKE="path:${DOTFILES_REAL_PATH}?dir=linux"
+fi
 NIX_FLAKE_FLAGS=(
     --extra-experimental-features
     "nix-command flakes"
