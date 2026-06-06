@@ -4,7 +4,7 @@ model_reasoning_effort = "high"
 service_tier = "flex"
 approval_policy = "never"
 sandbox_mode = "workspace-write"
-personality = "pragmatic"
+codepersonality = "pragmatic"
 
 [shell_environment_policy]
 inherit = "all"
@@ -14,7 +14,6 @@ enable_mcp_apps = true
 fast_mode = true
 goals = true
 hooks = true
-js_repl = true
 multi_agent = true
 
 [mcp_servers.Asana]
@@ -28,7 +27,6 @@ enabled = false
 
 [mcp_servers.Context7]
 url = "https://mcp.context7.com/mcp"
-env_http_headers = { "CONTEXT7_API_KEY" = "CONTEXT7_API_KEY" }
 
 [mcp_servers.Figma]
 url = "http://127.0.0.1:3845/mcp"
@@ -68,12 +66,24 @@ writable_roots = [
     "~/.cache",
     "~/.codex/sessions",
     "~/.codex/worktrees",
+    "~/.config/gcloud",
     "~/.local",
     "~/.npm",
     "~/.portless",
     "~/.serena",
     "~/.yarn/berry/cache",
 ]
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[desktop]
+preventSleepWhileRunning = true
+keepRemoteControlAwakeWhilePluggedIn = true
+git-commit-instructions = "$git-commit-creation"
+
+[desktop.open-in-target-preferences]
+global = "zed"
 
 [plugins."google-calendar@openai-curated"]
 enabled = true
@@ -87,8 +97,5 @@ enabled = true
 [plugins."github@openai-curated"]
 enabled = true
 
-[projects."/home/ubuntu/Workspace/com.github.japboy.dotfiles"]
-trust_level = "trusted"
-
-[tui.model_availability_nux]
-"gpt-5.5" = 1
+[plugins."browser@openai-bundled"]
+enabled = true
