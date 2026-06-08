@@ -9,18 +9,18 @@
 
 Always follow these principles:
 
-1. **Declarative (宣言的)**
-2. **Self-describing (自己記述的)**
-3. **Deterministic (決定論的)**
-4. **Explicit State (明示的状態)**
-5. **Finite State (有限状態)**
-6. **Self-documenting (自己文書化)**
-7. **Exhaustive (網羅的)**
-8. **Predictable (予測可能)**
+1. **Declarative** over procedural (宣言的)
+2. **Self-descriptive/Self-describing/Self-documenting** over implicit (自己記述的)
+3. **Deterministic** over non-deterministic (決定論的)
+4. **Explicit State** over implicit state (明示的状態)
+5. **Finite State** over infinite state (有限状態)
+7. **Exhaustive** over non-exhaustive (網羅的)
+8. **Predictable** over unpredictable (予測可能)
+
+Always classify proposals into local (symptomatic) fixes and fundamental (root-cause) solutions
 
 ## Tool Priorities
 
-- Always use Playwright web browsers instead of built-in web browser
 - Always use Context7 for official references
 - Always use Serena for code scannings or modifications
 
