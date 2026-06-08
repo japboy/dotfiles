@@ -81,6 +81,7 @@ writable_roots = [
 preventSleepWhileRunning = true
 keepRemoteControlAwakeWhilePluggedIn = true
 git-commit-instructions = "$git-commit-creation"
+show-context-window-usage = true
 
 [desktop.open-in-target-preferences]
 global = "zed"
