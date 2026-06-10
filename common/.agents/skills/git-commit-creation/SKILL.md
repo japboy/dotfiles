@@ -25,23 +25,15 @@ Append the following block verbatim to all commit messages (do not modify):
 
 #### Use with Codex
 
-```
-🤖 Generated with [Codex](https://openai.com/codex/)
+- Follow built-in signature format
 
-Co-Authored-By: Codex
-```
-
-#### Use with Zed and Claude Code
+#### Use with other agents which do not have built-in signature support (example)
 
 ```
-🤖 Generated with [Claude Code](https://claude.ai/code) via [Zed](https://zed.dev/docs/ai/external-agents)
+🤖 Generated with [<AGENT-NAME>](https://agent.foo.bar)
 
-Co-Authored-By: Zed <noreply@zed.dev>
-Co-Authored-By: GitHub Copilot <noreply@github.com>
-Co-Authored-By: Claude Code <noreply@anthropic.com>
+Co-Authored-By: <AGENT-NAME> <noreply@agent.foo.bar>
 ```
-
-> **Note:** This is a fixed template, not an example. Copy exactly as shown.
 
 See [Creating co-authored commits](https://docs.github.com/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors#creating-co-authored-commits-on-the-command-line) for details.
 
