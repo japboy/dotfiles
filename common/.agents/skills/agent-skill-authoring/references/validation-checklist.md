@@ -84,6 +84,20 @@ These are strong recommendations, not standard syntax rules.
 - [ ] resource directories are actually used by the workflow
 - [ ] no large duplicated content appears in both `SKILL.md` and `references/`
 
+### Supporting Script Safety
+
+- [ ] scripts that access files classify paths as bundled resource, repository
+      file, repo-local scratch file, or external input
+- [ ] bundled files are referenced relative to the skill root
+- [ ] repository files are resolved from an explicit repo/workspace root
+- [ ] arbitrary filesystem path CLI options are avoided or strictly allowlisted
+- [ ] absolute paths and `..` traversal are rejected when relative paths are
+      expected
+- [ ] resolved paths are checked to remain inside the intended base directory
+- [ ] validation is adjacent to filesystem read/write sinks
+- [ ] scratch files live under a fixed repo-local path such as
+      `.tmp/<skill-name>/...`
+
 ### Writing Quality
 
 - [ ] instructions are concrete and easy to follow

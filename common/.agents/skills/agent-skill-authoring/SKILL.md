@@ -204,6 +204,7 @@ Use resource directories intentionally:
   output-side artifacts
 - Extra directories: allowed when they clearly serve the skill, but document
   them explicitly from `SKILL.md`
+- Scripts that read or write files should keep path inputs finite and verify resolved paths stay inside the intended base
 
 ### Writing Style
 

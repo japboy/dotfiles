@@ -235,6 +235,10 @@ These are recommendations that work well in multiple products:
 - Put templates and output resources in `assets/`
 - Link supporting files directly from `SKILL.md`
 - Validate referenced files and executable scripts, not just frontmatter
+- For scripts that read or write files, keep path inputs finite: use
+  skill-root-relative bundled resources, derive explicit repo/workspace roots,
+  prefer fixed repo-local scratch paths, reject absolute or traversal paths, and
+  verify resolved paths stay inside the intended base before filesystem access
 - For updates, require evidence, bounded edits, validation, and traceability
 
 These are useful practices, not specification requirements unless the standard
