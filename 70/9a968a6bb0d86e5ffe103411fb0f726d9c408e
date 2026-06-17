@@ -1,0 +1,23 @@
+common/.agents/skills/agent-skill-authoring/SKILL.md
+  s_908022667a5cb2::t_4e7111374e7cd7 207
+common/.agents/skills/agent-skill-authoring/references/REFERENCE.md
+  s_908022667a5cb2::t_c95e949eb04420 238-241
+common/.agents/skills/agent-skill-authoring/references/validation-checklist.md
+  s_908022667a5cb2::t_c95e949eb04420 87-100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "709a968a6bb0d86e5ffe103411fb0f726d9c408e",
+  "prompts": {},
+  "sessions": {
+    "s_908022667a5cb2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019ed540-f3a7-7e81-bf9b-b14d48c317db",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
