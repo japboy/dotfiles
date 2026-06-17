@@ -10,6 +10,8 @@ codepersonality = "pragmatic"
 inherit = "all"
 
 [features]
+apps = true
+codex_git_commit = true
 enable_mcp_apps = true
 goals = true
 hooks = true
@@ -36,6 +38,9 @@ args = [
     "/Users",
 ]
 enabled = false
+
+[mcp_servers.MDN]
+url = "https://mcp.mdn.mozilla.net/"
 
 [mcp_servers.Miro]
 url = "https://mcp.miro.com/"
