@@ -1,0 +1,21 @@
+common/.agents/skills/term-translation-research/SKILL.md
+  s_02258c902470ca::t_a660da3d3dc7c7 1-86
+common/.agents/skills/term-translation-research/references/REFERENCE.md
+  s_02258c902470ca::t_a660da3d3dc7c7 1-147
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "740d0d9a1626a9e8a34df05f9eca2f237bd47259",
+  "prompts": {},
+  "sessions": {
+    "s_02258c902470ca": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019eec9e-481a-7490-9d84-f81099c82f08",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
