@@ -2,3 +2,4 @@
 .shell_extras
 common/.agents/skills/.*
 darwin/.ssh
+*.orig

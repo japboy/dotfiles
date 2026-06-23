@@ -14,8 +14,9 @@ To install or update, simply copy and paste the command below:
 bash <(curl -L https://raw.github.com/japboy/dotfiles/master/bootstrap.sh)
 ```
 
-You can also install/update without Git by downloading the repository and put it
-in `~/.dotfiles` then;
+You can also install/update without Git by downloading the repository and
+extracting its contents directly into `~/.dotfiles` (so that `~/.dotfiles/darwin`
+and friends exist, not nested one level deeper), then;
 
 ```bash
 bash ~/.dotfiles/bootstrap.sh sync
