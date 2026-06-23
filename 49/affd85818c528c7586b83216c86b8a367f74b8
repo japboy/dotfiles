@@ -1,0 +1,30 @@
+README.md
+  s_0f5c0c5a812f2f::t_f7f6480cfc396f 17-19
+bootstrap.sh
+  s_0f5c0c5a812f2f::t_2fbfed4ce98ddb 29-31
+  s_0f5c0c5a812f2f::t_6db9012b8d6421 195,201,206
+  s_0f5c0c5a812f2f::t_82404ed043e4b8 10-11
+  s_0f5c0c5a812f2f::t_895fe5b56b80ab 142,147,154,156-157,159-167
+  s_0f5c0c5a812f2f::t_f7c1b4ee15d426 180,186
+  s_0f5c0c5a812f2f::t_a0db21ffbed6c3 77-84
+  s_0f5c0c5a812f2f::t_29dc93dcb97fb3 236-237
+  s_0f5c0c5a812f2f::t_0e7f5150803334 36-39,41,43,46,49-76,85-111,113-115,117-132
+.gitignore
+  s_0f5c0c5a812f2f::t_36e15be234fc82 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.10",
+  "base_commit_sha": "49affd85818c528c7586b83216c86b8a367f74b8",
+  "prompts": {},
+  "sessions": {
+    "s_0f5c0c5a812f2f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01751d17-5d3f-45ec-acb6-9044f45ccd29",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": null
+    }
+  }
+}
