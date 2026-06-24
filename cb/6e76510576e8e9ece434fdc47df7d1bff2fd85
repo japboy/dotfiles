@@ -1,0 +1,20 @@
+common/.codex/AGENTS.md
+  s_793aa5b80cd354::t_3bf96d5e268a74 25
+  s_793aa5b80cd354::t_ff559f20306ec8 17-18,20-24,29-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.11",
+  "base_commit_sha": "cb6e76510576e8e9ece434fdc47df7d1bff2fd85",
+  "prompts": {},
+  "sessions": {
+    "s_793aa5b80cd354": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7620d948-b740-4708-8a34-c40c1b608d69",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
