@@ -14,15 +14,20 @@ Always follow these principles:
 3. **Deterministic** over non-deterministic (決定論的)
 4. **Explicit State** over implicit state (明示的状態)
 5. **Finite State** over infinite state (有限状態)
-7. **Exhaustive** over non-exhaustive (網羅的)
-8. **Predictable** over unpredictable (予測可能)
+6. **Exhaustive** over non-exhaustive (網羅的)
+7. **Predictable** over unpredictable (予測可能)
 
-Always classify proposals into local (symptomatic) fixes and fundamental (root-cause) solutions
+Always classify proposals into:
+
+- Local (symptomatic) fixes
+- Fundamental (root-cause) solutions
+
+Prefer fundamental solutions, but step back and critically confirm that each genuinely resolves the root cause — not merely that it is more fundamental than a local fix.
 
 ## Tool Priorities
 
-- Always use Context7 for official references
-- Always use Serena for code scannings or modifications
+- Use Context7/MDN for all official references.
+- Use Serena for scanning or modifying code.
 
 ## Signature
 
