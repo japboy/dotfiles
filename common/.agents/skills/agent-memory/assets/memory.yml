@@ -1,0 +1,83 @@
+version: 1
+
+storage:
+  database: ".agents/memory.db"
+  config: ".agents/memory.yml"
+  journal_mode: "wal"
+
+identity:
+  repository_id: null
+
+events:
+  default_importance: 3
+  recommended_kinds:
+    - observation
+    - action
+    - file_change
+    - question
+    - answer
+    - error
+    - handoff
+    - artifact_ref
+    - summary
+
+retrieval:
+  recent_limit: 20
+  search_limit: 20
+  topic_limit: 20
+  scope_limit: 20
+
+artifacts:
+  sources:
+    - id: git-tracked-text
+      include:
+        - "**/*"
+      exclude:
+        - ".git/**"
+        - ".agents/memory.db"
+        - ".agents/memory.db-wal"
+        - ".agents/memory.db-shm"
+        - "node_modules/**"
+        - "dist/**"
+        - "build/**"
+        - "coverage/**"
+      max_bytes: 2097152
+
+  kinds:
+    - id: project-instruction
+      match:
+        basenames:
+          - AGENTS.md
+          - README.md
+    - id: implementation
+      match:
+        extensions:
+          - .c
+          - .cc
+          - .cpp
+          - .cs
+          - .go
+          - .java
+          - .js
+          - .jsx
+          - .kt
+          - .mjs
+          - .py
+          - .rb
+          - .rs
+          - .ts
+          - .tsx
+    - id: document
+      match:
+        extensions:
+          - .md
+          - .mdx
+          - .rst
+          - .txt
+
+privacy:
+  never_record:
+    - credentials
+    - access tokens
+    - private keys
+    - unrelated personal data
