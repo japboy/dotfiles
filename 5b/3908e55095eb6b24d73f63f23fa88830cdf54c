@@ -1,0 +1,29 @@
+common/.agents/skills/japanese-naturalization/SKILL.md
+  s_b63830b8bab110::t_550bfc5145242d 73-94,100,107,151-153
+common/.agents/skills/japanese-naturalization/references/CHANGELOG.md
+  s_b63830b8bab110::t_590c0d1d06a488 10-11,17-64
+common/.agents/skills/japanese-naturalization/references/REFERENCE.md
+  s_b63830b8bab110::t_ba992c07abede1 13-14
+common/.agents/skills/japanese-naturalization/references/audience-register-risks.md
+  s_b63830b8bab110::t_a19622b2427f49 1-59
+common/.agents/skills/japanese-naturalization/references/evaluation-prompts.csv
+  s_b63830b8bab110::t_39f7a6f613cfbc 15-20
+common/.agents/skills/japanese-naturalization/references/notation-variation-risks.md
+  s_b63830b8bab110::t_fea11f91aedc73 1-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.8",
+  "base_commit_sha": "5b3908e55095eb6b24d73f63f23fa88830cdf54c",
+  "prompts": {},
+  "sessions": {
+    "s_b63830b8bab110": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f2189-14fc-7ba3-8c75-2219e622f4da",
+        "model": "unknown"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
