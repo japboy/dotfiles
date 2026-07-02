@@ -10,6 +10,8 @@ Load these only when the active rewrite needs the corresponding guidance:
 | File | Use when |
 |---|---|
 | [terminology-traps.md](terminology-traps.md) | A phrase may need context-specific term choice, domain wording, or audience-specific translation. |
+| [audience-register-risks.md](audience-register-risks.md) | Casualness, jokes, slang, age/generation cues, hierarchy, identity or attribute references, or harassment sensitivity may affect how the wording lands. |
+| [notation-variation-risks.md](notation-variation-risks.md) | Kanji/kana choices, okurigana, same-reading kanji, punctuation, number style, or other notation variants may be either natural intentional variation or confusing inconsistency. |
 | [japanese-style-defaults.md](japanese-style-defaults.md) | The rewrite needs lightweight orthography or style defaults and no project style guide overrides them. |
 | [ai-like-japanese-patterns.md](ai-like-japanese-patterns.md) | The output feels generic, translationese, overly stiff, or AI-like. |
 

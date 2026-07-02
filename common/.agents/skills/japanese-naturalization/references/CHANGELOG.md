@@ -7,10 +7,60 @@ rewriting guidance.
 Use this file to answer "what changed and when?" Keep entries compact. Detailed
 examples belong in [evaluation-prompts.csv](evaluation-prompts.csv); reusable
 runtime rules belong in [terminology-traps.md](terminology-traps.md),
+[audience-register-risks.md](audience-register-risks.md),
+[notation-variation-risks.md](notation-variation-risks.md),
 [japanese-style-defaults.md](japanese-style-defaults.md), or
 [ai-like-japanese-patterns.md](ai-like-japanese-patterns.md). If detailed
 decision records or rejected-edit notes become necessary, add separate
 maintenance files and link them from this changelog.
+
+## 2026-07-02
+
+- Added [notation-variation-risks.md](notation-variation-risks.md) for
+  separating natural intentional notation variation from confusing notation
+  inconsistency.
+  - Runtime entry point:
+    [Workflow step 5](../SKILL.md#workflow)
+  - Evidence: Culture Agency official references treat Japanese notation
+    standards as baselines for general social writing; `公用文作成の考え方`
+    emphasizes purpose, document type, expected readers, source-meaning
+    preservation, and document-level consistency; `異字同訓` guidance supports
+    checking meaning before normalizing same-reading kanji.
+  - Validation:
+
+    ```bash
+    uvx --from skills-ref agentskills validate "$SKILL_DIR"
+    ```
+
+- Added notation regression fixtures for concept-stable notation, meaning-bearing
+  kanji, deliberate kana for readability, and punctuation/number/width
+  consistency.
+  - Fixtures: `notation-001`, `notation-002`, `notation-003`, `notation-004`
+  - Validation: Parse [evaluation-prompts.csv](evaluation-prompts.csv) with a
+    CSV parser.
+
+- Added [audience-register-risks.md](audience-register-risks.md) for
+  audience-sensitive casualness, age/generation cues, hierarchy, identity or
+  attribute references, and harassment-sensitive wording.
+  - Runtime entry point:
+    [Workflow step 4](../SKILL.md#workflow)
+  - Evidence: User-provided Slack feedback about `TL;DR` in a README suggested
+    that casual shorthand can feel generation-marked in workplace technical
+    documentation. The Agency for Cultural Affairs' keigo guideline notes that
+    wording attitudes can differ by generation, and MHLW's workplace harassment
+    guidance identifies insults, severe verbal abuse, isolation, and private
+    intrusion as harassment-related risk patterns.
+  - Validation:
+
+    ```bash
+    uvx --from skills-ref agentskills validate "$SKILL_DIR"
+    ```
+
+- Added regression fixtures for neutralizing generation-marked shorthand and
+  age-based self-labeling without changing the underlying concern.
+  - Fixtures: `register-002`, `register-003`
+  - Validation: Parse [evaluation-prompts.csv](evaluation-prompts.csv) with a
+    CSV parser.
 
 ## 2026-06-30
 

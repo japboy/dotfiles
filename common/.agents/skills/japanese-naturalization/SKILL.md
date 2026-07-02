@@ -70,20 +70,41 @@ When invoked:
    - Prefer official, primary, product-maintained, or domain-specific sources
      over dictionaries and search snippets when external evidence is needed.
 
-4. Apply Japanese style defaults.
+4. Check audience-sensitive register risks.
+   - Use [audience-register-risks.md](references/audience-register-risks.md)
+     when casual expressions, jokes, slang, age/generation cues, hierarchy,
+     identity or attribute references, or harassment sensitivity could affect
+     how the wording lands.
+   - Prefer widely understood, neutral wording when the audience is mixed,
+     unknown, external, or workplace-broad.
+   - Preserve intentionally community-specific wording only when local evidence
+     or user instruction shows it fits the target context.
+
+5. Check notation variation and consistency.
+   - Use [notation-variation-risks.md](references/notation-variation-risks.md)
+     when kanji/kana choices, okurigana, same-reading kanji,
+     katakana/English variants, punctuation, number style, or full-width and
+     half-width forms vary within the target text.
+   - Preserve intentional variation when it carries meaning, register,
+     readability, quoted/source form, or local product terminology.
+   - Normalize confusing variation when it makes one concept look like multiple
+     concepts, hides a meaning distinction, or breaks document-level
+     predictability.
+
+6. Apply Japanese style defaults.
    - Use [japanese-style-defaults.md](references/japanese-style-defaults.md) for
      orthography and lightweight style defaults.
    - Treat these as defaults, not rules. Project style guides and target
      publication norms override them.
 
-5. Remove translationese and AI-like stiffness.
+7. Remove translationese and AI-like stiffness.
    - Use [ai-like-japanese-patterns.md](references/ai-like-japanese-patterns.md)
      as warning signs, not banned words.
    - Replace only when the alternative is more natural in the inferred context.
    - Keep technical katakana, kanji compounds, and passive constructions when
      they are normal for the domain.
 
-6. Control register explicitly.
+8. Control register explicitly.
    - Match the user's requested tone if present.
    - Otherwise, preserve the source's communicative intent while making the
      Japanese less stiff, less literal, and less templated.
@@ -127,6 +148,9 @@ Before answering, check that:
 - The rewritten text still says the same thing.
 - The terminology matches the inferred audience and domain.
 - The register fits the channel.
+- Audience-sensitive register and harassment risks were checked when relevant.
+- Natural notation variation and confusing notation inconsistency were separated
+  when relevant.
 - AI-like patterns were inspected but not mechanically removed.
 - No new factual claim, citation, example, or recommendation was added.
 - The result sounds like a plausible Japanese speaker wrote it for that context.
