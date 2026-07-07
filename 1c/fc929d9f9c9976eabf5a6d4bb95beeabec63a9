@@ -1,0 +1,41 @@
+common/nix/packages/mcp-servers.nix
+  s_3e81bca3b6277d::t_30b1ff6f6f2ba9 147-152
+  s_3e81bca3b6277d::t_9470999ca95908 129-130,142-143
+  s_3e81bca3b6277d::t_e40df10beceef5 8-9,15,19-20,26,28-29,38-43,48,52,75-79,97,157,161,219
+  s_3e81bca3b6277d::t_ba4d3010b59a2f 30-37,44-47,49-51,53-74,95,120-128,131-140,144-145
+  s_3e81bca3b6277d::t_c18a9f6aeb8ef6 146
+common/nix/packages/recent-version-packages.nix
+  s_92f47cc4445e2b::t_6a23f75b624a62 5-7
+darwin/flake.lock
+  s_92f47cc4445e2b::t_97dbc4c2540ce9 17-18,21,33-34,37
+darwin/flake.nix
+  s_92f47cc4445e2b::t_23ece74e379018 14-15,27-32,34-39,41-42,44-46,142-148,203,209,218
+linux/flake.lock
+  s_92f47cc4445e2b::t_50fc131bc847ef 17-18,21,33-34,37
+linux/flake.nix
+  s_92f47cc4445e2b::t_62d3763d39fba1 14-15,29-31,33-39,62-63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1cfc929d9f9c9976eabf5a6d4bb95beeabec63a9",
+  "prompts": {},
+  "sessions": {
+    "s_3e81bca3b6277d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f3a0b-df97-7b00-abfc-a5b549c0b232",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    },
+    "s_92f47cc4445e2b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "76982135-e44f-471b-a7ff-4592cbe77b5d",
+        "model": "unknown"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
