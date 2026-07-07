@@ -11,7 +11,8 @@
     nixpkgs-recent-version-packages.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = inputs@{ self, ... }:
+  outputs =
+    inputs@{ self, ... }:
     let
       commonNix = inputs."common-nix";
       nixpkgsEssentials = inputs."nixpkgs-essentials";
@@ -25,13 +26,17 @@
         inherit system;
         config.allowUnfree = true;
       };
-      recentVersionPackages = import "${commonNix}/packages/recent-version-packages.nix" { pkgs = recentVersionPkgs; };
+      recentVersionPackages = import "${commonNix}/packages/recent-version-packages.nix" {
+        pkgs = recentVersionPkgs;
+      };
       mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = recentVersionPkgs; };
-      python = essentialPkgs.python3.withPackages (pythonPackages: with pythonPackages; [
-        pip
-        pynvim
-        wheel
-      ]);
+      python = essentialPkgs.python3.withPackages (
+        pythonPackages: with pythonPackages; [
+          pip
+          pynvim
+          wheel
+        ]
+      );
       essentialPackages = with essentialPkgs; [
         # Fundamental tools
         blesh
@@ -41,7 +46,6 @@
         direnv
         fzf
         gcc
-        gh
         git
         gnumake
         neovim
@@ -55,7 +59,8 @@
         bun
         deno
         go
-        nodejs_22
+        nodejs_24
+        pnpm
         powershell
         python
         ruby

@@ -2,6 +2,9 @@
 
 with pkgs;
 [
+  # Fundamental tools
+  gh
+
   # Language runtimes and package managers
   mise
 

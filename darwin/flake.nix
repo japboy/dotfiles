@@ -11,7 +11,8 @@
     nixpkgs-recent-version-packages.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = inputs@{ self, ... }:
+  outputs =
+    inputs@{ self, ... }:
     let
       commonNix = inputs."common-nix";
       nixpkgsEssentials = inputs."nixpkgs-essentials";
@@ -23,19 +24,26 @@
 
       forAllSystems = nixpkgsEssentials.lib.genAttrs systems;
 
-      mkEssentialPkgs = system: import nixpkgsEssentials {
-        inherit system;
-        config.allowUnfree = true;
-      };
+      mkEssentialPkgs =
+        system:
+        import nixpkgsEssentials {
+          inherit system;
+          config.allowUnfree = true;
+        };
 
-      mkRecentVersionPkgs = system: import nixpkgsRecentVersionPackages {
-        inherit system;
-        config.allowUnfree = true;
-      };
+      mkRecentVersionPkgs =
+        system:
+        import nixpkgsRecentVersionPackages {
+          inherit system;
+          config.allowUnfree = true;
+        };
 
-      mkPackages = essentialPkgs: recentVersionPkgs:
+      mkPackages =
+        essentialPkgs: recentVersionPkgs:
         let
-          recentVersionPackages = import "${commonNix}/packages/recent-version-packages.nix" { pkgs = recentVersionPkgs; };
+          recentVersionPackages = import "${commonNix}/packages/recent-version-packages.nix" {
+            pkgs = recentVersionPkgs;
+          };
           mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = recentVersionPkgs; };
 
           highway = essentialPkgs.stdenv.mkDerivation rec {
@@ -131,11 +139,13 @@
             };
           };
 
-          python = essentialPkgs.python3.withPackages (pythonPackages: with pythonPackages; [
-            pip
-            pynvim
-            wheel
-          ]);
+          python = essentialPkgs.python3.withPackages (
+            pythonPackages: with pythonPackages; [
+              pip
+              pynvim
+              wheel
+            ]
+          );
 
           essentialPackages = with essentialPkgs; [
             # Fundamental tools
@@ -147,7 +157,6 @@
             curl
             direnv
             gettext
-            gh
             giflib
             git
             git-extras
@@ -179,7 +188,6 @@
             thePlatinumSearcher
             universal-ctags
             unzip
-            uv
             wget
             xz
 
@@ -192,13 +200,13 @@
             bun
             deno
             go
-            nodejs_22
+            nodejs_24
             pnpm
             powershell
             python
             ruby
             rustup
-            yarn
+            uv
           ];
 
           appPackages = [
@@ -207,11 +215,7 @@
         in
         essentialPkgs.buildEnv {
           name = "darwin-packages";
-          paths =
-            essentialPackages
-            ++ recentVersionPackages
-            ++ mcpPackages
-            ++ appPackages;
+          paths = essentialPackages ++ recentVersionPackages ++ mcpPackages ++ appPackages;
         };
     in
     {

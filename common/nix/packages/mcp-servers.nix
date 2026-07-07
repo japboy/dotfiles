@@ -5,28 +5,78 @@ let
 
   pythonPackages = pkgs.python3Packages;
 
-  mcp_1_27 = pythonPackages.mcp.overridePythonAttrs (oldAttrs: rec {
-    version = "1.27.0";
+  mcp_1_27_1 = pythonPackages.mcp.overridePythonAttrs (_oldAttrs: rec {
+    version = "1.27.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "modelcontextprotocol";
       repo = "python-sdk";
       tag = "v${version}";
-      hash = "sha256-qvbGyF0PVC626yCgUqOYmA1zOmvI3/bC7l7HhfOtKH8=";
+      hash = "sha256-LhoLcFC5+7xOCfud23sbHyTMxKYmdeZh0c+UtGdvzCs=";
     };
   });
 
-  pyobjc-framework-UniformTypeIdentifiers = pythonPackages.buildPythonPackage rec {
-    pname = "pyobjc-framework-UniformTypeIdentifiers";
-    version = "11.1";
-    pyproject = true;
+  pyobjc = rec {
+    version = "12.2.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "ronaldoussoren";
       repo = "pyobjc";
       tag = "v${version}";
-      hash = "sha256-2qPGJ/1hXf3k8AqVLr02fVIM9ziVG9NMrm3hN1de1Us=";
+      hash = "sha256-8Yv0HtE2ToiuIK/SJbvPCkfJ8ITHBfkZ+4Tb7wLJVTM=";
     };
+  };
+
+  pyobjcFrameworkPostPatch = ''
+    substituteInPlace pyobjc_setup.py \
+      --replace-warn "-buildversion" "-buildVersion" \
+      --replace-warn "-productversion" "-productVersion" \
+      --replace-fail "/usr/bin/sw_vers" "sw_vers" \
+      --replace-fail "/usr/bin/xcrun" "xcrun"
+  '';
+
+  pyobjc-core = pythonPackages.pyobjc-core.overridePythonAttrs (_oldAttrs: {
+    inherit (pyobjc) version src;
+
+    sourceRoot = "${pyobjc.src.name}/pyobjc-core";
+  });
+
+  overridePyobjcFramework =
+    frameworkName: package: dependencies:
+    package.overridePythonAttrs (_oldAttrs: {
+      inherit (pyobjc) version src;
+
+      sourceRoot = "${pyobjc.src.name}/pyobjc-framework-${frameworkName}";
+
+      postPatch = pyobjcFrameworkPostPatch;
+
+      inherit dependencies;
+    });
+
+  pyobjc-framework-Cocoa = overridePyobjcFramework "Cocoa" pythonPackages.pyobjc-framework-Cocoa [
+    pyobjc-core
+  ];
+
+  pyobjc-framework-Quartz = overridePyobjcFramework "Quartz" pythonPackages.pyobjc-framework-Quartz [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+  ];
+
+  pyobjc-framework-Security = overridePyobjcFramework "Security" pythonPackages.pyobjc-framework-Security [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+  ];
+
+  pyobjc-framework-WebKit = overridePyobjcFramework "WebKit" pythonPackages.pyobjc-framework-WebKit [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+  ];
+
+  pyobjc-framework-UniformTypeIdentifiers = pythonPackages.buildPythonPackage rec {
+    pname = "pyobjc-framework-UniformTypeIdentifiers";
+    pyproject = true;
+
+    inherit (pyobjc) version src;
 
     sourceRoot = "${src.name}/pyobjc-framework-UniformTypeIdentifiers";
 
@@ -42,15 +92,9 @@ let
       pkgs.darwin.DarwinTools
     ];
 
-    postPatch = ''
-      substituteInPlace pyobjc_setup.py \
-        --replace-fail "-buildversion" "-buildVersion" \
-        --replace-fail "-productversion" "-productVersion" \
-        --replace-fail "/usr/bin/sw_vers" "sw_vers" \
-        --replace-fail "/usr/bin/xcrun" "xcrun"
-    '';
+    postPatch = pyobjcFrameworkPostPatch;
 
-    dependencies = with pythonPackages; [
+    dependencies = [
       pyobjc-core
       pyobjc-framework-Cocoa
     ];
@@ -73,19 +117,48 @@ let
     };
   };
 
+  pyobjcPackageNames = [
+    "pyobjc-core"
+    "pyobjc-framework-Cocoa"
+    "pyobjc-framework-Quartz"
+    "pyobjc-framework-Security"
+    "pyobjc-framework-UniformTypeIdentifiers"
+    "pyobjc-framework-WebKit"
+  ];
+
+  isPyobjcPackage = dependency:
+    lib.elem (dependency.pname or null) pyobjcPackageNames;
+
+  pywebviewDarwinPyobjcDependencies = [
+    pyobjc-core
+    pyobjc-framework-Cocoa
+    pyobjc-framework-Quartz
+    pyobjc-framework-Security
+    pyobjc-framework-UniformTypeIdentifiers
+    pyobjc-framework-WebKit
+  ];
+
   pywebview = pythonPackages.pywebview.overridePythonAttrs (oldAttrs: {
-    dependencies = oldAttrs.dependencies ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
-      pyobjc-framework-UniformTypeIdentifiers
-    ];
+    dependencies =
+      lib.filter (dependency: !isPyobjcPackage dependency) oldAttrs.dependencies
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin pywebviewDarwinPyobjcDependencies;
+  });
+
+  pystray = pythonPackages.pystray.overridePythonAttrs (oldAttrs: {
+    propagatedBuildInputs =
+      lib.filter (dependency: !isPyobjcPackage dependency) oldAttrs.propagatedBuildInputs
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+        pyobjc-framework-Quartz
+      ];
   });
 
   chromeDevtoolsMcp = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "chrome-devtools-mcp";
-    version = "1.1.1";
+    version = "1.2.0";
 
     src = pkgs.fetchurl {
       url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-${version}.tgz";
-      hash = "sha512-Fs/ASXAkQqvYCbJjHIx/pnShjyIoZoPxdg4J3wjaA9FLkRb2ngGnisu2AGcBIXdw5qrPkOuV/cOlGOonpsE1qw==";
+      hash = "sha512-xHd8hoLZQArDsYhu8OUHvKBIiihx1Co9DgAPHWaM4kzRf41TpZ0IuxKioIWTEGzFKpRqQzIxpFqydY4AKqP5sQ==";
     };
 
     sourceRoot = "package";
@@ -143,7 +216,7 @@ let
       jinja2
       joblib
       lsprotocol
-      mcp_1_27
+      mcp_1_27_1
       overrides
       pathspec
       psutil
