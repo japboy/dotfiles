@@ -1,7 +1,8 @@
 # Skill Validation Checklist
 
 Use this checklist in layers. Do not confuse shared specification rules,
-product-specific conventions, and SkillOpt-informed review practices.
+recommended authoring practice, product-specific conventions, and update-review
+practices.
 
 ## Layer 1: Agent Skills Standard
 
@@ -51,6 +52,9 @@ These checks apply to any portable Agent Skill.
 - [ ] main instructions are materially below the 5,000-token guidance when
       practical
 - [ ] `SKILL.md` is under 500 lines unless the extra length is justified
+- [ ] rules that must hold for the whole task appear near the top of `SKILL.md`
+- [ ] each supporting file reference states *when* to load it, not just that it
+      exists
 - [ ] file references use relative paths from the skill root
 - [ ] reference chains are shallow enough for predictable loading
 
@@ -69,6 +73,11 @@ These are strong recommendations, not standard syntax rules.
 - [ ] `description` uses task language the client can match
 - [ ] scope boundaries are clear enough to avoid over-triggering
 - [ ] realistic should-trigger and should-not-trigger prompts have been checked
+- [ ] negative prompts include near-misses, not only unrelated requests
+- [ ] description length is justified against a listing budget shared with every
+      other installed skill
+- [ ] description changes were selected on held-out prompts rather than the
+      prompts used to guide the edit
 
 ### Progressive Disclosure
 
@@ -106,6 +115,23 @@ These are strong recommendations, not standard syntax rules.
 - [ ] procedural rules, tool policies, output constraints, and failure modes are
       stated when supported by evidence
 
+### Instruction Calibration
+
+- [ ] every instruction would change behavior if followed; none restate what the
+      agent already does reliably
+- [ ] no generic self-verification, re-check, or double-check instructions
+- [ ] no repeated rules, no style instructions that change nothing, and no
+      examples that change nothing
+- [ ] prescriptive detail is reserved for fragile operations and mandatory
+      sequences
+- [ ] success criteria and stopping conditions are stated
+- [ ] absolute language is reserved for genuine invariants
+- [ ] exhaustive generation and filtering are separate phases, rather than a
+      single instruction to be conservative
+- [ ] output length is calibrated for skills that produce written deliverables
+- [ ] progress-update cadence is stated for long-running workflows
+- [ ] the skill is not over-constrained: added rules are still improving results
+
 Important note:
 
 - Imperative voice is usually good practice
@@ -123,6 +149,8 @@ Run this layer only when the skill targets Codex.
 - [ ] duplicate skill names are understood; Codex does not merge them
 - [ ] symlinked skill folders, if used, point to the intended target
 - [ ] `[[skills.config]]` disables only the intended skill when used
+- [ ] the description still carries its key use case after Codex shortens the
+      listing to 2% of the context window, or 8,000 characters when unknown
 
 ### `agents/openai.yaml`
 
@@ -171,6 +199,8 @@ Run this layer only when the skill targets Claude Code.
 - [ ] `description` contains the key use case first
 - [ ] `when_to_use`, if present, adds trigger guidance without bloating the
       combined listing text beyond the 1,536-character cap
+- [ ] the skill still works when only its first 5,000 tokens survive
+      auto-compaction re-attachment
 - [ ] `argument-hint` and `arguments`, if present, match actual placeholders
 - [ ] `disable-model-invocation` is used for workflows the model should not
       trigger automatically
@@ -178,9 +208,13 @@ Run this layer only when the skill targets Claude Code.
       hidden from the slash menu
 - [ ] `allowed-tools` grants only the intended pre-approved tools
 - [ ] `disallowed-tools` removes tools intentionally and temporarily
-- [ ] `model` and `effort` overrides are intentional and scoped to the active
-      skill turn
+- [ ] `model` and `effort` overrides are intentional, measured, and scoped to the
+      active skill turn, not defaults carried over from another skill or model
+- [ ] before any raised `effort`, the body was checked for a missing success
+      criterion, dependency rule, tool-selection rule, or verification loop
 - [ ] `context: fork` is used only when the skill contains an actionable task
+- [ ] skills that delegate state which work warrants a subagent and cap the
+      number, and do not use subagents to double-check their own work
 - [ ] `agent`, if present, names the intended built-in or custom subagent
 - [ ] `hooks`, if present, are scoped to the skill lifecycle intentionally
 - [ ] `paths`, if present, limit automatic activation to the intended globs
@@ -201,7 +235,7 @@ Run this layer only when the skill targets Claude Code.
 - [ ] Claude Code conventions are not described as if they were standard Agent
       Skills requirements
 
-## Layer 5: SkillOpt-Informed Update Review
+## Layer 5: Update Review
 
 Run this layer for non-trivial updates to existing skills, especially when the
 change affects triggering, tool use, output format, or product portability.
@@ -212,6 +246,8 @@ change affects triggering, tool use, output format, or product portability.
 - [ ] evaluation isolates the skill change rather than changing multiple
       variables at once
 - [ ] portability claims identify each intended product or harness
+- [ ] model-specific vendor guidance is recorded as fixed-target evidence rather
+      than promoted into portable authoring rules
 
 ### Evidence
 
@@ -225,6 +261,7 @@ change affects triggering, tool use, output format, or product portability.
 
 - [ ] update scope or edit budget is explicit
 - [ ] edits are small add/delete/replace changes unless a rewrite is justified
+- [ ] deletion was considered as an edit, not only addition
 - [ ] duplicated guidance is removed or avoided
 - [ ] new rules are procedural and generalizable
 
@@ -232,6 +269,9 @@ change affects triggering, tool use, output format, or product portability.
 
 - [ ] previous and candidate skill behavior are compared on representative or
       held-out prompts/tasks
+- [ ] each run starts from a clean context, without leftover authoring context
+- [ ] token count and duration are recorded for both sides of the comparison
+- [ ] the quality gain is judged against the token and time cost it adds
 - [ ] acceptance criterion is documented
 - [ ] rejected or inconclusive results block or narrow the change
 - [ ] open-ended domains use documented human or model-based review when
@@ -279,6 +319,8 @@ change affects triggering, tool use, output format, or product portability.
 - Codex or Claude Code integration requested by the user but not implemented
 - behavior-changing update accepted without evidence or validation
 - Claude Code-only behavior added to a skill that claims portability
+- one vendor's model-specific prompting guidance presented as a portable
+  authoring rule
 
 ### Minor
 
@@ -287,6 +329,8 @@ change affects triggering, tool use, output format, or product portability.
 - underused supporting files
 - stale product metadata
 - unrecorded rejected edits when they would help future reviews
+- behavior-changing update accepted without recording its token and time cost
+- instructions that restate behavior the agent already performs reliably
 
 ## Useful Commands
 

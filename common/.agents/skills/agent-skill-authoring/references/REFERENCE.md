@@ -4,15 +4,19 @@
 
 Use sources in this order when authoring or reviewing skills:
 
-1. **Agent Skills standard**
-2. **Product-specific documentation**
-3. **Product-maintained example repositories**
-4. **Research sources for evaluation practices**
+1. **Agent Skills specification** for portable format and validation rules
+2. **Agent Skills standard-site authoring and evaluation guidance** for
+   recommended authoring, description-optimization, and evaluation practice
+3. **Product-specific documentation**
+4. **Product-maintained example repositories**
+5. **Research sources** for additional evaluation and iteration rationale
 
 This order matters. Product examples are useful implementation references, but
 they do not override the shared specification unless the product explicitly says
-so. Research papers can inform evaluation and iteration, but they do not define
-the Agent Skills file format.
+so. Standard-site authoring guidance is recommendation, not syntax: it is
+authoritative for *practice* but does not add validation rules. Research papers
+can inform evaluation and iteration, but they do not define the Agent Skills
+file format.
 
 ## Standard Agent Skills Sources
 
@@ -27,6 +31,28 @@ These are the baseline references for any portable skill:
   reference validator and prompt-generation tooling
 - [Agent Skills spec source](https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx) -
   canonical source text for the public spec
+
+### Standard-Site Authoring and Evaluation Guidance
+
+The standard site publishes authoring guidance alongside the specification.
+These pages are the primary source for recommended practice, above product
+documentation and research sources:
+
+- [Quickstart](https://agentskills.io/skill-creation/quickstart) - creating a
+  first skill
+- [Best practices for skill creators](https://agentskills.io/skill-creation/best-practices) -
+  sourcing skill content from real expertise, spending context wisely,
+  calibrating control, and reusable instruction patterns
+- [Optimizing skill descriptions](https://agentskills.io/skill-creation/optimizing-descriptions) -
+  trigger evaluation, train/validation splits, and description revision
+- [Using scripts](https://agentskills.io/skill-creation/using-scripts) -
+  bundling and running executable scripts
+- [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills) -
+  eval-driven iteration, assertions, grading, and cost/benefit benchmarks
+
+Condensed procedures derived from these pages live in
+[instruction-patterns.md](instruction-patterns.md) and
+[evaluation-workflow.md](evaluation-workflow.md).
 
 ## `skills-ref` Installation and Execution
 
@@ -55,11 +81,15 @@ entry point when using the current PyPI package.
 
 Use these for Codex-specific behavior:
 
-- [OpenAI Codex: Agent Skills](https://developers.openai.com/codex/skills) -
-  Codex support for local skills, progressive disclosure, skill discovery, and
+- [Build skills](https://learn.chatgpt.com/docs/build-skills) - Codex support
+  for local skills, progressive disclosure, skill discovery, and
   `agents/openai.yaml`
 - [OpenAI skills examples](https://github.com/openai/skills) - examples linked
   from the Codex docs
+
+The former `https://developers.openai.com/codex/skills` and
+`https://developers.openai.com/codex/build-skills` URLs now issue a permanent
+redirect to `learn.chatgpt.com/docs/build-skills`. Prefer the current URL.
 
 Key Codex-only topics:
 
@@ -72,6 +102,14 @@ Key Codex-only topics:
 - `dependencies.tools`
 - UI metadata such as `display_name`, `short_description`, `icon_small`,
   `icon_large`, `brand_color`, and `default_prompt`
+
+Codex skill-listing budget:
+
+- The startup skills list uses at most 2% of the model's context window, or
+  8,000 characters when the context window is unknown
+- When many skills are installed, Codex shortens skill descriptions first
+- This makes front-loading the key use case a requirement rather than a
+  stylistic preference
 
 ## Claude Code Sources
 
@@ -97,9 +135,29 @@ Key Claude Code-only topics:
 - invocation control with `disable-model-invocation` and `user-invocable`
 - dynamic context injection with `` !`command` `` and ` ```! ` blocks
 - `${CLAUDE_SKILL_DIR}` for bundled file paths
-- `context: fork` and `agent` for subagent execution
+- `context: fork`, `agent`, and `background` for subagent execution
 - `allowed-tools`, `disallowed-tools`, `model`, `effort`, `hooks`, `paths`, and
   `shell`
+
+Claude Code context accounting for skills:
+
+- Once a skill loads, its body stays in context across turns, so every line is a
+  recurring token cost
+- The startup skill listing budget scales at 1% of the model's context window,
+  configurable with the `skillListingBudgetFraction` setting or the
+  `SLASH_COMMAND_TOOL_CHAR_BUDGET` environment variable
+- When the listing overflows, Claude Code drops descriptions starting with the
+  least-invoked skills, so frequently used skills keep their full text
+- Each listing entry's combined `description` and `when_to_use` text is capped at
+  1,536 characters regardless of budget, configurable with
+  `skillListingMaxDescChars`
+- Low-priority skills can be set to `"name-only"` in `skillOverrides` to free
+  listing budget
+- `/doctor` estimates the listing's context cost and its biggest contributors
+- After auto-compaction, Claude Code re-attaches the most recent invocation of
+  each skill, keeping only the **first 5,000 tokens** of each, within a
+  **combined 25,000-token** budget filled from the most recently invoked skill;
+  older skills can be dropped entirely
 
 Important note:
 
@@ -117,6 +175,13 @@ Important note:
 ## Research and Evaluation Sources
 
 Use research sources to improve review discipline, not to define syntax.
+
+The standard site now publishes the primary evaluation procedure; see
+[evaluation-workflow.md](evaluation-workflow.md). SkillOpt remains useful as
+supplementary rationale for *why* that discipline works, and it supplies
+vocabulary the standard pages do not, such as rejected-edit buffers and
+optimizer/runtime separation. It is no longer the primary source for how to
+evaluate a skill.
 
 - [SkillOpt: Executive Strategy for Self-Evolving Agent Skills](https://arxiv.org/html/2605.23904v2) -
   arXiv HTML for the May 25, 2026 v2 paper
@@ -140,6 +205,36 @@ SkillOpt-backed evaluation concepts:
   generalizable rather than instance-specific
 - transfer should be evaluated explicitly when portability across models,
   harnesses, or products is claimed
+
+## Model and Harness Guidance Sources
+
+Vendor prompting guides describe how a *specific* model behaves. Treat them as
+fixed-target evidence, not as portable Agent Skills rules. Use them to explain
+why a shared authoring practice exists, and record the target model when citing
+one.
+
+- [Prompting Claude Opus 5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5)
+- [Claude prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)
+- [Prompting guidance for GPT-5.6 Sol](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6.md)
+
+Points where these guides converge, and which therefore generalize into shared
+authoring practice:
+
+- Instructions for behavior the model already performs reliably should be
+  deleted, not merely tolerated. Both vendors name self-verification and
+  re-checking explicitly.
+- Prompts should state the outcome, success criteria, constraints, and stopping
+  conditions, and leave routine path selection to the model.
+- Absolute language should be reserved for genuine invariants.
+- Conservative or hedging instructions are followed literally and suppress
+  recall, so exhaustive generation and filtering belong in separate phases.
+- Output length and progress-narration cadence must be stated explicitly; they
+  are not controlled by reasoning-effort settings.
+- Positive examples of a desired style outperform prohibitions.
+
+Points that are model-specific and must not be promoted into portable guidance:
+context window sizes, thinking-disabled output artifacts, API parameters such as
+verbosity or programmatic tool calling, and any recommended effort default.
 
 ## Standard Baseline Summary
 
@@ -227,8 +322,19 @@ and using relative paths from the skill root.
 These are recommendations that work well in multiple products:
 
 - Keep `description` concrete and trigger-oriented
-- Front-load key trigger terms because clients may shorten long descriptions
+- Front-load key trigger terms because clients shorten descriptions from a
+  budget shared across every installed skill, not a per-skill allowance
 - Keep `SKILL.md` focused on the core workflow
+- Put the rules that must survive a long session near the top of `SKILL.md`
+- Delete instructions the agent already follows reliably, especially generic
+  self-verification and re-checking
+- State success criteria and stopping conditions
+- Reserve absolute language for genuine invariants and explain the reason behind
+  flexible rules
+- Separate exhaustive generation from filtering instead of asking for
+  conservative output in one pass
+- State output length and progress-update cadence explicitly for skills that
+  produce documents or run long workflows
 - Use progressive disclosure
 - Move detailed material into `references/`
 - Put deterministic helpers in `scripts/`
@@ -300,9 +406,11 @@ Claude Code examples and docs commonly show:
 Treat these as Claude Code implementation practices when relevant. Do not copy
 them into a portable skill without labeling them as Claude Code-specific.
 
-## SkillOpt-Informed Review Model
+## Update Review Model
 
-Use this model when evaluating a proposed skill update:
+Use this model when evaluating a proposed skill update. It combines the
+standard-site evaluation procedure in [evaluation-workflow.md](evaluation-workflow.md)
+with SkillOpt's review vocabulary:
 
 1. **Fixed target**: Identify the target model/product/harness and evaluator.
    Do not attribute gains to a skill if those variables also changed.
@@ -313,7 +421,9 @@ Use this model when evaluating a proposed skill update:
 4. **Bounded edits**: Use small add/delete/replace changes with explicit scope.
    Avoid broad rewrites unless the existing skill is structurally unsalvageable.
 5. **Validation gate**: Compare previous and candidate skills on held-out or at
-   least representative prompts before accepting behavior-changing edits.
+   least representative prompts before accepting behavior-changing edits, from a
+   clean context each run. Record token count and duration alongside quality, and
+   weigh the gain against the added cost rather than treating cost as neutral.
 6. **Rejected-edit memory**: Record rejected changes and the reason or evidence
    against them.
 7. **Compactness**: Keep the deployed skill auditable; move rationale and bulky
@@ -337,12 +447,18 @@ Recommended structure:
 ```text
 skill-name/
 |-- SKILL.md
+|-- evals/
+|   `-- evals.json
 `-- references/
     |-- CHANGELOG.md
     |-- evaluation-notes.md
     |-- rejected-edits.md
     `-- decision-records.md
 ```
+
+`evals/evals.json` is the standard-site location for test cases. Eval *results*
+belong in a workspace directory outside the skill, so they never enter the
+skill's context.
 
 Use these files as follows:
 
@@ -410,3 +526,9 @@ These are repository-specific helpers. They are not the Agent Skills standard.
    instructions without a clear task-time purpose
 9. Treating chronological change history as runtime procedure instead of
    maintenance records under `references/`
+10. Treating a single vendor's model-specific prompting guidance as a portable
+    Agent Skills authoring rule
+11. Measuring only whether a skill improves quality, without recording the token
+    and time cost it adds
+12. Adding rules to fix every observed failure until the skill is
+    over-constrained, instead of testing whether deleting instructions helps
