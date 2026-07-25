@@ -501,13 +501,17 @@ const fetchMachine = setup({
 
 ## Test Strategy
 
-### What NOT to Test
+### Test Transitions by Risk
 
-State machine definitions are declarative specifications. Testing transitions is redundant.
+State machine definitions are declarative specifications, but transition tests are not
+inherently redundant. Test externally meaningful transitions, final states, emitted
+events, and invoked side effects when they protect behavior that could regress. A
+one-to-one restatement of a trivial transition may be low value when stronger
+integration coverage already protects the same risk.
 
 ```typescript
-// Redundant: This just restates the machine definition
-it('should transition to loading on fetch.requested', () => {
+// Valuable when loading is an externally meaningful contract
+it('enters loading while a fetch request is active', () => {
   const actor = createActor(fetchMachine);
   actor.start();
   actor.send({ type: 'fetch.requested' });
@@ -520,9 +524,14 @@ it('should transition to loading on fetch.requested', () => {
 | Target | Priority | Reason |
 |--------|----------|--------|
 | Actor implementations (fromPromise, fromCallback) | High | Side effects need verification |
+| Critical transitions and final states | High | Observable workflow behavior needs verification |
 | Complex guards | Medium | Business logic validation |
 | Derived selectors | Medium | Computation correctness |
 | Component integration | High | User-facing behavior |
+
+Use the [official XState testing guidance](https://stately.ai/docs/testing) as
+the baseline. Treat the priorities above as team conventions, not as XState
+requirements.
 
 ### Actor Implementation Tests
 

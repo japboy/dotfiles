@@ -187,6 +187,14 @@ Source:
 - [Conventional Commits 1.0.0 beta specification](https://www.conventionalcommits.org/en/v1.0.0/-beta)
   normative rules using RFC 2119 language
 
+## Repository House Policy
+
+This skill additionally requires a Conventional Commit-style title, optional
+`Problem:`, `Change:`, `Rationale:`, and `Alternatives:` bullet sections, and
+one current-agent attribution block. These are repository choices documented in
+[commit-message-guide.md](commit-message-guide.md), not requirements from Git's
+manual or the `git.git` contribution guide.
+
 ## Primary References
 
 - [`Documentation/git-commit.adoc`](https://github.com/git/git/blob/master/Documentation/git-commit.adoc)

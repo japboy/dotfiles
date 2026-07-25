@@ -30,6 +30,8 @@ from typing import Dict, Optional, Tuple
 from urllib.parse import parse_qs, quote, unquote, urlencode, urlparse, urlunparse
 
 SUPPORTED_SOURCE_TYPES = {"code", "figma", "notion", "doc", "api", "other"}
+SKILL_ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_FILENAMES = ("normalized.csv", "duplicates.csv", "invalid.csv", "summary.json")
 
 OUTPUT_COLUMNS = [
     "source_row",
@@ -119,7 +121,7 @@ def normalize_figma(locator: str) -> Tuple[bool, Dict[str, str], str]:
 
 
 def normalize_code(locator: str) -> Tuple[bool, Dict[str, str], str]:
-    value = locator.strip()
+    value = locator.strip().replace("\\", "/")
     if not value:
         return False, {}, "code locator is empty"
     if "://" in value:
@@ -135,7 +137,13 @@ def normalize_code(locator: str) -> Tuple[bool, Dict[str, str], str]:
     if not path_raw:
         return False, {}, "code path is empty"
 
-    normalized_path = str(PurePosixPath(path_raw.replace("\\", "/")))
+    logical_path = PurePosixPath(path_raw)
+    if logical_path.is_absolute() or re.match(r"^[A-Za-z]:/", path_raw):
+        return False, {}, "code path must be workspace-relative"
+    if ".." in logical_path.parts:
+        return False, {}, "code path must not contain '..' traversal"
+
+    normalized_path = str(logical_path)
     if normalized_path in {"", "."}:
         return False, {}, "code path is invalid"
 
@@ -265,8 +273,18 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
-def run(input_path: Path, out_dir: Path) -> dict:
+def run(input_path: Path, out_dir: Path, *, overwrite: bool = False) -> dict:
     rows = load_rows(input_path)
+
+    existing_outputs = [
+        out_dir / name for name in OUTPUT_FILENAMES if (out_dir / name).exists()
+    ]
+    if existing_outputs and not overwrite:
+        existing = ", ".join(str(path) for path in existing_outputs)
+        raise FileExistsError(
+            f"refusing to replace existing output files without --overwrite: {existing}"
+        )
+
     out_dir.mkdir(parents=True, exist_ok=True)
 
     normalized_rows: list[dict] = []
@@ -329,14 +347,63 @@ def run(input_path: Path, out_dir: Path) -> dict:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Normalize source registry CSV")
-    parser.add_argument("--input", required=True, type=Path, help="Input CSV path")
-    parser.add_argument("--out-dir", required=True, type=Path, help="Output directory path")
+    parser.add_argument(
+        "--workspace-root",
+        required=True,
+        type=Path,
+        help="Absolute repository or project root for workspace inputs and outputs",
+    )
+    parser.add_argument(
+        "--input-scope",
+        required=True,
+        choices=("skill", "workspace"),
+        help="Resolve --input from the bundled skill root or workspace root",
+    )
+    parser.add_argument("--input", required=True, type=Path, help="Relative input CSV path")
+    parser.add_argument(
+        "--out-dir",
+        required=True,
+        type=Path,
+        help="Relative output directory under --workspace-root",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Explicitly replace existing normalized output files",
+    )
     return parser.parse_args()
+
+
+def resolve_relative_path(base: Path, relative: Path, *, label: str) -> Path:
+    if relative.is_absolute():
+        raise ValueError(f"{label} must be relative")
+    if ".." in relative.parts:
+        raise ValueError(f"{label} must not contain '..' traversal")
+    if str(relative) in {"", "."}:
+        raise ValueError(f"{label} must name a path below its base")
+
+    resolved_base = base.resolve(strict=True)
+    resolved = (resolved_base / relative).resolve(strict=False)
+    try:
+        resolved.relative_to(resolved_base)
+    except ValueError as exc:
+        raise ValueError(f"{label} resolves outside its base") from exc
+    return resolved
 
 
 def main() -> None:
     args = parse_args()
-    summary = run(args.input, args.out_dir)
+    if not args.workspace_root.is_absolute():
+        raise ValueError("--workspace-root must be absolute")
+
+    workspace_root = args.workspace_root.resolve(strict=True)
+    if not workspace_root.is_dir():
+        raise ValueError("--workspace-root must be a directory")
+
+    input_base = SKILL_ROOT if args.input_scope == "skill" else workspace_root
+    input_path = resolve_relative_path(input_base, args.input, label="--input")
+    out_dir = resolve_relative_path(workspace_root, args.out_dir, label="--out-dir")
+    summary = run(input_path, out_dir, overwrite=args.overwrite)
     print(json.dumps(summary, ensure_ascii=True))
 
 

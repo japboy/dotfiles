@@ -28,6 +28,19 @@ iir_detect_tmpdir() {
     return 1
 }
 
+# Accept one finite GitHub repository identifier and reject path syntax before
+# it is used to construct a local directory.
+# Arguments: <repo:owner/name>
+iir_validate_repo() {
+    local repo="$1"
+    local owner="${repo%%/*}"
+    local name="${repo#*/}"
+
+    [[ "$repo" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || return 1
+    [ "$owner" != "." ] && [ "$owner" != ".." ] || return 1
+    [ "$name" != "." ] && [ "$name" != ".." ] || return 1
+}
+
 # Compose the per-issue round root path:
 #   <tmpdir>/github-issue-plan-refinement/<repo-slug>/issue-<N>
 # Arguments: <tmpdir> <repo:owner/name> <issue>
@@ -35,6 +48,8 @@ iir_round_root() {
     local tmpdir="$1"
     local repo="$2"
     local issue="$3"
+    iir_validate_repo "$repo" || return 2
+    [[ "$issue" =~ ^[0-9]+$ ]] || return 2
     local slug="${repo//\//-}"
     printf '%s/github-issue-plan-refinement/%s/issue-%s' "${tmpdir%/}" "$slug" "$issue"
 }

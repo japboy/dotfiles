@@ -1,13 +1,18 @@
 # Changelog
 
-This file is the high-level chronological index of accepted changes to the
-`agent-skill-authoring` skill. It is a record, not runtime instruction for creating or
+This file is the high-level chronological index of changes to the
+`agent-skill-authoring` skill. Each entry states whether it is provisional,
+accepted, or rejected. It is a record, not runtime instruction for creating or
 updating skills.
 
 Use this file to answer "what changed and when?" Keep evidence, rationale, and
 rejected alternatives in the detailed record files linked from each entry.
 
 ## 2026-07-25
+
+Status: **Provisional**. Syntax and source cross-checks passed, but the recorded
+previous-version/candidate comparison did not complete. Do not infer a measured
+behavior improvement from these entries.
 
 - Added Agent Skills standard-site authoring and evaluation guidance as source
   layer 2, demoted SkillOpt to supplementary rationale, and renamed the review
@@ -34,8 +39,15 @@ rejected alternatives in the detailed record files linked from each entry.
 - Updated the Codex documentation URL to `learn.chatgpt.com/docs/build-skills`
   after the previous `developers.openai.com` paths began issuing permanent
   redirects.
+- Corrected this repository's documented Codex helper entrypoint to
+  `~/.agents/skills/.system/skill-creator/` and retained target validation plus
+  the portable fallback for unresolved helper symlinks.
 
 ## 2026-05-30
+
+Status: **Provisional for behavioral effects**. Syntax and source-structure
+checks passed, but no trigger-rate or previous-version/output-quality comparison
+was recorded; no measured behavior improvement is claimed.
 
 - Separated Agent Skills standard rules, Codex-specific practices, Claude
   Code-specific practices, and SkillOpt-informed review criteria.

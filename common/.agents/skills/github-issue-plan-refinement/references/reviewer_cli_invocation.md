@@ -1,8 +1,8 @@
 # Reviewer CLI Invocation
 
-How `run_review.sh` invokes each reviewer CLI. The skill always uses
-the **maximum reasoning effort** the CLI supports; do not override
-this per invocation. The binding rule lives in
+How `run_review.sh` invokes each reviewer CLI. The skill accepts the
+finite cross-client set `low`, `medium`, or `high`, defaults to `high`,
+and records the selected value in each round. The binding rule lives in
 [SKILL.md](../SKILL.md); this file documents the implementation
 details.
 
@@ -10,7 +10,7 @@ details.
 
 ```bash
 codex exec \
-    -c 'model_reasoning_effort="xhigh"' \
+    -c 'model_reasoning_effort="<low|medium|high>"' \
     -o "<workdir>/final.md" \
     "<prompt>" \
     > "<workdir>/raw.txt" 2>&1
@@ -18,8 +18,8 @@ codex exec \
 
 - `-c key=value`: TOML config override that wins over any
   `~/.codex/config.toml` setting.
-- `model_reasoning_effort`: accepted values are
-  `none, minimal, low, medium, high, xhigh`. `xhigh` is the maximum.
+- `model_reasoning_effort`: this skill deliberately uses the portable
+  subset `low`, `medium`, or `high`.
 - `-o` / `--output-last-message`: writes the final assistant message
   to the given file. The skill reads `final.md` from this path; the
   full transcript stays in `raw.txt`.
@@ -28,15 +28,14 @@ codex exec \
 
 ```bash
 claude -p \
-    --effort max \
+    --effort "<low|medium|high>" \
     --output-format json \
     "<prompt>" \
     > "<workdir>/raw.txt" 2>&1
 jq -r '.result // ""' "<workdir>/raw.txt" > "<workdir>/final.md"
 ```
 
-- `--effort`: accepted values are `low, medium, high, max`. `max` is
-  the maximum.
+- `--effort`: this skill deliberately uses `low`, `medium`, or `high`.
 - `--output-format json`: emits a single JSON object whose `.result`
   field contains the final message.
 - `jq -r '.result // ""'`: extracts the final message into
@@ -53,10 +52,9 @@ file when:
 - A worker fails inside `run_batch.sh` (also see the
   per-round `dispatch.log`)
 
-## Why fix the effort
+## Why make effort explicit
 
-Maximum reasoning effort is fixed by the skill so that review
-quality does not drift with local config changes (for example, a
-user lowering `model_reasoning_effort` in `~/.codex/config.toml`
-for unrelated work). The trade-off is higher latency and cost per
-round; see [cost_and_rate_limits.md](cost_and_rate_limits.md).
+An explicit batch value prevents review configuration from drifting with
+unrelated local CLI settings. Keeping one value across a batch also makes
+rounds comparable without asserting that maximum effort is universally
+optimal. See [cost_and_rate_limits.md](cost_and_rate_limits.md).

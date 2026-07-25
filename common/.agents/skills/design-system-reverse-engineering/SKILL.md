@@ -6,7 +6,7 @@ description: >
   Principles/Foundation/Content structure. Use when users ask to derive design
   rules from legacy projects, normalize heterogeneous inputs, and produce
   evidence-based design system documentation.
-license: Apache-2.0
+license: Mixed; see LICENSE.md
 compatibility: Requires Python 3.10+ and access to project code plus design/document sources.
 metadata:
   author: codex
@@ -97,6 +97,18 @@ Collect inputs into a single registry CSV first:
 
 Start from `assets/source-registry.template.csv` and adapt per project.
 
+Resource roles:
+
+- Use `assets/foundation-observation-schema.template.csv` when structuring
+  Foundation observations.
+- Use `assets/content-observation-schema.template.csv` when structuring Content
+  observations.
+- Use `assets/spectrum-taxonomy.yaml` when validating the final Spectrum
+  structure mapping.
+- Load `references/unified-modeling-theory.md` and
+  `references/unified-modeling-practice.md` only when the task explicitly needs
+  cross-layer domain, information-architecture, and design-system modeling.
+
 ## Data intake and normalization
 
 1. Ingest all source locators into one registry table.
@@ -106,12 +118,24 @@ Start from `assets/source-registry.template.csv` and adapt per project.
 5. Split invalid and duplicate rows into separate audit files.
 6. Freeze queue order before extraction.
 
+Resolve two absolute bases before running the normalizer:
+
+- `SKILL_ROOT`: this skill directory; bundled scripts and assets resolve here.
+- `WORKSPACE_ROOT`: the repository or project being analyzed; generated
+  inventory resolves here.
+
+Only these two bases may be used. Pass relative `--input` and `--out-dir` values;
+the script rejects absolute paths and `..` traversal. Existing output files are
+not replaced unless `--overwrite` is explicitly present.
+
 Run:
 
 ```bash
-python scripts/normalize_sources.py \
+python "$SKILL_ROOT/scripts/normalize_sources.py" \
+  --workspace-root "$WORKSPACE_ROOT" \
+  --input-scope skill \
   --input assets/source-registry.template.csv \
-  --out-dir ./design-system-inventory/intake
+  --out-dir design-system-inventory/intake
 ```
 
 Generated files:
@@ -138,6 +162,11 @@ Allowed transitions:
 - Do not skip states.
 
 ## Execution flow
+
+For work spanning multiple sources or more than one extraction phase, report a
+compact progress update after Phase 0.5 and after each completed numbered phase.
+State the completed phase, artifact paths, invalid or unresolved counts, and the
+next phase. Do not emit progress updates inside a short single-phase task.
 
 ### Phase 0: Input Freeze
 
@@ -305,4 +334,5 @@ Publish:
 - `layout-abstraction-validation.csv` diff rows always include either `conflict_type` (`layout_mismatch` or `canonical_mismatch`) or `resolve_action`.
 - All pending conflicts have owners and statuses.
 
-See detailed schema and reference contracts in `references/REFERENCE.md`.
+Load `references/REFERENCE.md` when defining schemas, canonical keys, state
+transitions, output packages, or the final definition of done.

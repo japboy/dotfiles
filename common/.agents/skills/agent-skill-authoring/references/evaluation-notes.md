@@ -141,7 +141,8 @@ shared Instruction Calibration rules. Model-specific numbers stayed here.
   arm ran to completion, but the run was stopped before the candidate arm
   finished, so there is no comparison and no conclusion. The changes are
   documentation-derived, so the validation gate for behavioral edits remains
-  open; treat the new Instruction Calibration rules as unmeasured.
+  open; the 2026-07-25 changes are provisional and the new Instruction
+  Calibration rules remain unmeasured.
 - The `description` was not modified in this revision, so a trigger-rate
   evaluation would validate nothing about it. Run one only as a regression check.
 
@@ -164,3 +165,14 @@ Verified on 2026-07-25 with Claude Code CLI 2.1.201 on darwin:
   runs headlessly with no permission denials.
 - Observed cost and wall time per authoring task at `claude-opus-5`: roughly
   $0.70-$3.00 and 2-9 minutes, scaling with turn count (8-23 turns).
+
+### Repository helper path correction
+
+- The canonical documented entrypoint is
+  `~/.agents/skills/.system/skill-creator/`, matching the repository's
+  user-facing symlink layout.
+- On 2026-07-25 the directory resolved to this repository, but the four
+  documented helper files resolved through self-referential child symlinks and
+  failed regular-readable-file checks.
+- Runtime guidance therefore keeps an explicit target check and portable
+  fallback; it does not claim that the current symlink targets are usable.

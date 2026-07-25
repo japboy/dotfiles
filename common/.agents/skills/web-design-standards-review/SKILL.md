@@ -1,6 +1,6 @@
 ---
 name: web-design-standards-review
-description: Evaluate and apply modern web design principles using web standards (W3C/WHATWG) and authoritative guidance (MDN, web.dev). Covers mobile-first, fluid layouts, CSS logical properties, feature detection (vs UA/version sniffing), progressive enhancement, accessibility (WCAG), internationalization, semantics, and performance-oriented UX.
+description: Evaluate and apply web UI design and implementation principles using W3C/WHATWG standards and authoritative guidance from MDN, web.dev, and WAI. Use when defining or reviewing responsive layout, CSS capability detection, progressive enhancement, accessibility, internationalization, semantics, or performance-oriented UX; do not use for purely subjective visual styling without a standards or compatibility question.
 license: CC-BY-4.0
 compatibility: Works in any web-frontend environment; assumes access to HTML/CSS/JS and standard browser devtools.
 metadata:
@@ -184,21 +184,21 @@ Rule of thumb: **Use native HTML semantics first**, add ARIA only when necessary
 
 ## Examples
 
-### Example: Replace UA sniffing with feature detection
+### Example: Detect the capability the enhancement actually uses
 
 **Bad**
 ```js
-if (navigator.userAgent.includes("Safari/") && !navigator.userAgent.includes("Chrome/")) {
-  // do X
+if (navigator.userAgent.includes("Safari/")) {
+  enableContainerQueryLayout();
 }
 ```
 
 **Better**
 ```js
-if ("serviceWorker" in navigator) {
-  // do X
+if (CSS.supports("container-type", "inline-size")) {
+  enableContainerQueryLayout();
 } else {
-  // fallback behavior
+  enableFluidFallbackLayout();
 }
 ```
 

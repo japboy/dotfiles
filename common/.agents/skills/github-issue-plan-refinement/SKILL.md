@@ -8,7 +8,7 @@ description: >
   user, and updating the issue body via `gh issue edit`. Each batch
   consumes `concurrency` consecutive round numbers; about 30% of the
   workers in a batch use a dissenting reviewer for model diversity.
-  Reviewers always run at their maximum reasoning effort. Use when
+  Each batch uses one explicit low, medium, or high reasoning-effort value. Use when
   the user asks to "iterate on issue #NNN", "refine the plan in
   #NNN", "run a review round on #NNN", "run N parallel reviews on
   #NNN", "loop reviewer feedback on #NNN", or wants to repeat
@@ -66,6 +66,7 @@ Every batch invocation of `run_batch.sh` takes:
 - `round`: the starting round number for the batch
 - `main`: `codex` or `claude` — the primary reviewer
 - `concurrency`: positive integer `N` (≥1)
+- `effort` (optional): `low`, `medium`, or `high`; defaults to `high`
 - `repo` (optional): `owner/name`; resolved from `gh repo view`
   when absent
 
@@ -93,6 +94,7 @@ scripts/run_batch.sh \
   --concurrency <N> \
   --issue <N> \
   --round <K> \
+  [--effort <low|medium|high>] \
   [--repo <owner/name>]
 ```
 
@@ -118,6 +120,7 @@ round-<n>/
 ├── raw.txt
 ├── final.md
 ├── reviewer        (name of the reviewer CLI used)
+├── effort          (explicit reasoning-effort value)
 └── dispatch.log    (worker's stdout/stderr captured during dispatch)
 ```
 
@@ -156,251 +159,26 @@ The full procedure lives in
 
 ## Output Format
 
-The per-batch report has a **fixed shape** so it can be read
-predictably across many batches. The report is composed of:
+Before rendering any batch report, read
+[output_format.md](references/output_format.md). It owns the binding
+report contract: fixed section order, table columns, required detail
+sections, question mapping, persistence paths, and validation rules.
 
-1. A mechanical header (script)
-2. A Findings table (orchestrator)
-3. Per-finding sections for `BLOCKER` and `IMPORTANT` (orchestrator)
-4. Cross-round notes (orchestrator, only when needed)
-5. AskUserQuestion calls for `Awaiting` rows (orchestrator)
-6. A User decisions section (orchestrator, populated after answers)
-
-The orchestrator never pastes the per-round `final.md` files
-verbatim. Each finding is summarized in the table; the table's
-Source column links into the corresponding `final.md` for the
-full reviewer text.
-
-### 1. Mechanical header (script)
+Run the two bundled commands instead of reconstructing their state:
 
 ```bash
 scripts/summarize_batch.sh \
   --issue <N> --round <K> --concurrency <C> [--repo <owner/name>]
-```
-
-Emits, in this exact order, only the header bullets:
-
-- A `# GitHub Issue Plan Refinement — Batch <K>..<K+C-1>` heading
-- `Issue / Concurrency / Reviewer mix / Convergence / Severity
-  totals / Round directory` bullets
-
-The orchestrator MUST obtain the header by **running the script
-and pasting its stdout verbatim**. Do not hand-compose the header
-from this document's description; the descriptions here are
-placeholders showing what the script produces, not a template to
-fill.
-
-The `Round directory` bullet must contain the **literal absolute
-path** the script emitted (both the link label and the `file://`
-href). Never substitute the path with `round_root`, `<round_root>`,
-`...`, an ellipsis, an abbreviated tail, or any other placeholder.
-The path is the audit anchor for every Sources link and for
-`Round paths`-style cross-references; abbreviating it breaks
-traceability.
-
-The angle-bracket placeholders (`<K>`, `<owner>-<repo>`,
-`<round_root>`, etc.) appear only in **this skill's documentation**;
-the script's actual stdout always contains the resolved values.
-
-### 2. Findings table (orchestrator)
-
-After the header, render exactly one row per finding (multi-row per
-round when a round produces multiple findings).
-
-Allocate the `#` column once per batch via:
-
-```bash
 scripts/allocate_finding_numbers.sh \
   --issue <N> --count <total-findings-in-this-batch> \
   [--repo <owner/name>]
 ```
 
-The allocator reads `<round_root>/finding-counter`, prints the next
-`count` numbers, and persists the new counter. Numbers never repeat
-across batches for the same issue; this is the report's stable
-cross-batch identifier.
-
-Columns and shape:
-
-```markdown
-## Findings
-
-| # | Severity | Sources | Disposition | Summary |
-|---|----------|---------|-------------|---------|
-| 12 | BLOCKER | [round-2](file:///<abs>/round-2/final.md) codex<br>[round-3](file:///<abs>/round-3/final.md) codex<br>[round-5](file:///<abs>/round-5/final.md) claude | Auto-applied | DoD 節欠落 → 追記 |
-| 13 | IMPORTANT | [round-4](file:///<abs>/round-4/final.md) claude | Awaiting (Q1) | 移行アプローチ A/B |
-| 14 | SUGGESTION | [round-6](file:///<abs>/round-6/final.md) codex | Skipped | 表現の微調整 |
-```
-
-Column rules:
-
-- `#`: number from the allocator. Render in allocation order.
-- `Severity`: `BLOCKER`, `IMPORTANT`, `QUESTION`, `SUGGESTION`, `NIT`.
-- `Sources`: one or more `[round-N](file:///<abs>/round-N/final.md)
-  <reviewer>` entries. Use the absolute file URL so the link is
-  clickable in editors. When a consolidated finding originates from
-  multiple rounds, list every source separated by `<br>`, sorted by
-  round number ascending. Single-source rows render as one line.
-- `Disposition`: `Auto-applied`, `Awaiting (Q<n>)`, or `Skipped`.
-  `Q<n>` matches the n-th AskUserQuestion call below (`Q1`, `Q2`, …).
-- `Summary`: orchestrator summary. The required length depends on
-  whether the row has a per-finding section:
-  - **Section present** (`BLOCKER`, `IMPORTANT`+Awaiting,
-    `QUESTION`): keep `Summary` to one short line — the section
-    carries the detail.
-  - **Section omitted** (`IMPORTANT`+Auto-applied/Skipped,
-    `SUGGESTION`, `NIT`): write a longer summary (~2× the prose
-    length of a non-omitted section) so the row alone carries
-    enough context for the reader to act on or revisit. Fold in
-    the defect, the action taken (or the reason for skipping),
-    and any non-obvious rationale.
-
-  Never copy the reviewer's prose verbatim.
-
-### 3. Per-finding sections (orchestrator — MANDATORY where required)
-
-A per-finding section is **required** by severity × disposition:
-
-| Severity | Disposition | Per-finding section |
-|---|---|:-:|
-| `BLOCKER` | any | **Required** |
-| `IMPORTANT` | `Awaiting (Q<n>)` | **Required** |
-| `IMPORTANT` | `Auto-applied` / `Skipped` | Omitted; expanded `Summary` (see below) |
-| `QUESTION` | any | **Required** |
-| `SUGGESTION` | any | Omitted; expanded `Summary` |
-| `NIT` | any | Omitted; expanded `Summary` |
-
-For every required section, append below the table — never collapse,
-merge, or skip them. The total section count equals
-`(BLOCKER count) + (IMPORTANT-Awaiting count) + (QUESTION count)`.
-Verify this match before persisting (see Persistence below).
-
-When a section is omitted, the row's `Summary` cell is the only
-context the user has for that finding. Make it about **2× the
-prose length of a non-omitted section** (i.e., up to ~800
-characters), folding in:
-
-- For `Auto-applied`: the defect identified **and** the change
-  applied to the body.
-- For `Skipped`: why the finding was skipped (e.g. "out of scope
-  for this batch", "user previously declined").
-- For `SUGGESTION` / `NIT`: enough context that the user can
-  reopen the finding later if they change their mind.
-
-Section template (the outer fence uses four backticks so the
-inner three-backtick block renders correctly inside the example):
-
-````markdown
-### Finding <#> — <SEVERITY>
-
-**Sources**:
-- [round-N/final.md](file:///<abs>/round-N/final.md) <reviewer>
-- [round-M/final.md](file:///<abs>/round-M/final.md) <reviewer>
-
-**Disposition**: <Auto-applied | Awaiting (Q<n>) | Skipped>
-
-<Explanatory prose. Describe the defect, the proposed fix, and
-why. Cite the relevant span of the issue body when useful.>
-
-```<lang>
-<Optional code block. Include only when the explanation requires
-it (diff, command, snippet, schema, etc.).>
-```
-````
-
-Length and content rules:
-
-- `**Sources**:` always renders as a bullet list, even with a
-  single source, sorted by round number ascending. The label is
-  always plural (`Sources`).
-- Explanatory prose ≤ 400 characters total. Metadata bullets and
-  fenced code blocks do not count toward the limit.
-- Include a code block only when the prose alone cannot convey
-  the fix (e.g. you need to show a diff, command, or example).
-- Sections appear in `#` order, after the table.
-- Never lengthen a section to restate the table — the section
-  exists to add the context the table cannot fit.
-- A `QUESTION` finding's section explains the situation and the
-  trade-off; the matching AskUserQuestion call carries the
-  user-facing options. The two are complementary, not redundant.
-
-### 4. Cross-round notes (orchestrator, optional)
-
-Add a `## Cross-round notes` section only when there is a real
-cross-round contradiction, consensus, or pattern worth surfacing.
-Omit the entire section when there is nothing to record.
-
-```markdown
-## Cross-round notes
-
-- round-2 と round-3 が反対方向の修正を提案。Q1 として保留。
-```
-
-### 5. AskUserQuestion (orchestrator, Claude Code)
-
-After the table and per-finding sections, issue AskUserQuestion
-calls for every `Awaiting` finding so the user can resolve them.
-Question identifiers (`Q1`, `Q2`, …) match the `Awaiting (Q<n>)`
-strings in the table.
-
-Batching rules (≤4 per call), `Q<n>` numbering by `#`-ascending
-order, field-level rules (`header`, `question`, `options`,
-`multiSelect`, recommended-option convention), and the Codex
-fallback live in
-[output_format.md → AskUserQuestion fields](references/output_format.md#askuserquestion-fields).
-
-### 6. User decisions (orchestrator, after answers)
-
-The user always picks the option themselves — via AskUserQuestion's
-UI in Claude Code, or via a free-text chat reply when the Codex
-fallback applies. The orchestrator never resolves an `Awaiting`
-finding on its own.
-
-Once every `Awaiting` question has a user-supplied answer, append
-a `## User decisions` section, e.g.:
-
-```markdown
-## User decisions
-
-- Q1 (Migration): selected "Transactional"; reason: rollback safety.
-- Q2 (Auth flow): selected "Other" → custom: 2-step OTP only.
-```
-
-Omit the section entirely when the batch had no `Awaiting`
-findings. Line ordering, format, and the `Other` / reason
-conventions are detailed in
-[output_format.md → User decisions log format](references/output_format.md#user-decisions-log-format).
-The Codex fallback rendering rules are in
-[output_format.md → Codex fallback](references/output_format.md#codex-fallback).
-
-### 7. Persistence
-
-Once the table, sections, AskUserQuestion answers, and any
-follow-up edits to the draft body are settled:
-
-1. Write the complete report (header + table + per-finding
-   sections + Cross-round notes + User decisions) to:
-
-   ```text
-   <round_root>/consolidated-for-batch-<K>.md
-   ```
-
-2. Write the revised issue body to:
-
-   ```text
-   <round_root>/revised-body-for-batch-<K>.md
-   ```
-
-3. Push:
-
-   ```bash
-   gh issue edit <N> --repo <owner/name> \
-     --body-file <round_root>/revised-body-for-batch-<K>.md
-   ```
-
-The cross-batch finding counter (`<round_root>/finding-counter`),
-the per-batch consolidated report, and the per-batch revised body
-together form the audit trail.
+Paste the header command's stdout verbatim. Use the allocator's
+numbers in allocation order. Never paste reviewer outputs verbatim,
+abbreviate absolute audit paths, invent an `Awaiting` decision, or
+persist a report that fails the section-count and question-mapping
+checks in `output_format.md`.
 
 ## Decision Protocol and Convergence
 
@@ -466,9 +244,9 @@ Never hardcode `/tmp` in callers.
 
 ## Reviewer CLIs
 
-The scripts always invoke reviewers at the **maximum reasoning
-effort** supported by each CLI. This is fixed by the skill; do not
-lower it per invocation.
+The scripts invoke every worker in a batch with the same explicit
+`low`, `medium`, or `high` reasoning effort. `high` is the default;
+choose another value deliberately and keep it fixed within the batch.
 
 See [reviewer_cli_invocation.md](references/reviewer_cli_invocation.md)
 for the exact flags, accepted-value tables, and diagnostic notes.
@@ -477,7 +255,7 @@ for the exact flags, accepted-value tables, and diagnostic notes.
 
 The orchestrator drives the loop:
 
-1. Confirm issue number, `main`, and `concurrency` with the user
+1. Confirm issue number, `main`, `effort`, and `concurrency` with the user
    before the first batch.
 2. Start at round `1`. Each batch is invoked once.
 3. Run `run_batch.sh` for the current `--round` and
@@ -512,8 +290,8 @@ batch is a user-visible checkpoint.
 
 ## Cost and Rate Limits
 
-Batches multiply reviewer cost by `concurrency` and run at maximum
-reasoning effort. `run_batch.sh` warns at `--concurrency > 5` but
+Batches multiply reviewer cost by `concurrency`; the explicit `effort`
+value also affects cost. `run_batch.sh` warns at `--concurrency > 5` but
 does not enforce a hard cap.
 
 See [cost_and_rate_limits.md](references/cost_and_rate_limits.md)
@@ -524,8 +302,8 @@ practical concurrency guidance.
 
 - Always use `gh` for GitHub operations.
 - Always pass reviewer selection via `--main` to `run_batch.sh`.
-- Always run reviewers at max reasoning effort; never lower it per
-  invocation.
+- Always pass one explicit reviewer effort to the batch and keep it
+  unchanged for every round in that batch.
 - Always render the per-batch report per the Output Format:
   `summarize_batch.sh` header (verbatim) + Findings table +
   per-finding sections for `BLOCKER` / `IMPORTANT` + AskUserQuestion

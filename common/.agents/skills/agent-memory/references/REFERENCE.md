@@ -36,6 +36,10 @@
   discovery for artifact indexing.
 - [git-worktree](https://git-scm.com/docs/git-worktree): background for
   multiple worktrees sharing one repository.
+- [git-rev-parse](https://git-scm.com/docs/git-rev-parse): official definition
+  of `--show-toplevel`, `--git-dir`, and the shared `--git-common-dir` path.
+- [git rev-parse source](https://github.com/git/git/blob/master/builtin/rev-parse.c):
+  Git source implementing the revision/path query command used by the helper.
 - [gitattributes](https://git-scm.com/docs/gitattributes): binary file handling
   considerations when repository-local databases are committed or ignored.
 

@@ -65,6 +65,10 @@ Track these fields while researching:
 | `confidence` | `high`, `medium`, or `low` |
 | `sources` | URLs, internal locators, file paths, page titles, dates |
 | `evidence_notes` | Why the source supports or weakens the candidate |
+| `source_published_or_updated_at` | Source publication date or most recent visible update date, when exposed |
+| `retrieved_at` | Date the evidence was retrieved |
+| `last_verified_at` | Date the concept and term match was last verified |
+| `freshness_status` | `current`, `stale`, `unknown`, or `not-time-sensitive` |
 | `collision_risk` | Existing acronym, product label, legal term, UI conflict, etc. |
 | `decision` | Recommend, use with caveat, explain only, or reject |
 

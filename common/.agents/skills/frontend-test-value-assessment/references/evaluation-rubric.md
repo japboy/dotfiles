@@ -11,11 +11,11 @@ Answer these in order. Stop at the first decisive answer.
 1. Can a static mechanism prevent this defect with equal or better confidence?
 - Yes -> `MOVE_TO_STATIC` or `KEEP_STATIC`
 
-2. Is the risk mainly user-visible behavior spanning multiple frontend units?
-- Yes -> prefer `INTEGRATION`
-
-3. Does the risk materially depend on real browser engines, real navigation, persistence, backend round trips, auth flow, device behavior, or multi-screen workflow realism?
+2. Does the risk materially depend on real browser engines, real navigation, persistence, backend round trips, auth flow, device behavior, or multi-screen workflow realism?
 - Yes -> prefer `E2E`
+
+3. Is the risk mainly user-visible behavior spanning multiple frontend units after ruling out the E2E dependencies above?
+- Yes -> prefer `INTEGRATION`
 
 4. Is the logic pure, local, and not better expressed through integration or static guarantees?
 - Yes -> prefer `UNIT`

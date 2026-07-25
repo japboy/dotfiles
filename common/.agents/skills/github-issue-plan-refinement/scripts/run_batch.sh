@@ -8,7 +8,8 @@
 # Usage:
 #   run_batch.sh --main <codex|claude> --concurrency <N> \
 #                --issue <N> --round <K> \
-#                [--repo <owner/name>] [--dry-run]
+#                [--repo <owner/name>] [--effort <low|medium|high>]
+#                [--dry-run]
 #
 # A batch consumes `concurrency` consecutive round numbers starting at
 # `--round K`, i.e. rounds K, K+1, ..., K+N-1. Each round maps to one
@@ -48,6 +49,7 @@ concurrency=""
 issue=""
 round=""
 repo=""
+effort="high"
 dry_run=0
 
 while [ $# -gt 0 ]; do
@@ -57,6 +59,7 @@ while [ $# -gt 0 ]; do
         --issue)       issue="${2:-}";       shift 2 ;;
         --round)       round="${2:-}";       shift 2 ;;
         --repo)        repo="${2:-}";        shift 2 ;;
+        --effort)      effort="${2:-}";      shift 2 ;;
         --dry-run)     dry_run=1;            shift ;;
         -h|--help)     usage; exit 0 ;;
         *)
@@ -99,8 +102,21 @@ if ! [[ "$round" =~ ^[0-9]+$ ]] || [ "$round" -lt 1 ]; then
     exit 64
 fi
 
+case "$effort" in
+    low|medium|high) ;;
+    *)
+        echo "--effort must be low, medium, or high; got '${effort}'" >&2
+        exit 64
+        ;;
+esac
+
 if [ "$concurrency" -gt 5 ]; then
     echo "notice: --concurrency=${concurrency} multiplies reviewer cost by ${concurrency}x and may trip API rate limits" >&2
+fi
+
+if [ -n "$repo" ] && ! iir_validate_repo "$repo"; then
+    echo "--repo must be a safe owner/name identifier, got '${repo}'" >&2
+    exit 64
 fi
 
 others_count="$(iir_others_count "$concurrency")"
@@ -126,8 +142,8 @@ while [ "$i" -lt "$concurrency" ]; do
 done
 
 if [ "$dry_run" -eq 1 ]; then
-    printf 'plan issue=%s main=%s concurrency=%s rounds=%s..%s (main=%d other=%d)\n' \
-        "$issue" "$main" "$concurrency" "$batch_start" "$batch_end" \
+    printf 'plan issue=%s main=%s effort=%s concurrency=%s rounds=%s..%s (main=%d other=%d)\n' \
+        "$issue" "$main" "$effort" "$concurrency" "$batch_start" "$batch_end" \
         "$main_count" "$others_count"
     i=0
     while [ "$i" -lt "${#rounds[@]}" ]; do
@@ -150,6 +166,10 @@ if [ -z "$repo" ]; then
         exit 72
     fi
     repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+fi
+if ! iir_validate_repo "$repo"; then
+    echo "--repo must be a safe owner/name identifier, got '${repo}'" >&2
+    exit 64
 fi
 
 tmpdir="$(iir_detect_tmpdir)" || {
@@ -199,6 +219,7 @@ while [ "$i" -lt "${#rounds[@]}" ]; do
             --issue "$issue" \
             --round "$r" \
             --repo "$repo" \
+            --effort "$effort" \
             --prior-feedback-file "$prior_blob"
     ) > "$log_file" 2>&1 &
     pids+=("$!")

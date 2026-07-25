@@ -1,4 +1,9 @@
-# Commit Message Guide
+# Repository House Commit Message Guide
+
+This is the repository's Conventional Commit-style house policy. Git itself
+does not require the type/scope schema, labeled sections, bullet bodies, or
+agent attribution. Read [REFERENCE.md](REFERENCE.md) when the distinction from
+Git's official baseline matters.
 
 ## Structure
 
@@ -57,7 +62,9 @@ Write the body as concise labeled bullet lists when a body is needed:
 
 - Reference issues: `Fixes #123`, `Closes #456`
 - Breaking changes: `BREAKING CHANGE: <description>`
-- Co-author signatures: Append the fixed block from SKILL.md verbatim (required)
+- Agent attribution: append exactly the current runtime-supplied signature block
+  once. If none is supplied, stop and request the identity; never copy an
+  example or invent an author.
 
 ## Examples
 
@@ -80,14 +87,11 @@ Alternatives:
 
 Fixes #789
 
-🤖 Generated with [Claude Code](https://claude.ai/code) via [Zed](https://zed.dev/docs/ai/external-agents)
-
-Co-Authored-By: Zed <noreply@zed.dev>
-Co-Authored-By: GitHub Copilot <noreply@github.com>
-Co-Authored-By: Claude Code <noreply@anthropic.com>
+<current runtime-supplied agent signature>
 ```
 
-> **Note:** The co-author block above is the exact fixed template from SKILL.md.
+> The final line is a labeled slot, not literal commit text. Replace it only
+> with the current runtime-supplied signature.
 
 ### Bad Examples
 
@@ -131,5 +135,5 @@ Before committing, verify:
 - [ ] Empty or redundant sections are removed
 - [ ] Points are not repeated across sections
 - [ ] `Alternatives:` is included only when trade-offs matter
-- [ ] Footer includes co-author signatures
+- [ ] Footer includes the current runtime-supplied signature exactly once
 - [ ] Commit is atomic (single logical change)

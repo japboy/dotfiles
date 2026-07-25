@@ -26,8 +26,9 @@ Decision:
   decisions under `references/`.
 - Treat `CHANGELOG.md` as an index of accepted changes, not as the place for
   detailed evidence, rationale, or rejected alternatives.
-- Keep `SKILL.md` limited to current validated runtime instructions and concise
-  navigation to maintenance records.
+- Keep `SKILL.md` limited to current runtime instructions and concise navigation
+  to maintenance records. If an urgent correction ships before comparative
+  evaluation, mark it provisional and do not claim improvement.
 
 Rationale:
 

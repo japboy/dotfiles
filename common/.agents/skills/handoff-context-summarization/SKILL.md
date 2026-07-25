@@ -5,15 +5,19 @@ description: >
   methodology for seamless handoff to subsequent agents. Use when ending a
   session, switching agents, or when the user asks to "summarize context",
   "save session state", "prepare handoff", or "document current progress".
+compatibility: Requires Bash 3.2+, awk, mktemp, and a writable Desktop directory only for persisted output.
 ---
 
 # Handoff Context Summarization
 
-Organize and persist the current conversation context using MFR (Model-First-Reasoning) methodology, enabling accurate understanding by subsequent agents.
+Organize the current conversation context using MFR (Model-First-Reasoning)
+methodology so a subsequent agent can continue without hidden state. Return the
+summary in chat by default. Write a file only when the user explicitly requests
+saved, persisted, or file output.
 
 ## Entities
 
-### Context Summary Structure
+### Persisted Summary Structure
 
 ```
 ~/Desktop/
@@ -29,12 +33,23 @@ Organize and persist the current conversation context using MFR (Model-First-Rea
 | **Actions** | Completed actions, pending tasks, or recommended next steps |
 | **Constraints** | Limitations, requirements, or boundaries identified |
 
-## States
+## Output States
 
 - **Analyzing**: Reviewing conversation to identify key information
 - **Modeling**: Organizing information into MFR categories
-- **Persisting**: Writing summary to assets directory
-- **Complete**: Summary saved and ready for handoff
+- **ChatOnly**: Returning the validated summary without a filesystem write
+- **Persisting**: Passing a validated summary to the bundled save helper
+- **Complete**: Summary returned in chat, or saved at the helper-reported path
+- **Blocked**: Required content is missing or persistence validation fails
+
+Allowed transitions:
+
+```text
+Analyzing -> Modeling -> ChatOnly -> Complete
+Analyzing -> Modeling -> Persisting -> Complete
+Analyzing -> Modeling -> Blocked
+Persisting -> Blocked
+```
 
 ## Actions
 
@@ -120,7 +135,7 @@ Organize extracted information into the four MFR categories:
 
 > If a previous summary exists, include all constraints from it unless they were explicitly resolved or changed during the current session.
 
-### 4. Generate Summary File
+### 4. Generate the Summary
 
 Create a markdown file with the following structure:
 
@@ -151,67 +166,61 @@ Create a markdown file with the following structure:
 [Any context that does not fit the above categories]
 ```
 
-### 5. Save to Desktop
+Before delivery, require each exact heading once with non-empty content:
 
-Pipe the summary content to the script, which saves it to Desktop with a timestamped filename:
+- `## Entities`
+- `## States`
+- `## Actions`
+- `## Constraints`
 
+If the user did not explicitly request persistence, return the summary in chat
+and stop in `Complete`. Do not call the script.
+
+### 5. Persist Only When Requested
+
+Resolve `skill-root` as the directory containing this `SKILL.md`. The helper is
+a bundled skill resource, not a repository-relative script. Write the generated
+summary to a temporary input file using the active environment's safe file API,
+then redirect that file to the helper:
 
 ```bash
-echo '<summary-content>' | ./scripts/save-summary.sh <summary-title>
-```
-
-Example:
-
-
-```bash
-echo '# Context Summary: API Refactoring
-
-**Date**: 2025-01-19 14:30
-**Session Goal**: Refactor API endpoints
-
-## Entities
-
-- **ApiClient**: Main HTTP client class
-- **src/api/endpoints.ts**: Modified endpoint definitions
-
-## States
-
-- **Progress**: 70% complete
-
-## Actions
-
-### Completed
-
-- Refactored authentication endpoints
-
-### Pending
-
-- Update remaining CRUD endpoints
-
-## Constraints
-
-- Must maintain backward compatibility' | ./scripts/save-summary.sh api-refactoring-progress
-# Output: /Users/username/Desktop/summary-202501191430-api-refactoring-progress.md
+bash <skill-root>/scripts/save-summary.sh <summary-title> < /absolute/path/to/summary-input.md
 ```
 
 The script:
 
 - Reads content from stdin
 - Generates timestamp in `YYYYMMDDHHmm` format automatically
-- Validates title contains only lowercase letters, numbers, and hyphens
+- Validates title uses lowercase alphanumeric segments separated by single
+  hyphens
 - Ensures title is 50 characters or less
-- Saves file to Desktop and outputs the filepath
+- Validates the four required headings occur exactly once and have content
+- Creates a fully written temporary file in the Desktop directory
+- Publishes it atomically and refuses to overwrite the same timestamp/title
+- Outputs the saved absolute filepath
 
-> **Note**: Use single quotes (`'...'`) around the content to preserve special characters like `#`, `*`, and `$`. Do not use heredoc syntax (`cat <<'EOF'`) as it is not supported in some environments.
+Do not interpolate the whole summary into `echo`, a command argument, or an
+unquoted shell expression. Content can contain quotes, `$`, backticks, and
+newlines; file redirection passes those bytes without shell re-interpretation.
 
 ## Constraints
 
 - Summary must include all four MFR categories
-- Filename must follow the specified format exactly
-- Title should be descriptive but concise (under 50 characters)
+- Persisted filename must follow the specified format exactly
+- Title should be descriptive but concise (50 characters or fewer)
 - Avoid including sensitive information (credentials, secrets)
 - Focus on information useful for agent handoff, not general documentation
 
+## Completion
+
+Chat-only output is complete when the rendered summary contains the four exact,
+non-empty MFR headings. Persisted output is complete only when the helper exits
+successfully and reports the new absolute path. A validation error, filename
+collision, missing Desktop, or write failure is `Blocked`; report it without
+claiming that a file was saved.
+
 ## Reference
 
-See [MFR Methodology](references/REFERENCE.md) for detailed modeling guidelines.
+Read [MFR Methodology](references/REFERENCE.md) when inheritance is ambiguous,
+when modeling preconditions/effects or blockers, or when the compact templates
+above are insufficient.

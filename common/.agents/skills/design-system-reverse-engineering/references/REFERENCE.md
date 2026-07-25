@@ -118,7 +118,9 @@ Input:
 
 Normalization:
 - Normalize slash direction to POSIX `/`
-- Collapse `.` and `..` path segments
+- Collapse `.` path segments
+- Reject absolute paths and any `..` traversal segment; code locators are
+  workspace-relative logical paths
 - Keep line as integer if present
 
 Canonical key:

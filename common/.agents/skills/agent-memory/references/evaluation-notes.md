@@ -46,3 +46,32 @@ Reasoning:
   references are relative to the skill root.
 - Codex supports user skills under `$HOME/.agents/skills`, so a bundled helper
   should not be addressed as repository-relative.
+
+## 2026-07-25 Git-Common Worktree Sharing
+
+Status: **Provisional**. The requested storage invariant has deterministic smoke
+coverage, but no previous-version/candidate behavioral benchmark or description
+trigger-rate evaluation was run.
+
+Validation performed:
+
+- `uvx --from skills-ref agentskills validate ./agent-memory`: passed.
+- `python3 -m py_compile scripts/agent_memory.py`: passed.
+- Created a temporary repository with `base` and linked `feature` worktrees.
+- Initialized and recorded an event from `base`; recalled it from `feature`.
+- Recorded another event from `feature`; recalled it from `base`.
+- Confirmed both invocations reported the same `git_common_dir`, policy path,
+  and database path, while reporting different `worktree_root` values.
+- Confirmed the database resolved below the Git common directory.
+
+Design evidence:
+
+- `git rev-parse --show-toplevel` identifies the active worktree boundary.
+- `git rev-parse --git-common-dir` identifies the repository state shared by
+  linked worktrees.
+- Artifact reads remain worktree-contained; policy and SQLite writes are
+  Git-common-contained. Arbitrary external paths remain invalid.
+
+No legacy `.agents/memory.db` or `.agents/memory.yml` exists in this repository,
+so no migration was required here. A future migration tool must select its
+source worktree explicitly rather than guessing among divergent databases.

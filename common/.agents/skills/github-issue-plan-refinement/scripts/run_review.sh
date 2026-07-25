@@ -8,6 +8,7 @@
 # Usage:
 #   run_review.sh --reviewer <codex|claude> --issue <N> --round <K>
 #                 [--repo <owner/name>]
+#                 [--effort <low|medium|high>]
 #                 [--prior-feedback-file <path>]
 #
 # One invocation runs one reviewer CLI against the current issue body
@@ -23,6 +24,7 @@
 #   raw.txt           full reviewer stdout (diagnostic)
 #   final.md          reviewer's final message (authoritative)
 #   reviewer          name of the reviewer CLI used (audit)
+#   effort            requested reasoning effort (audit)
 #
 # Prior-round feedback handling:
 #   --prior-feedback-file <path>   use the given file verbatim as the
@@ -44,6 +46,7 @@ reviewer=""
 issue=""
 round=""
 repo=""
+effort="high"
 prior_feedback_file=""
 
 while [ $# -gt 0 ]; do
@@ -52,6 +55,7 @@ while [ $# -gt 0 ]; do
         --issue)                issue="${2:-}";                shift 2 ;;
         --round)                round="${2:-}";                shift 2 ;;
         --repo)                 repo="${2:-}";                 shift 2 ;;
+        --effort)               effort="${2:-}";               shift 2 ;;
         --prior-feedback-file)  prior_feedback_file="${2:-}";  shift 2 ;;
         -h|--help)              usage; exit 0 ;;
         *)
@@ -74,6 +78,14 @@ case "$reviewer" in
     codex|claude) ;;
     *)
         echo "--reviewer must be 'codex' or 'claude', got '${reviewer}'" >&2
+        exit 64
+        ;;
+esac
+
+case "$effort" in
+    low|medium|high) ;;
+    *)
+        echo "--effort must be low, medium, or high; got '${effort}'" >&2
         exit 64
         ;;
 esac
@@ -113,6 +125,10 @@ fi
 if [ -z "$repo" ]; then
     repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
 fi
+if ! iir_validate_repo "$repo"; then
+    echo "--repo must be a safe owner/name identifier, got '${repo}'" >&2
+    exit 64
+fi
 
 tmpdir="$(iir_detect_tmpdir)" || {
     echo "cannot detect OS temp directory" >&2
@@ -140,6 +156,20 @@ else
         fi
         prior_candidate=$((prior_candidate - 1))
     done
+fi
+
+if [ -n "$effective_prior" ]; then
+    python3 - "$round_root" "$effective_prior" <<'PY'
+import pathlib
+import sys
+
+base = pathlib.Path(sys.argv[1]).resolve()
+candidate = pathlib.Path(sys.argv[2]).resolve()
+try:
+    candidate.relative_to(base)
+except ValueError as exc:
+    raise SystemExit(f"prior-feedback file escapes round root: {candidate}") from exc
+PY
 fi
 
 template_path="${script_dir}/../references/reviewer_prompt.md"
@@ -176,23 +206,21 @@ pathlib.Path(out_path).write_text(prompt)
 PY
 
 printf '%s\n' "$reviewer" > "${workdir}/reviewer"
+printf '%s\n' "$effort" > "${workdir}/effort"
 
-# Always run both reviewer CLIs at their highest reasoning effort.
-# For Codex that is `model_reasoning_effort = "xhigh"`, injected via
-# `-c key="value"` (TOML value). For Claude Code that is
-# `--effort max`. Keep these fixed so review quality does not drift
-# with local config changes.
+# Pass one explicit, cross-client effort value so local CLI defaults cannot
+# silently change the review configuration.
 case "$reviewer" in
     codex)
         codex exec \
-            -c 'model_reasoning_effort="xhigh"' \
+            -c "model_reasoning_effort=\"${effort}\"" \
             -o "${workdir}/final.md" \
             "$(cat "${workdir}/prompt.md")" \
             > "${workdir}/raw.txt" 2>&1
         ;;
     claude)
         claude -p \
-            --effort max \
+            --effort "$effort" \
             --output-format json \
             "$(cat "${workdir}/prompt.md")" \
             > "${workdir}/raw.txt" 2>&1

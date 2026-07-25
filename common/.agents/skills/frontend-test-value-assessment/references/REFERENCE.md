@@ -9,8 +9,8 @@ The Testing Trophy is the primary decision model for this skill.
 Interpret it as a guide to confidence-per-cost:
 
 - Static checks provide the cheapest and broadest defect prevention.
-- Integration tests are the default dynamic layer for frontend behavior.
-- End-to-end tests are necessary when realistic browser, device, workflow, or backend behavior matters.
+- End-to-end tests are necessary when realistic browser, device, workflow, or backend behavior matters; evaluate this dependency before choosing the default dynamic layer.
+- Integration tests are the default dynamic layer for frontend behavior after those end-to-end dependencies are ruled out.
 - Unit tests are the narrowest and least-preferred dynamic layer, reserved for pure local logic and hard-to-reach edge logic.
 
 For this skill, layer selection comes before in-layer quality scoring.

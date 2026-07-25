@@ -28,6 +28,20 @@ usage as separate layers rather than collapsing them into one answer.
   `descriptive`, `avoid`, or `unverified`.
 - Always classify proposals into local fixes and fundamental solutions.
 
+Research follows a finite state machine:
+
+- `R0 Defined`
+- `R1 SearchPlanned`
+- `R2 EvidenceCollected`
+- `R3 CandidatesCompared`
+- `R4 Complete` or `R4 Unverified`
+
+Before searching, set a finite evidence budget. By default, inspect at most
+three high-authority sources for each applicable usage layer plus two targeted
+collision or freshness checks across the task. Extend the budget once only when
+the user requests broader research or a material contradiction cannot otherwise
+be classified; state the extension and its reason.
+
 ## Workflow
 
 1. Define the term problem.
@@ -49,6 +63,8 @@ usage as separate layers rather than collapsing them into one answer.
      style guides, and mainstream usage.
    - Use search counts, blogs, and generated summaries only as weak supporting
      evidence, never as the deciding source.
+   - Record publication or update date, retrieval date, last verification date,
+     and freshness status when the source exposes them.
 
 3. Load the detailed reference when making a recommendation.
    - Use [REFERENCE.md](references/REFERENCE.md) for the source hierarchy,
@@ -70,9 +86,29 @@ usage as separate layers rather than collapsing them into one answer.
    - If specialist and general-audience needs differ, provide a use-by-audience
      table rather than forcing one term.
 
+6. Stop with an explicit terminal state.
+   - Use `R4 Complete` when the concept, audience, and usage layer are explicit;
+     the selected status meets the evidence rule in `references/REFERENCE.md`;
+     collision and freshness checks are complete; and material contradictions
+     are resolved or disclosed.
+   - Use `R4 Unverified` when the evidence budget is exhausted and any required
+     source, concept match, collision result, or freshness result remains
+     missing. Report the missing evidence instead of continuing open-ended
+     search.
+
 ## Output Shape
 
-Use this structure for substantive answers:
+Use the compact shape for one term, one audience, and no material collision:
+
+1. **Decision**: term, audience, status, confidence, and terminal state.
+2. **Why**: short evidence-backed rationale.
+3. **Local Fixes** and **Fundamental Solutions**: include `none` when no proposal
+   is warranted.
+4. **Unknowns**: omit only in `R4 Complete` when none remain.
+
+Use the substantive shape when comparing multiple candidates or audiences, or
+when there is a collision, regulatory constraint, material contradiction, or
+stale evidence:
 
 1. **Decision**: recommended term, target audience, and status.
 2. **Use By Audience**: domain-specific, industry, and general usage.
@@ -81,6 +117,7 @@ Use this structure for substantive answers:
 5. **Fundamental Solutions**: glossary, termbase, naming policy, or review
    workflow changes that address root causes.
 6. **Unknowns**: missing sources, stale evidence, or follow-up validation.
+7. **Terminal State**: `R4 Complete` or `R4 Unverified` and the stopping reason.
 
 Keep citations close to the claim they support. Prefer concise paraphrase over
 long quotations.

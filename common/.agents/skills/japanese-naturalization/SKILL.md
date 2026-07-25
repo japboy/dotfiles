@@ -1,11 +1,11 @@
 ---
 name: japanese-naturalization
 description: >
-  Naturalize the current or referenced assistant output into
+  Naturalize the current or explicitly referenced assistant output into
   context-appropriate Japanese while preserving meaning. Use when the user asks
-  to make the previous response sound natural, remove AI-like Japanese, fix
-  translationese, adjust register, or choose Japanese terminology from audience
-  and domain context.
+  to rewrite an existing assistant response so it sounds natural, removes
+  AI-like Japanese or translationese, or fits a different register. For
+  standalone evidence-backed term selection, use term-translation-research.
 ---
 
 # Japanese Naturalization
@@ -167,16 +167,13 @@ hierarchy, use [REFERENCE.md](references/REFERENCE.md).
 
 ## Skill Improvement Feedback
 
-When the user points out an unnatural expression, or when you notice a
-potentially reusable expression problem while applying this skill, fix the
-current rewrite first. Then evaluate whether the feedback should become a skill
-improvement candidate. If it appears reusable, explicitly propose a bounded
-skill update and name the likely destination reference file. If the user is
-already asking to update or maintain the skill, apply the update using the
-workflow below.
+Apply this section only when the user explicitly asks to update, maintain, or
+incorporate reusable feedback into this skill. A correction to the current
+rewrite alone is not permission to propose or edit skill files; fix the rewrite
+and stop.
 
-Do not silently edit the skill for a one-off preference. For skill updates from
-expression feedback, use [improvement-workflow.md](references/improvement-workflow.md).
-Keep updates bounded, evidence-backed, and validated. If the update involves
-Agent Skills structure, metadata, validation, or SkillOpt-style review
-discipline, use the `agent-skill-authoring` skill when available.
+In an explicit skill-maintenance task, use
+[improvement-workflow.md](references/improvement-workflow.md). Keep updates
+bounded, evidence-backed, and validated. If the update involves Agent Skills
+structure, metadata, validation, or SkillOpt-style review discipline, use the
+`agent-skill-authoring` skill when available.

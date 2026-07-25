@@ -29,18 +29,18 @@ Out of primary scope:
 
 Treat the Testing Trophy as the center of the skill.
 
-Use this priority order when deciding where confidence should come from:
+Use this routing precedence when deciding where confidence should come from:
 
 1. Static
-2. Integration
-3. End-to-End
+2. End-to-End dependency gate
+3. Integration
 4. Unit
 
 Interpretation requirements:
 
 - `Static` is the cheapest and broadest confidence for syntax, types, linting, schema shape, and other machine-verifiable guarantees.
-- `Integration` is the default destination for most frontend behavior because it exercises multiple units together with user-visible outcomes.
-- `End-to-End` is required when real browser, device, navigation, persistence, backend integration, or cross-screen workflow behavior materially affects risk.
+- `End-to-End` is required when real browser, device, navigation, persistence, backend integration, or cross-screen workflow behavior materially affects risk. Check this dependency before applying the integration default.
+- `Integration` is the default destination for frontend behavior only after ruling out material end-to-end dependencies; it exercises multiple units together with user-visible outcomes.
 - `Unit` is the narrowest and lowest-priority dynamic layer. Reserve it for pure local logic that cannot be protected more cheaply by static analysis or more meaningfully by integration.
 
 Treat these as mandatory:
@@ -73,11 +73,11 @@ Choose the highest-ROI layer first:
 1. `MOVE_TO_STATIC`
 - Use when type checks, lint rules, schema validation, contract generation, or similar static mechanisms can prevent the defect better than runtime tests.
 
-2. `MOVE_TO_INTEGRATION`
-- Use by default for most frontend behavior involving UI rendering, state propagation, router coordination, client adapters, accessibility semantics, or boundary mapping that can be validated without full production infrastructure.
-
-3. `MOVE_TO_E2E`
+2. `MOVE_TO_E2E`
 - Use when the risk depends on real browser engines, real navigation, persistence, authentication flow, backend round trips, third-party integrations, multi-screen workflows, or device-specific behavior.
+
+3. `MOVE_TO_INTEGRATION`
+- Use by default for frontend behavior involving UI rendering, state propagation, router coordination, client adapters, accessibility semantics, or boundary mapping after the E2E dependency gate has been ruled out.
 
 4. `MOVE_TO_UNIT`
 - Use only when the protected logic is pure, local, and not more clearly verified by static analysis or integrated behavior.
@@ -205,8 +205,8 @@ Capture:
 Apply these routing rules in order:
 
 1. If static analysis can prevent the defect well enough, prefer `MOVE_TO_STATIC`.
-2. Else if the risk is user-visible behavior spanning multiple frontend units, prefer `MOVE_TO_INTEGRATION`.
-3. Else if real browser, device, backend, or full workflow realism matters, prefer `MOVE_TO_E2E`.
+2. Else if real browser, device, backend, navigation, persistence, or full workflow realism matters, prefer `MOVE_TO_E2E`.
+3. Else if the risk is user-visible behavior spanning multiple frontend units, prefer `MOVE_TO_INTEGRATION`.
 4. Else if the logic is pure and local, prefer `MOVE_TO_UNIT`.
 5. Else if no unique risk remains, prefer `REMOVE`.
 

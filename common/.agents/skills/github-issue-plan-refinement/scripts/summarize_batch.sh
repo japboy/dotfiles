@@ -74,6 +74,10 @@ if [ -z "$repo" ]; then
     fi
     repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
 fi
+if ! iir_validate_repo "$repo"; then
+    echo "--repo must be a safe owner/name identifier, got '${repo}'" >&2
+    exit 64
+fi
 
 tmpdir="$(iir_detect_tmpdir)" || {
     echo "cannot detect OS temp directory" >&2
@@ -116,9 +120,24 @@ round_reviewer() {
     fi
 }
 
+# Pretty-print the finite effort state recorded for round-<n>, or
+# "unknown" for artifacts created before effort was recorded.
+round_effort() {
+    local rd="$1"
+    if [ -f "${rd}/effort" ]; then
+        tr -d '[:space:]' < "${rd}/effort"
+    else
+        printf 'unknown'
+    fi
+}
+
 reviewer_count_codex=0
 reviewer_count_claude=0
 reviewer_count_unknown=0
+effort_count_low=0
+effort_count_medium=0
+effort_count_high=0
+effort_count_unknown=0
 total_blocker=0
 total_important=0
 total_question=0
@@ -131,10 +150,17 @@ while [ "$n" -le "$batch_end" ]; do
     rd="${round_root}/round-${n}"
     final="${rd}/final.md"
     rev="$(round_reviewer "$rd")"
+    effort="$(round_effort "$rd")"
     case "$rev" in
         codex)  reviewer_count_codex=$((reviewer_count_codex + 1)) ;;
         claude) reviewer_count_claude=$((reviewer_count_claude + 1)) ;;
         *)      reviewer_count_unknown=$((reviewer_count_unknown + 1)) ;;
+    esac
+    case "$effort" in
+        low)    effort_count_low=$((effort_count_low + 1)) ;;
+        medium) effort_count_medium=$((effort_count_medium + 1)) ;;
+        high)   effort_count_high=$((effort_count_high + 1)) ;;
+        *)      effort_count_unknown=$((effort_count_unknown + 1)) ;;
     esac
 
     total_blocker=$((total_blocker + $(count_tag '[BLOCKER]' "$final")))
@@ -180,6 +206,31 @@ if [ -z "$mix_parts" ]; then
     mix_parts="(none)"
 fi
 
+effort_parts=""
+append_effort() {
+    local part="$1"
+    if [ -n "$effort_parts" ]; then
+        effort_parts="${effort_parts}, ${part}"
+    else
+        effort_parts="$part"
+    fi
+}
+if [ "$effort_count_low" -gt 0 ]; then
+    append_effort "low × ${effort_count_low}"
+fi
+if [ "$effort_count_medium" -gt 0 ]; then
+    append_effort "medium × ${effort_count_medium}"
+fi
+if [ "$effort_count_high" -gt 0 ]; then
+    append_effort "high × ${effort_count_high}"
+fi
+if [ "$effort_count_unknown" -gt 0 ]; then
+    append_effort "unknown × ${effort_count_unknown}"
+fi
+if [ -z "$effort_parts" ]; then
+    effort_parts="(none)"
+fi
+
 # Header (only). The orchestrator appends the Findings table,
 # per-finding sections, Cross-round notes, and User decisions
 # below this header. Per-round `final.md` content is not pasted
@@ -188,6 +239,7 @@ printf '# GitHub Issue Plan Refinement — Batch %s..%s\n\n' "$batch_start" "$ba
 printf -- '- Issue: %s#%s\n' "$repo" "$issue"
 printf -- '- Concurrency: %s\n' "$concurrency"
 printf -- '- Reviewer mix: %s\n' "$mix_parts"
+printf -- '- Reviewer effort: %s\n' "$effort_parts"
 printf -- '- Convergence: %s\n' "$converged"
 printf -- '- Severity totals: BLOCKER=%d IMPORTANT=%d QUESTION=%d SUGGESTION=%d NIT=%d\n' \
     "$total_blocker" "$total_important" "$total_question" "$total_suggestion" "$total_nit"

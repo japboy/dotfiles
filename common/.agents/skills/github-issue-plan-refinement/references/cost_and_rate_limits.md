@@ -6,14 +6,12 @@ it matters.
 
 ## Cost shape
 
-- One round = one reviewer CLI invocation at maximum reasoning
-  effort.
+- One round = one reviewer CLI invocation at the batch's explicit
+  `low`, `medium`, or `high` reasoning effort.
 - One batch = `concurrency` rounds, dispatched concurrently.
 - Per-batch wall-clock is bounded by the slowest worker.
-- Per-batch cost is roughly `concurrency * single-round-cost`. The
-  reasoning effort is fixed at the maximum (`xhigh` for Codex,
-  `max` for Claude), so per-round cost runs higher than a default
-  invocation.
+- Per-batch cost is roughly `concurrency * single-round-cost`. Higher
+  explicit effort generally increases per-round latency and cost.
 
 ## Rate limit risk
 

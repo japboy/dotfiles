@@ -1,9 +1,10 @@
 ---
 name: web-architecture-pattern-application
 description: >
-  Apply Yu Inao's personal catalogue of web architecture grand-design patterns.
-  Use when designing, reviewing, or documenting whole-system web architecture
-  decisions and selecting the relevant reference pattern from this skill.
+  Apply Yu Inao's route-state-based product analytics pattern to web
+  architecture decisions. Use when designing or reviewing declarative analytics
+  derived from route transitions, URL-as-state, route registries, measurement
+  manifests, or DWH semantic models. Do not use for unrelated web architecture.
 license: CC-BY-NC-4.0
 metadata:
   author: "Yu Inao"
@@ -18,8 +19,8 @@ metadata:
 
 ## Purpose
 
-Use this skill to reason about web architecture as a whole-system design
-problem, not as isolated frontend implementation work.
+Use this skill to reason about route-state product analytics as a whole-system
+web architecture problem, not as isolated frontend tracking calls.
 
 The expected output is an architectural decision, critique, or pattern proposal
 that selects and applies the relevant reference pattern from this catalogue.
@@ -55,6 +56,15 @@ Start by identifying the architectural level of the user's question:
 Then load only the reference files needed for that level. Do not import one
 reference pattern's assumptions into unrelated architecture decisions.
 
+Choose exactly one terminal applicability state before recommending a pattern:
+
+- `applicable`: the task matches a catalogue entry and the project evidence is
+  sufficient to apply it.
+- `not-applicable`: no catalogue entry matches. State that result and stop; do
+  not turn the catalogue into generic web architecture advice.
+- `defer`: a catalogue entry may match, but a required project fact is missing.
+  Name the missing fact and the artifact that can resolve it, then stop.
+
 ## Reference Catalog
 
 Available references:
@@ -77,7 +87,7 @@ When applying a pattern:
 
 ## Output Shape
 
-For design guidance, prefer this structure:
+For an `applicable` result, prefer this structure:
 
 1. **Decision**: the recommended architecture or review outcome
 2. **Why**: the architectural rationale
@@ -85,9 +95,13 @@ For design guidance, prefer this structure:
 4. **Model**: the explicit states, contracts, boundaries, or schemas involved
 5. **Risks**: ambiguity, coupling, refactoring hazards, or semantic drift
 6. **Checklist**: concrete validation questions
+7. **Applicability State**: `applicable`
 
 Keep the answer grounded in the actual project artifacts when reviewing a real
 codebase.
+
+For `not-applicable` or `defer`, return only the applicability state, the reason,
+and, for `defer`, the missing fact and resolving artifact.
 
 ## License Notes
 

@@ -69,6 +69,10 @@ if [ -z "$repo" ]; then
     fi
     repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
 fi
+if ! iir_validate_repo "$repo"; then
+    echo "--repo must be a safe owner/name identifier, got '${repo}'" >&2
+    exit 64
+fi
 
 tmpdir="$(iir_detect_tmpdir)" || {
     echo "cannot detect OS temp directory" >&2

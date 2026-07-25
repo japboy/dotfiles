@@ -1,11 +1,69 @@
-# Output Format — Interactive Sub-rules
+# Output Format — Binding Report Contract
 
-Detailed sub-rules referenced by the SKILL.md "Output Format"
-section. SKILL.md owns the binding shape (header → table →
-per-finding sections → cross-round notes → AskUserQuestion → user
-decisions → persistence). This file fills in the precise field
-shapes for AskUserQuestion, the Codex fallback, and the User
-decisions log line format.
+Read this file before rendering any batch report. The fixed order is:
+
+1. Mechanical header from `summarize_batch.sh`
+2. One Findings table
+3. Required per-finding sections
+4. `Cross-round notes` only when a real pattern or conflict exists
+5. User questions for every `Awaiting` row
+6. `User decisions` after all answers, omitted when none were needed
+7. Validation and persistence
+
+Never paste a per-round `final.md` verbatim. Summarize findings and
+link every source to its absolute `file://` path.
+
+## Mechanical header
+
+Run `scripts/summarize_batch.sh` and paste its stdout verbatim. Its
+heading and bullets are authoritative, including the literal absolute
+round-directory path. Do not hand-compose or abbreviate them.
+
+## Findings table
+
+Allocate stable cross-batch IDs with
+`scripts/allocate_finding_numbers.sh`, then emit exactly one row per
+finding with these columns in this order:
+
+```markdown
+## Findings
+
+| # | Severity | Sources | Disposition | Summary |
+|---|----------|---------|-------------|---------|
+```
+
+- `Severity`: `BLOCKER`, `IMPORTANT`, `QUESTION`, `SUGGESTION`, or
+  `NIT`.
+- `Sources`: every source as `[round-N](file:///<absolute-path>)
+  <reviewer>`, sorted by round and separated by `<br>`.
+- `Disposition`: `Auto-applied`, `Awaiting (Q<n>)`, or `Skipped`.
+- `Summary`: one short line when a detail section follows. Otherwise
+  include the defect, action or skip reason, and rationale in at most
+  about 800 characters. Never copy reviewer prose verbatim.
+
+## Required per-finding sections
+
+| Severity | Disposition | Detail section |
+|---|---|:-:|
+| `BLOCKER` | any | Required |
+| `IMPORTANT` | `Awaiting (Q<n>)` | Required |
+| `IMPORTANT` | `Auto-applied` / `Skipped` | Omit |
+| `QUESTION` | any | Required |
+| `SUGGESTION` / `NIT` | any | Omit |
+
+Each required section is `### Finding <#> — <SEVERITY>`, followed by
+a `**Sources**:` bullet list, `**Disposition**:`, and explanatory
+prose of at most 400 characters. Add a fenced block only when prose
+cannot convey the fix. Sort sections by finding ID.
+
+Before persistence, verify that the detail-section count equals
+`BLOCKER + IMPORTANT/Awaiting + QUESTION` and every `Awaiting (Q<n>)`
+maps one-to-one to a user question and decision entry.
+
+## Cross-round notes
+
+Add `## Cross-round notes` only for a substantive contradiction,
+consensus, or pattern. Omit it otherwise.
 
 ## AskUserQuestion fields
 
@@ -114,3 +172,23 @@ Rules:
 
 The User decisions section as a whole is omitted when the batch
 has no `Awaiting` findings.
+
+## Persistence
+
+After all required user answers and issue-body edits are settled:
+
+1. Write the complete report to
+   `<round_root>/consolidated-for-batch-<K>.md`.
+2. Write the revised issue body to
+   `<round_root>/revised-body-for-batch-<K>.md`.
+3. Push only that body with:
+
+   ```bash
+   gh issue edit <N> --repo <owner/name> \
+     --body-file <round_root>/revised-body-for-batch-<K>.md
+   ```
+
+The persisted finding counter, consolidated report, revised body, and
+per-round audit files together form the explicit batch state. Do not
+persist or push until the section-count and question-mapping checks
+above pass.

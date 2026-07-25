@@ -456,15 +456,17 @@ skill-name/
     `-- decision-records.md
 ```
 
-`evals/evals.json` is the standard-site location for test cases. Eval *results*
-belong in a workspace directory outside the skill, so they never enter the
-skill's context.
+The standard-site evaluation guidance uses `evals/evals.json` as its test-case
+layout. This is authoring guidance, not an Agent Skills specification
+requirement. Eval *results* belong in a workspace directory outside the skill,
+so they never enter the skill's activation context.
 
 Use these files as follows:
 
-- `SKILL.md`: current validated runtime instructions only
-- `references/CHANGELOG.md`: high-level chronological index of accepted
-  changes, with links to detailed records
+- `SKILL.md`: current runtime instructions; mark an unevaluated
+  behavior-changing candidate `provisional` in maintenance records
+- `references/CHANGELOG.md`: high-level chronological index with explicit
+  `provisional`, `accepted`, or `rejected` state and links to detailed records
 - `references/evaluation-notes.md`: prompts, fixtures, scores, reviewer
   judgments, and validation-gate evidence
 - `references/rejected-edits.md`: rejected candidate edits, score drops, and
@@ -472,14 +474,18 @@ Use these files as follows:
 - `references/decision-records.md`: durable maintenance decisions that explain
   why the skill is shaped a certain way, but are not task-time instructions
 
-The `agent-skill-authoring` skill itself follows this layout and can be used as a
-reference implementation for record/runtime separation. Its `CHANGELOG.md` is
-kept as an index, not as the place for detailed evidence or decision rationale.
+The `agent-skill-authoring` skill demonstrates the `references/` maintenance
+record subset. It does not currently include `evals/evals.json`, so do not cite
+it as a complete evaluation-layout reference implementation. Its `CHANGELOG.md`
+is kept as an index, not as the place for detailed evidence or decision
+rationale.
 
-Promote a note from `references/` into `SKILL.md` only when it has become a
-validated, reusable procedure, tool policy, applicability condition, output
-constraint, or failure-avoidance rule. Do not copy time-ordered history into
-`SKILL.md` merely to preserve context.
+Ordinarily promote a note from `references/` into `SKILL.md` only when it has
+become a validated, reusable procedure, tool policy, applicability condition,
+output constraint, or failure-avoidance rule. If an immediate local correction
+must ship before comparative evaluation, record it as provisional and do not
+claim improvement. Do not copy time-ordered history into `SKILL.md` merely to
+preserve context.
 
 If `SKILL.md` links these files, label them as update/audit references so an
 agent does not treat them as required task instructions:
@@ -495,20 +501,21 @@ For skill updates or audits only, see:
 
 ## Repository-Specific Codex Helpers
 
-This repository includes Codex-oriented tooling under:
+This repository declares the user-facing Codex helper path as:
 
 ```text
-common/.agents/skills/.system/skill-creator/
+~/.agents/skills/.system/skill-creator/
 ```
 
-Useful files:
+When these paths resolve to regular readable files, useful files are:
 
 - `scripts/init_skill.py`
 - `scripts/generate_openai_yaml.py`
 - `scripts/quick_validate.py`
 - `references/openai_yaml.md`
 
-These are repository-specific helpers. They are not the Agent Skills standard.
+These are repository-specific helpers. They are not the Agent Skills standard,
+and missing, recursive, or broken symlinks must not block portable authoring.
 
 ## Common Mistakes
 

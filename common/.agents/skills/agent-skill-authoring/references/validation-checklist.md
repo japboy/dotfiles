@@ -274,6 +274,8 @@ change affects triggering, tool use, output format, or product portability.
 - [ ] the quality gain is judged against the token and time cost it adds
 - [ ] acceptance criterion is documented
 - [ ] rejected or inconclusive results block or narrow the change
+- [ ] an unevaluated behavior-changing candidate is marked `provisional`, not
+      `accepted`, and has an explicit follow-up gate
 - [ ] open-ended domains use documented human or model-based review when
       automatic verification is unavailable
 
@@ -281,8 +283,9 @@ change affects triggering, tool use, output format, or product portability.
 
 - [ ] changelogs, evaluation notes, rejected edits, and decision records live in
       `references/` or another explicitly documented record location
-- [ ] `CHANGELOG.md`, if present, is an index of accepted changes and links to
-      detailed records rather than duplicating evidence or rationale
+- [ ] `CHANGELOG.md`, if present, records each change as `provisional`,
+      `accepted`, or `rejected` and links to detailed records rather than
+      duplicating evidence or rationale
 - [ ] rejected edits and reasons are recorded when they inform future reviews
 - [ ] accepted behavioral changes can be traced to evidence or rationale
 - [ ] reviewer/optimizer-only notes are not shipped as runtime instructions

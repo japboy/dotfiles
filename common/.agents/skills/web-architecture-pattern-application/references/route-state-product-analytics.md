@@ -336,7 +336,7 @@ type RouterLike = {
       url: string;
       type: RouteTransition["transition"]["type"];
     }) => void,
-  ): void;
+  ): () => void;
 };
 
 type Collector = {
@@ -389,7 +389,7 @@ export function installRouteStateInstrumentation(input: {
 }) {
   let previous: RouteSnapshot | null = null;
 
-  input.router.subscribe((change) => {
+  const unsubscribe = input.router.subscribe((change) => {
     const to = matchRoute(change.url, routePatterns);
     const transition: RouteTransition = {
       from: previous,
@@ -413,6 +413,14 @@ export function installRouteStateInstrumentation(input: {
 
     previous = to;
   });
+
+  let installed = true;
+  return () => {
+    if (!installed) return;
+    installed = false;
+    unsubscribe();
+    previous = null;
+  };
 }
 
 function evaluateMeasurements(
@@ -459,6 +467,10 @@ The omitted helpers are intentionally isolated:
   components.
 - `toRawTransitionEvent` shapes the stable warehouse event.
 - `resolveExpression` reads only allowlisted paths such as `$to.params.courseId`.
+
+`installRouteStateInstrumentation` returns an idempotent disposer. The owner of
+the router lifecycle must call it before reinstalling instrumentation or
+disposing the application boundary so one transition produces one event stream.
 
 The important boundary is that product features only navigate to canonical
 routes. They do not call analytics SDKs for durable metrics.

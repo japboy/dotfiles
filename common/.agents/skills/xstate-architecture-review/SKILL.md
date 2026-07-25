@@ -68,7 +68,11 @@ Provide structured feedback:
 
 ## Actions
 
-Provide feedback based on official XState references. Cite specific documentation sections and code examples when giving recommendations.
+Provide feedback based on official XState references. Before making a framework-bound
+claim, read [the official source map](references/REFERENCE.md) and cite the specific
+documentation section or source-code location that supports it. Treat the bundled
+convention files as team policy unless the source map identifies a corresponding
+official XState requirement.
 
 Evaluate against:
 - [XState conventions](./references/xstate-conventions.md) for general XState patterns

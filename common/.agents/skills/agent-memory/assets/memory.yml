@@ -1,8 +1,9 @@
 version: 1
 
 storage:
-  database: ".agents/memory.db"
-  config: ".agents/memory.yml"
+  scope: "git-common"
+  database: "agent-memory/memory.db"
+  config: "agent-memory/memory.yml"
   journal_mode: "wal"
 
 identity:
@@ -10,7 +11,7 @@ identity:
 
 events:
   default_importance: 3
-  recommended_kinds:
+  allowed_kinds:
     - observation
     - action
     - file_change
@@ -34,9 +35,6 @@ artifacts:
         - "**/*"
       exclude:
         - ".git/**"
-        - ".agents/memory.db"
-        - ".agents/memory.db-wal"
-        - ".agents/memory.db-shm"
         - "node_modules/**"
         - "dist/**"
         - "build/**"

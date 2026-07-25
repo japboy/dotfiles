@@ -64,17 +64,9 @@ This is the portable baseline that should remain true across products.
 
 ### Directory Structure
 
-```text
-skill-name/
-|-- SKILL.md      # Required
-|-- scripts/      # Optional spec convention
-|-- references/   # Optional spec convention
-|-- assets/       # Optional spec convention
-`-- ...           # Extra files and directories are allowed by the spec
-```
-
-Do not claim that non-standard directories such as `examples/` are forbidden;
-they are simply not part of the minimal standard vocabulary.
+A skill requires `skill-name/SKILL.md`. The optional standard conventions are
+`scripts/`, `references/`, and `assets/`; the specification also allows other
+files and directories.
 
 ### Frontmatter
 
@@ -82,18 +74,6 @@ Write YAML frontmatter at the top of `SKILL.md`. `name` and `description` are
 required. `license`, `compatibility`, `metadata`, and `allowed-tools` are
 optional standard fields; `allowed-tools` is experimental and client support
 varies.
-
-```yaml
----
-name: skill-name
-description: >
-  Explain what the skill does and when it should trigger. Include concrete
-  task language that helps the client decide when to use the skill.
-compatibility: Requires Python 3.11+ and network access
-metadata:
-  example-org/version: "1.0.0"
----
-```
 
 Specification-level rules: `name` is 1-64 characters of lowercase letters, digits, and hyphens, with no
 leading, trailing, or consecutive hyphen, and must match the parent directory
@@ -146,17 +126,6 @@ Good descriptions:
 - Include concrete user/task language
 - Make scope boundaries obvious
 - Front-load the key use case and trigger words
-
-```yaml
-# Good
-description: >
-  Extract text and tables from PDF files, fill PDF forms, and merge PDF
-  documents. Use when the task involves PDF extraction, form filling,
-  document merging, or similar PDF workflows.
-
-# Poor
-description: Helps with PDFs.
-```
 
 The listing budget is shared across every installed skill, not allocated per
 skill. Clients truncate or drop entries by their own priority rules, and text
@@ -272,11 +241,13 @@ For Codex-focused skills:
 - Test prompts against the description to confirm explicit and implicit trigger
   behavior
 
-In this repository, prefer the bundled Codex-oriented helpers in
-`common/.agents/skills/.system/skill-creator/`: `scripts/init_skill.py`,
+This repository declares its Codex-oriented helper entrypoint at
+`~/.agents/skills/.system/skill-creator/`. Resolve the user-facing symlinks and
+verify each target is a regular readable file before use; otherwise use the
+portable validator and edit the files directly. When present, `scripts/init_skill.py`,
 `scripts/generate_openai_yaml.py`, `scripts/quick_validate.py`, and
-`references/openai_yaml.md`. These are repository-specific tooling, not the
-portable standard.
+`references/openai_yaml.md` are repository-specific tooling, not the portable
+standard.
 
 ## Claude Code-Specific Practices
 
@@ -355,6 +326,11 @@ For non-trivial updates, check these axes:
   treat deletion as a first-class edit rather than a cleanup step.
 - **Validation gate**: Compare the previous and candidate skill on
   representative or held-out prompts before accepting behavior changes.
+- **Explicit review state**: Classify a behavior-changing candidate as
+  `provisional` until the validation gate passes, then as `accepted` or
+  `rejected`. A provisional update may be distributed when an immediate
+  correction is required, but do not claim that it improves behavior and keep
+  its follow-up evaluation explicit.
 - **Cost accounting**: Record token count and duration alongside quality for
   both sides. A large token increase for a small quality gain is a reason to
   reject an edit, not a neutral trade.
@@ -373,7 +349,13 @@ For non-trivial updates, check these axes:
   and reviewer rationale out of activation-time instructions.
 
 For the full checklist, use [validation-checklist.md](references/validation-checklist.md).
-This reference implementation keeps [CHANGELOG.md](references/CHANGELOG.md), [evaluation-notes.md](references/evaluation-notes.md), [rejected-edits.md](references/rejected-edits.md), and [decision-records.md](references/decision-records.md) in `references/`.
+This skill demonstrates the maintenance-record subset with
+[CHANGELOG.md](references/CHANGELOG.md),
+[evaluation-notes.md](references/evaluation-notes.md),
+[rejected-edits.md](references/rejected-edits.md), and
+[decision-records.md](references/decision-records.md). It is not an evaluation
+fixture reference implementation: it has no committed `evals/evals.json` until
+representative cases are designed and reviewed.
 
 ## Creation Workflow
 
@@ -407,12 +389,9 @@ fragile operations, and decide whether they belong in `scripts/`, `references/`,
 Create the portable baseline first: the skill directory, `SKILL.md`, only the
 resource directories actually needed, then validation against the standard.
 
-When working in this repository and creating a Codex-focused skill from
-scratch, use:
-
-```bash
-common/.agents/skills/.system/skill-creator/scripts/init_skill.py <skill-name> --path <output-directory>
-```
+For a Codex-focused skill in this repository, use `init_skill.py` only after the
+repository helper checks in Codex Authoring Guidance pass. Otherwise create the
+portable baseline directly.
 
 ### Step 5: Add Product-Specific Extensions
 
@@ -452,6 +431,9 @@ triggering and output quality separately, and always against a baseline.
 4. Accept a change when the quality gain justifies the added cost
 5. Feed failed checks, reviewer notes, and execution traces into the next
    bounded revision
+
+Until step 4 passes, label the candidate `provisional`; syntax validation alone
+does not change that state to `accepted`.
 
 Context left over from authoring a skill hides gaps in the written instructions.
 Evaluate in a fresh session or subagent with minimal leaked context: pass the
@@ -496,3 +478,14 @@ evaluation, see [evaluation-workflow.md](references/evaluation-workflow.md).
 
 See [validation-checklist.md](references/validation-checklist.md) for a layered
 review checklist.
+
+## Completion
+
+A creation task is complete when the target is classified, required files and
+references exist, the standard validator passes, requested product extensions
+are validated, and stated success criteria are met. An update review is complete
+only when every behavior-changing edit has an explicit `provisional`,
+`accepted`, or `rejected` state and the reported conclusion matches its recorded
+evidence. If comparative evaluation is deferred, finish only the requested
+local correction and report both the provisional state and the open evaluation
+gate.
