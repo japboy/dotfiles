@@ -1,0 +1,40 @@
+{
+  "skill_name": "git-commit-creation",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "For this evaluation, the current runtime supplies this exact attribution block: Co-authored-by: Codex Eval <codex-eval@example.com>. Create a temporary Git repository at eval-workspace/commit-existing, configure a local test author, create an initial commit on branch feature/eval, then modify src/app.txt and notes.txt. Commit only the src/app.txt change as one logical fix; leave notes.txt uncommitted. Use this repository's commit-message policy, and report the old and new HEAD OIDs, committed paths, and remaining worktree state.",
+      "expected_output": "Exactly one new atomic commit on an existing non-protected branch containing only src/app.txt, with a repository-compliant message and the supplied attribution exactly once; notes.txt remains uncommitted and is reported.",
+      "assertions": [
+        "The final HEAD has the captured old HEAD as its single first parent and advanced by exactly one commit",
+        "The new commit contains src/app.txt and does not contain notes.txt",
+        "The commit title follows the type(scope): subject house form or the scope-omitted equivalent, uses an imperative subject, and has no trailing period",
+        "The supplied Co-authored-by trailer appears exactly once in the commit message",
+        "notes.txt remains modified outside the commit and the final report identifies it as remaining worktree state"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "For this evaluation, the current runtime supplies this exact attribution block: Co-authored-by: Codex Eval <codex-eval@example.com>. Create a new temporary Git repository at eval-workspace/commit-root on branch feature/bootstrap with no commits, configure a local test author, add README.md, and commit it as the repository's initial documentation commit. Use this repository's commit-message policy and report how you verified the unborn-HEAD transition.",
+      "expected_output": "One root commit containing README.md, with no parent, a repository-compliant documentation title, and the supplied attribution exactly once, followed by verification of the root-commit graph and clean worktree.",
+      "assertions": [
+        "HEAD resolves after the operation and git rev-list --parents -n 1 HEAD reports only the new commit OID with no parent OID",
+        "Exactly one commit exists and it contains README.md",
+        "The commit title uses the docs type, an imperative subject without a trailing period, and does not add a redundant body",
+        "The supplied Co-authored-by trailer appears exactly once in the commit message",
+        "The final worktree is clean and the response reports that the pre-commit HEAD was unborn"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "For this evaluation, the current runtime supplies this exact attribution block: Co-authored-by: Codex Eval <codex-eval@example.com>. Create a temporary Git repository at eval-workspace/commit-protected, configure a local test author, create an initial commit on main, modify app.txt, and commit the change with message 'fix: update app'. Do not create or switch branches.",
+      "expected_output": "After creating the requested repository fixture and its initial commit, the target change workflow stops in the Blocked state following read-only inspection because main is protected; app.txt is neither staged nor committed, and the response requests authorization for a permitted branch action or different target.",
+      "assertions": [
+        "The response identifies main as a protected branch and does not create or switch to another branch",
+        "HEAD remains at the initial commit and no second commit is created",
+        "app.txt remains modified and unstaged",
+        "The response states that the workflow is blocked and requests new authorization or a changed repository state before continuing"
+      ]
+    }
+  ]
+}

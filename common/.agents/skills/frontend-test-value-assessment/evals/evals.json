@@ -1,0 +1,38 @@
+{
+  "skill_name": "frontend-test-value-assessment",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review these frontend tests. src/hooks/useInviteForm.ts contains form state and submits through src/api/invitations.ts. src/hooks/useInviteForm.test.tsx renders the hook, asserts setState calls, and mocks the API client. src/components/InviteForm.stories.tsx exports ValidInvite and supplies the same providers and args, but src/components/InviteForm.spec.tsx duplicates those providers and only asserts that onSubmit was called. The product behavior is that a user enters an email, submits, and sees either a confirmation or an accessible inline error. Give a Testing Trophy decision for each existing test and a replacement plan.",
+      "expected_output": "A structured review that routes the direct hook and callback-plumbing coverage by protected risk, uses the canonical story only when a component-level test remains justified, and recommends user-visible integration coverage without claiming that Storybook changes the Trophy layer.",
+      "assertions": [
+        "The report uses the required section order from Decision Summary through References and assigns exactly one allowed final status to each reviewed test",
+        "The direct hook test is classified as unit-level and is not kept solely for mocked internal state or API-call assertions",
+        "The replacement verifies confirmation or accessible error behavior through user interaction, and any story reuse names src/components/InviteForm.stories.tsx and the ValidInvite export",
+        "Every repository finding cites the supplied production and test paths, and every framework-bound claim includes an official documentation URL plus a source-code permalink with a commit and line range"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Assess checkout coverage as a critical journey. tests/unit/useCheckout.test.ts mocks authentication, localStorage, the router, and the payment API, then asserts internal step numbers. tests/checkout.spec.ts runs in Playwright but intercepts every backend request and starts directly on /checkout/payment. Production paths are src/checkout/useCheckout.ts and src/checkout/CheckoutPage.tsx. The escaped regression was that a real login redirect dropped the cart and the return navigation reopened an empty checkout. Decide the best layer and final status for each test, and preserve a minimal safety net.",
+      "expected_output": "A Testing Trophy review that recognizes the real authentication, persistence, navigation, and multi-screen dependencies, does not mistake Playwright tooling for automatic end-to-end coverage, and recommends realistic non-unit protection for the critical flow.",
+      "assertions": [
+        "The routing decision evaluates the end-to-end dependency gate before the integration default and identifies authentication, cart persistence, real navigation, and the backend boundary as material risks",
+        "The Playwright test is not labeled end-to-end merely because it uses Playwright; its mocked runtime and direct-entry limitation are reflected in its status",
+        "The recommendation includes at least one realistic non-unit scenario covering login redirect, preserved cart state, return navigation, and a user-visible checkout outcome",
+        "Each existing test receives exactly one allowed final status, and relocation or removal is conditioned on retaining a higher-value safety net for the same business risk"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Should we keep tests/unit/orderStatus.test.ts? It passes arbitrary strings into renderOrderStatus and expects unknown values to render ‘Unknown’. The production type in src/orders/orderStatus.ts is `type OrderStatus = 'pending' | 'paid' | 'cancelled'`, and all callers are TypeScript. The product contract says unsupported API values must be rejected at the API boundary before reaching the component. There is currently no runtime schema validator at that boundary. Produce the assessment and the smallest higher-value replacement.",
+      "expected_output": "A boundary-focused review that separates the compile-time closed union from untrusted API input, routes guarantees in precedence order, and replaces low-value impossible-state component coverage without losing boundary compatibility protection.",
+      "assertions": [
+        "The report distinguishes the static guarantee for typed internal callers from the runtime validation required for untrusted API payloads",
+        "The routing follows static-first precedence and does not keep the current unit test as the primary protection for the API-boundary risk",
+        "The replacement plan names a schema or equivalent boundary validator and an observable rejection or fallback assertion at the boundary, while retaining type checking for internal callers",
+        "The finding cites both tests/unit/orderStatus.test.ts and src/orders/orderStatus.ts and marks any unverified implementation detail as unknown"
+      ]
+    }
+  ]
+}

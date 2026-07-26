@@ -1,0 +1,38 @@
+{
+  "skill_name": "design-system-reverse-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We are documenting the color foundation for a legacy checkout. The product requirements at docs/checkout-accessibility.md:18 say, ‘Error messaging MUST never rely on color alone.’ The Figma checkout file at https://figma.example/checkout?node-id=220-18 annotates the error state with an icon and inline text. In src/checkout/ErrorField.css:41 the only error treatment is border-color: #d32f2f, and src/checkout/ErrorField.tsx:67 renders no icon or error text. Draft the design-system color section and record the disagreement. Do not import Adobe Spectrum color values or prose.",
+      "expected_output": "An intent-first color section that treats the documented and Figma intent as authoritative, records the code as a remediation gap rather than a design rule, and attributes every normative statement to the supplied evidence.",
+      "assertions": [
+        "The color section is ordered Design Intent, Usage Guidelines, Token/Rule Specification, then Evidence",
+        "The no-color-only rule is attributed to the documentation and Figma evidence, while the current code is identified as a lower-priority implementation divergence",
+        "The output includes the supplied source locators and visibly distinguishes [Notion] or documentation, [Figma], and [Code] evidence",
+        "The output provides a remediation action for the missing non-color error cue and does not invent Spectrum color values or project evidence"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I only have code evidence for typography today: src/theme/type.ts:12 defines 14/20 body text and src/components/Caption.css:8 defines 12/16 captions. There are no product docs, ADRs, or design-file annotations available yet. Turn this into a reviewable typography candidate for the design-system inventory. Be explicit about what can and cannot be approved.",
+      "expected_output": "A bounded typography candidate that preserves the observed implementation facts and their evidence while refusing to promote code-only observations into authoritative design rules until intent evidence is available.",
+      "assertions": [
+        "Both observed typography values are recorded with their exact code paths and line references",
+        "The observations are labeled implementation-only with design intent unverified, rather than presented as approved normative rules",
+        "Missing intent evidence and approval state are represented explicitly as unknown, pending, or an equivalent finite non-approved state instead of being left blank",
+        "The output names the evidence needed to advance the candidates without fabricating documentation, design rationale, or approval"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Reverse-engineer a responsive layout candidate from these observations. Dashboard and Orders both use navigation/content/inspector at desktop, so there are two independent screens with the same responsibility pattern. Code at src/theme/layout.ts:10-24 defines breakpoints and spacing; src/layout/Shell.css:30-58 defines columns, gap, margins, and max-width. Figma nodes https://figma.example/app?node-id=10-20 and ?node-id=11-20 show Auto Layout and constraints. At tablet, code collapses the inspector but Figma keeps it as an overlay. Propose the grid rule set and canonical layout records, including what must happen before adoption.",
+      "expected_output": "Linked grid and canonical-layout candidates derived from the supplied evidence, with explicit state, a recorded tablet conflict, and a validation path that prevents premature adoption.",
+      "assertions": [
+        "The abstract grid candidate includes columns, gutter, margin, and container_max_width, while the canonical layout separately includes layout_id, primary_regions, pane_count, navigation_mode, and transition_rule",
+        "The canonical layout record links to a grid_rule_set_id and cites both code and Figma evidence using the supplied locators",
+        "The tablet disagreement is recorded as layout_mismatch or canonical_mismatch with an owner/status or resolve action, rather than silently choosing one implementation",
+        "The candidate remains in an explicit pre-adoption LA state and requires representative-screen reapplication with layout-diff evidence before LA5 Adopted"
+      ]
+    }
+  ]
+}

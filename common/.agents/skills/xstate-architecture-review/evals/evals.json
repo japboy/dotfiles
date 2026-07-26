@@ -1,0 +1,39 @@
+{
+  "skill_name": "xstate-architecture-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this XState v5 machine architecture and provide evidence-backed corrections:\n\n```ts\nconst machine = createMachine({\n  initial: 'loading',\n  states: {\n    error: { on: { RETRY: 'loading' } },\n    loading: {\n      invoke: { src: () => fetch('/api/user'), onDone: 'idle', onError: 'error' }\n    },\n    idle: { on: { LOAD_USER: 'loading' } }\n  }\n});\n```\n\nDistinguish official XState requirements from this repository's naming, setup/createMachine, actor, state-order, and testing conventions.",
+      "expected_output": "A structured XState v5 review that identifies convention violations, proposes a typed setup/createMachine and fromPromise design, distinguishes team policy from official behavior, and cites exact official documentation or source locations.",
+      "assertions": [
+        "The response contains Summary, severity-labeled Violations, Recommendations, and Positive aspects sections",
+        "Each violation names the applicable bundled convention and includes both the problematic code and a corrected example",
+        "The correction uses XState v5 setup/createMachine with an actor implementation such as fromPromise and addresses event naming and the repository's idle-first/error-last policy",
+        "Framework-bound claims cite specific official XState v5 documentation sections or source-code locations, while repository ordering or naming rules are labeled as team conventions",
+        "The test recommendation prioritizes observable transitions, invoked side effects, or failure/retry behavior rather than mechanically restating every transition"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Audit this React integration for an XState v5 page-local wizard. The app currently places WizardActorContext.Provider at the application root, reads `snapshot.context` inline in six components, and subscribes to `wizard.completed` in useEffect without returning the subscription cleanup. The wizard should have one independent actor per mounted WizardForm. Recommend the appropriate ActorContext or component-lifecycle pattern and show the key corrected code.",
+      "expected_output": "A structured review recommending a component 1:1 useActor/provide lifecycle for independent wizard instances, selectors where appropriate, and subscription cleanup, supported by official @xstate/react evidence and clearly labeled team conventions.",
+      "assertions": [
+        "The response explains why an app-root shared Provider conflicts with one independent actor per WizardForm and recommends the component 1:1 lifecycle pattern",
+        "The corrected example uses useActor with machine.provide() or an equivalently scoped XState v5 actor implementation",
+        "The response addresses reusable selectors or a facade boundary instead of endorsing repeated inline context access",
+        "The event subscription example returns or invokes unsubscribe during effect cleanup",
+        "Official @xstate/react claims are cited to specific documentation or source locations and team-policy conventions are not misrepresented as official requirements"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Please review this Redux Toolkit slice for naming, normalized entities, and selector memoization. The project does not use XState, statecharts, actors, or @xstate/react, and I am not asking whether it should migrate.",
+      "expected_output": "A concise scope response that declines to perform a Redux architecture review under the XState-specific skill and does not invent XState violations.",
+      "assertions": [
+        "The response clearly states that the request is outside the XState architecture review scope",
+        "The response does not evaluate Redux conventions or fabricate XState-related findings",
+        "The response does not recommend an XState migration that the user did not request"
+      ]
+    }
+  ]
+}

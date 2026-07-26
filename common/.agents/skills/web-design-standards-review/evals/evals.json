@@ -1,0 +1,38 @@
+{
+  "skill_name": "web-design-standards-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this card layout for responsiveness, RTL, and compatibility:\n\n```css\n.card { width: 720px; margin-left: 24px; border-left: 4px solid; }\n@media (min-width: 768px) { .card { width: 960px; } }\n```\n```js\nif (navigator.userAgent.includes('Safari/')) enableContainerQueries();\n```\n\nClassify each recommendation as a standard, guidance, or heuristic and give concrete replacements with authoritative sources.",
+      "expected_output": "A standards-backed review that discourages brittle fixed sizing, physical-direction CSS, and UA sniffing, then provides fluid, logical-property, and feature-detection alternatives with scoped decisions and references.",
+      "assertions": [
+        "Each reviewed principle receives a decision of Recommend, Recommend with constraints, or Discourage",
+        "The response distinguishes standardized enabling features from authoring guidance instead of calling every principle a web standard",
+        "The implementation guidance includes a fluid or intrinsic layout replacement, CSS logical properties, and capability detection using @supports or CSS.supports",
+        "The response includes a concrete review checklist and links to relevant W3C, WHATWG, MDN, web.dev, or WAI sources"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "My design system document says: 'Mobile-first is a W3C standard, so every desktop-first stylesheet is non-conforming.' Is that technically correct? Separate what is standardized from recommended practice, note reasonable exceptions, and cite authoritative references.",
+      "expected_output": "A strict correction explaining that mobile-first is guidance, while media queries and responsive CSS capabilities are standardized, with scope and exceptions rather than a false conformance claim.",
+      "assertions": [
+        "The response explicitly rejects the claim that mobile-first itself is a W3C conformance standard",
+        "The response classifies mobile-first as guidance and separately identifies standardized web capabilities that can enable responsive design",
+        "The response discusses at least one bounded exception such as a desktop-only specialist application without abandoning accessibility or resilience",
+        "The references include authoritative standards or MDN/web.dev material that directly supports the distinction"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We are building a browser-based bitmap editor whose canvas must map one image pixel to one screen pixel at 100% zoom. Review the proposal 'never use fixed pixel dimensions anywhere' and recommend a standards-aligned layout policy for the canvas and the surrounding controls.",
+      "expected_output": "A review that discourages the blanket ban, then recommends with constraints a bounded pixel-addressed canvas while keeping the surrounding UI fluid, accessible, zoom-resilient, and explicit about exceptions.",
+      "assertions": [
+        "The response discourages the blanket 'never use fixed pixel dimensions anywhere' proposal and gives the replacement policy a `Recommend with constraints` decision or equivalent",
+        "The response isolates fixed pixel sizing to the pixel-addressed canvas and recommends fluid or intrinsic layout for surrounding UI",
+        "The scope covers browser zoom, text scaling, keyboard/focus behavior, and overflow or small-viewport resilience",
+        "The response separates standards-backed capabilities from guidance and supplies authoritative references plus a validation checklist"
+      ]
+    }
+  ]
+}
