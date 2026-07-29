@@ -1,0 +1,21 @@
+common/.claude/CLAUDE.md
+  s_01ea6d86761ab9::t_b706598760500f 41-45
+common/.codex/AGENTS.md
+  s_01ea6d86761ab9::t_ff646770d16865 40-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "1101e6b20016e4bc2efc2830fef52ce267e50104",
+  "prompts": {},
+  "sessions": {
+    "s_01ea6d86761ab9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b20a727e-64d8-49fb-9df0-c91aaa3ee2eb",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
