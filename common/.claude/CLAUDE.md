@@ -38,6 +38,11 @@ If none holds, present the fundamental solution alone.
 - Use Serena for scanning or modifying code.
 - Use `gh` command for GitHub related tasks
 
+## Feedback
+
+- Always format feedback on tickets, issues, and pull requests as Conventional Comments: `<label> [decorations]: <subject>` (https://conventionalcomments.org/)
+- Always state a decoration explicitly — `(blocking)` prevents acceptance until resolved, `(non-blocking)` does not, `(if-minor)` leaves resolution to the author when the change is trivial
+
 ## Signature
 
 - Always include your own signature when you open a pull request, file an issue, or post a comment on any platform.
