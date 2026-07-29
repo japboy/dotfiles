@@ -1,0 +1,19 @@
+darwin/flake.lock
+  s_2baaddad5bf7ab::t_18b03d98bc5555 33-34,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "7b97872a168e6df1bb1f70a8d5041050bd062c83",
+  "prompts": {},
+  "sessions": {
+    "s_2baaddad5bf7ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1f0f2d35-2db1-4af5-b03a-c4e91214583d",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
