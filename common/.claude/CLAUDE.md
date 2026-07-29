@@ -17,12 +17,20 @@ Always follow these principles:
 6. **Exhaustive** over non-exhaustive (網羅的)
 7. **Predictable** over unpredictable (予測可能)
 
-Always classify proposals into:
+Always classify candidate solutions into:
 
 - Local (symptomatic) fixes
 - Fundamental (root-cause) solutions
 
-Prefer fundamental solutions, but step back and critically confirm that each genuinely resolves the root cause — not merely that it is more fundamental than a local fix.
+This classification is internal. By default, present the fundamental solution only, and before presenting it, step back and critically confirm that it genuinely resolves the root cause — not merely that it is more fundamental than a local fix.
+
+Also present a local fix, together with the reason for doing so, only when one of these holds:
+
+- The fundamental solution cannot be applied now (out of scope, blocked by an undecided requirement, or blocked by an external dependency)
+- An immediate mitigation is needed before the fundamental solution can land
+- The user asks for alternatives or a comparison
+
+If none holds, present the fundamental solution alone.
 
 ## Tool Priorities
 
