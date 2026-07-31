@@ -29,7 +29,6 @@ else
     DOTFILES_DARWIN_FLAKE="path:${DOTFILES_REAL_PATH}?dir=darwin"
 fi
 
-
 ##
 # Functions
 
@@ -66,13 +65,6 @@ function is_older_os () {
     is_older_version "${target_version}" "${actual_version}"
 }
 
-function is_specific_serial () {
-    TARGET_SERIAL=${1}
-    ACTUAL_SERIAL=$(system_profiler SPHardwareDataType | awk '/Serial/ {print $4}')
-    [ ${TARGET_SERIAL} = ${ACTUAL_SERIAL} ] && return 0
-    return 1
-}
-
 function source_nix () {
     if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]
     then
@@ -80,6 +72,188 @@ function source_nix () {
     elif [ -e "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]
     then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+    fi
+}
+
+function download_file () {
+    local source_url="${1}"
+    local destination_path="${2}"
+    local expected_sha256="${3}"
+
+    curl --fail --location --output "${destination_path}" "${source_url}" || return 1
+
+    if [ -n "${expected_sha256}" ]
+    then
+        printf '%s  %s\n' "${expected_sha256}" "${destination_path}" | shasum -a 256 -c - || return 1
+    fi
+}
+
+function install_dmg_app () {
+    local disk_image_path="${1}"
+    local app_name="${2}"
+    local destination_directory="${3}"
+    local mount_point
+    local source_app_path
+    local exit_status=0
+
+    mount_point=$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-darwin.XXXXXX") || return 1
+
+    if ! hdiutil attach -nobrowse -readonly -mountpoint "${mount_point}" "${disk_image_path}"
+    then
+        rmdir "${mount_point}"
+        return 1
+    fi
+
+    if [ -d "${mount_point}/${app_name}" ]
+    then
+        source_app_path="${mount_point}/${app_name}"
+    elif [ -d "${mount_point}/Contents" ]
+    then
+        # Some DMGs expose the application bundle itself as the mounted volume.
+        source_app_path="${mount_point}"
+    else
+        echo "${TEXT_RED}${app_name} was not found in ${disk_image_path}.${TEXT_RESET}"
+        exit_status=1
+    fi
+
+    if [ "${exit_status}" -eq 0 ] && ! ditto "${source_app_path}" "${destination_directory}/${app_name}"
+    then
+        exit_status=1
+    fi
+
+    hdiutil detach "${mount_point}" || exit_status=1
+    rmdir "${mount_point}" || exit_status=1
+    return "${exit_status}"
+}
+
+function install_app_cleaner () {
+    local version='3.6.8'
+    local url="https://freemacsoft.net/downloads/AppCleaner_${version}.zip"
+    local archive_path="./AppCleaner_${version}.zip"
+
+    if ! is_older_app ~/Applications/AppCleaner.app "${version}"
+    then
+        return 0
+    fi
+
+    if ! download_file "${url}" "${archive_path}" '' || ! unzip -o -d ~/Applications/ "${archive_path}"
+    then
+        echo "${TEXT_RED}AppCleaner installation failed.${TEXT_RESET}"
+        return 1
+    fi
+}
+
+function install_docker_desktop () {
+    local version='4.84.0'
+    local minimum_macos_version='14.0'
+    local build='234817'
+    local arm64_url="https://desktop.docker.com/mac/main/arm64/${build}/Docker.dmg"
+    local arm64_sha256='ed9e93bf2b71c53492eb80ef35e722e131222018cba8157973dfe3bb717952dd'
+    local amd64_url="https://desktop.docker.com/mac/main/amd64/${build}/Docker.dmg"
+    local amd64_sha256='5e42979b75b13d516e3bfe69b93f134c3a48c76943cba068fd814007f922bf87'
+    local url
+    local sha256
+    local disk_image_path='./Docker.dmg'
+
+    if is_older_os "${minimum_macos_version}"
+    then
+        echo "${TEXT_RED}Docker Desktop ${version} requires macOS ${minimum_macos_version} or later. Skipping.${TEXT_RESET}"
+        return 0
+    fi
+
+    if ! is_older_app /Applications/Docker.app "${version}"
+    then
+        return 0
+    fi
+
+    case "${ARCH}" in
+        arm64)
+            url="${arm64_url}"
+            sha256="${arm64_sha256}"
+            ;;
+        x86_64)
+            url="${amd64_url}"
+            sha256="${amd64_sha256}"
+            ;;
+        *)
+            echo "${TEXT_RED}Unsupported Docker Desktop architecture: ${ARCH}.${TEXT_RESET}"
+            return 1
+            ;;
+    esac
+
+    if ! download_file "${url}" "${disk_image_path}" "${sha256}" || ! install_dmg_app "${disk_image_path}" Docker.app /Applications
+    then
+        echo "${TEXT_RED}Docker Desktop installation failed.${TEXT_RESET}"
+        return 1
+    fi
+
+    open /Applications/Docker.app
+}
+
+function install_iterm2 () {
+    local version='3.6.11'
+    local minimum_macos_version='12.4'
+    local url="https://iterm2.com/downloads/stable/iTerm2-${version//./_}.zip"
+    local sha256='36e78c5049560eaa8e122224f6652eb4b229c61cd5e7332d6d25b5c36f7398e7'
+    local archive_path="./iTerm2-${version//./_}.zip"
+
+    if is_older_os "${minimum_macos_version}"
+    then
+        echo "${TEXT_RED}iTerm2 ${version} requires macOS ${minimum_macos_version} or later. Skipping.${TEXT_RESET}"
+        return 0
+    fi
+
+    if ! is_older_app ~/Applications/iTerm.app "${version}"
+    then
+        return 0
+    fi
+
+    if ! download_file "${url}" "${archive_path}" "${sha256}" || ! unzip -o -d ~/Applications/ "${archive_path}"
+    then
+        echo "${TEXT_RED}iTerm2 installation failed.${TEXT_RESET}"
+        return 1
+    fi
+}
+
+function install_monitor_control () {
+    local version='4.3.3'
+    local url="https://github.com/MonitorControl/MonitorControl/releases/download/v${version}/MonitorControl.${version}.dmg"
+    local disk_image_path="./MonitorControl.${version}.dmg"
+
+    if ! is_older_app ~/Applications/MonitorControl.app "${version}"
+    then
+        return 0
+    fi
+
+    if ! download_file "${url}" "${disk_image_path}" '' || ! install_dmg_app "${disk_image_path}" MonitorControl.app ~/Applications
+    then
+        echo "${TEXT_RED}MonitorControl installation failed.${TEXT_RESET}"
+        return 1
+    fi
+}
+
+function install_xquartz () {
+    local version='2.8.6'
+    local minimum_macos_version='10.13'
+    local url="https://github.com/XQuartz/XQuartz/releases/download/XQuartz-${version}/XQuartz-${version}.pkg"
+    local sha256='9ac35a505095bfbd3009c3b4772f0c6421e2f79c4210ab908459270d1c447909'
+    local package_path="./XQuartz-${version}.pkg"
+
+    if is_older_os "${minimum_macos_version}"
+    then
+        echo "${TEXT_RED}XQuartz ${version} requires macOS ${minimum_macos_version} or later. Skipping.${TEXT_RESET}"
+        return 0
+    fi
+
+    if ! is_older_app /Applications/Utilities/XQuartz.app "${version}"
+    then
+        return 0
+    fi
+
+    if ! download_file "${url}" "${package_path}" "${sha256}" || ! sudo installer -pkg "${package_path}" -target /
+    then
+        echo "${TEXT_RED}XQuartz installation failed.${TEXT_RESET}"
+        return 1
     fi
 }
 
@@ -138,53 +312,11 @@ echo "${TEXT_BOLD}Now installing fundamental applications...${TEXT_RESET}"
 # Current directory to ~/Downloads
 cd ${HOME}/Downloads
 
-# AppCleaner
-if is_older_app ~/Applications/AppCleaner.app '3.6.8'
-then
-    curl -LO https://freemacsoft.net/downloads/AppCleaner_3.6.8.zip
-    unzip -o -d ~/Applications/ ./AppCleaner_3.6.8.zip
-fi
-
-# Docker
-if ! command -v docker &> /dev/null || is_older_version '29.0.1' "$(docker version --format '{{.Client.Version}}' 2>/dev/null)"
-then
-    if [[ "${ARCH}" = 'arm64' ]]
-    then
-        curl -LO https://desktop.docker.com/mac/main/arm64/Docker.dmg
-    elif [[ "${ARCH}" = 'x86_64' ]]
-    then
-        curl -LO https://desktop.docker.com/mac/stable/amd64/Docker.dmg
-    fi
-    hdiutil attach Docker.dmg
-    cp -R /Volumes/Docker/Docker.app /Applications/
-    hdiutil detach /Volumes/Docker
-    open /Applications/Docker.app
-fi
-
-# iTerm2
-if is_older_app ~/Applications/iTerm.app '3.6.6'
-then
-    curl -LO https://iterm2.com/downloads/stable/iTerm2-3_6_6.zip
-    unzip -o -d ~/Applications/ ./iTerm2-3_6_6.zip
-fi
-
-# MonitorControl
-if is_older_app ~/Applications/MonitorControl.app '4.3.3'
-then
-    curl -LO https://github.com/MonitorControl/MonitorControl/releases/download/v4.3.3/MonitorControl.4.3.3.dmg
-    hdiutil attach ./MonitorControl.4.3.3.dmg
-    cp -a /Volumes/MonitorControl.app ~/Applications/
-    hdiutil detach /Volumes/MonitorControl.4.3.3.dmg
-fi
-
-# XQuartz
-if is_older_app /Applications/Utilities/XQuartz.app '2.8.5'
-then
-    curl -LO https://github.com/XQuartz/XQuartz/releases/download/XQuartz-2.8.5/XQuartz-2.8.5.pkg
-    hdiutil attach XQuartz-2.8.5.pkg
-    sudo installer -pkg /Volumes/XQuartz-2.8.5/XQuartz.pkg -target /
-    hdiutil detach /Volumes/XQuartz-2.8.5
-fi
+install_app_cleaner || exit 1
+install_docker_desktop || exit 1
+install_iterm2 || exit 1
+install_monitor_control || exit 1
+install_xquartz || exit 1
 
 # Reset current working directory
 cd ${CWD}
@@ -310,5 +442,11 @@ unset -f \
     is_older_app \
     is_older_version \
     is_older_os \
-    is_specific_serial \
-    source_nix
+    source_nix \
+    download_file \
+    install_dmg_app \
+    install_app_cleaner \
+    install_docker_desktop \
+    install_iterm2 \
+    install_monitor_control \
+    install_xquartz
