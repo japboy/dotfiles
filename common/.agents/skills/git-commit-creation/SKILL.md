@@ -25,6 +25,14 @@ tools that did not author the change, or invent an identity or email address.
 This skill's house contract requires agent attribution. If the current runtime
 supplies no identity, stop and request the missing identity before committing.
 
+For ChatGPT (Codex), the product-supplied attribution is:
+
+```text
+Co-authored-by: Codex <noreply@openai.com>
+```
+
+Use this block only when the current runtime is ChatGPT (Codex).
+
 GitHub recognizes a co-author trailer in this form when a runtime supplies one:
 
 ```text

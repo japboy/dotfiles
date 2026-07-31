@@ -65,6 +65,7 @@ Write the body as concise labeled bullet lists when a body is needed:
 - Agent attribution: append exactly the current runtime-supplied signature block
   once. If none is supplied, stop and request the identity; never copy an
   example or invent an author.
+  - ChatGPT (Codex) supplies `Co-authored-by: Codex <noreply@openai.com>`.
 
 ## Examples
 
