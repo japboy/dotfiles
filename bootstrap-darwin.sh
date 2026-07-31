@@ -126,6 +126,36 @@ function install_dmg_app () {
     return "${exit_status}"
 }
 
+function install_docker_desktop_from_dmg () {
+    local disk_image_path="${1}"
+    local mount_point
+    local installer_path
+    local exit_status=0
+
+    mount_point=$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-darwin.XXXXXX") || return 1
+
+    if ! hdiutil attach -nobrowse -readonly -mountpoint "${mount_point}" "${disk_image_path}"
+    then
+        rmdir "${mount_point}"
+        return 1
+    fi
+
+    installer_path="${mount_point}/Docker.app/Contents/MacOS/install"
+
+    if [ ! -x "${installer_path}" ]
+    then
+        echo "${TEXT_RED}Docker Desktop installer was not found in ${disk_image_path}.${TEXT_RESET}"
+        exit_status=1
+    elif ! sudo "${installer_path}"
+    then
+        exit_status=1
+    fi
+
+    hdiutil detach "${mount_point}" || exit_status=1
+    rmdir "${mount_point}" || exit_status=1
+    return "${exit_status}"
+}
+
 function install_app_cleaner () {
     local version='3.6.8'
     local url="https://freemacsoft.net/downloads/AppCleaner_${version}.zip"
@@ -181,7 +211,10 @@ function install_docker_desktop () {
             ;;
     esac
 
-    if ! download_file "${url}" "${disk_image_path}" "${sha256}" || ! install_dmg_app "${disk_image_path}" Docker.app /Applications
+    # Docker supplies an installer that safely replaces Docker.app.  Copying an
+    # active application bundle with ditto can be interrupted by processes
+    # using Docker and leaves the existing bundle only partially updated.
+    if ! download_file "${url}" "${disk_image_path}" "${sha256}" || ! install_docker_desktop_from_dmg "${disk_image_path}"
     then
         echo "${TEXT_RED}Docker Desktop installation failed.${TEXT_RESET}"
         return 1
@@ -445,6 +478,7 @@ unset -f \
     source_nix \
     download_file \
     install_dmg_app \
+    install_docker_desktop_from_dmg \
     install_app_cleaner \
     install_docker_desktop \
     install_iterm2 \
