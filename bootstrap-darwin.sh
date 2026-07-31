@@ -88,12 +88,88 @@ function download_file () {
     fi
 }
 
+function replace_app_bundle () {
+    local source_app_path="${1}"
+    local app_name="${2}"
+    local destination_directory="${3}"
+    local destination_path="${destination_directory}/${app_name}"
+    local staging_directory
+    local staged_app_path
+    local previous_app_path
+    local exit_status=0
+
+    if ! mkdir -p "${destination_directory}"
+    then
+        echo "${TEXT_RED}Failed to create application directory: ${destination_directory}.${TEXT_RESET}"
+        return 1
+    fi
+
+    # Stage alongside the destination, rather than modifying a running app
+    # bundle in place.  The final moves are on the same filesystem, so a
+    # process using the old bundle cannot leave the new bundle partially copied.
+    if [ "${exit_status}" -eq 0 ]
+    then
+        staging_directory=$(mktemp -d "${destination_directory}/.${app_name}.bootstrap.XXXXXX") || exit_status=1
+        staged_app_path="${staging_directory}/${app_name}"
+        previous_app_path="${staging_directory}/previous-${app_name}"
+    fi
+
+    # A signed app bundle must not retain Finder metadata or resource forks.
+    # The DMG can contain those attributes, so do not copy them into staging.
+    if [ "${exit_status}" -eq 0 ] && ! ditto --norsrc "${source_app_path}" "${staged_app_path}"
+    then
+        echo "${TEXT_RED}Failed to stage ${app_name}.${TEXT_RESET}"
+        exit_status=1
+    fi
+
+    if [ "${exit_status}" -eq 0 ] && ! codesign --verify --deep --strict "${staged_app_path}"
+    then
+        echo "${TEXT_RED}Code signature verification failed for ${app_name}.${TEXT_RESET}"
+        exit_status=1
+    fi
+
+    if [ "${exit_status}" -eq 0 ] && { [ -e "${destination_path}" ] || [ -L "${destination_path}" ]; }
+    then
+        if ! mv "${destination_path}" "${previous_app_path}"
+        then
+            echo "${TEXT_RED}Failed to prepare the existing ${app_name} for replacement.${TEXT_RESET}"
+            exit_status=1
+        elif ! mv "${staged_app_path}" "${destination_path}"
+        then
+            echo "${TEXT_RED}Failed to replace ${app_name}; restoring the previous version.${TEXT_RESET}"
+            if ! mv "${previous_app_path}" "${destination_path}"
+            then
+                echo "${TEXT_RED}Previous ${app_name} is preserved at ${previous_app_path}.${TEXT_RESET}"
+            fi
+            exit_status=1
+        elif ! rm -rf "${previous_app_path}"
+        then
+            echo "${TEXT_RED}Installed ${app_name}, but could not remove ${previous_app_path}.${TEXT_RESET}"
+        fi
+    elif [ "${exit_status}" -eq 0 ] && ! mv "${staged_app_path}" "${destination_path}"
+    then
+        echo "${TEXT_RED}Failed to install ${app_name}.${TEXT_RESET}"
+        exit_status=1
+    fi
+
+    if [ -n "${staging_directory:-}" ] && [ -d "${staging_directory}" ] && ! rmdir "${staging_directory}"
+    then
+        # Retain a non-empty staging directory after a failed replacement so
+        # the previous application remains recoverable.
+        echo "${TEXT_RED}Retained staging directory: ${staging_directory}.${TEXT_RESET}"
+    fi
+
+    return "${exit_status}"
+}
+
 function install_dmg_app () {
     local disk_image_path="${1}"
     local app_name="${2}"
     local destination_directory="${3}"
+    local install_method="${4}"
     local mount_point
     local source_app_path
+    local installer_path
     local exit_status=0
 
     mount_point=$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-darwin.XXXXXX") || return 1
@@ -112,44 +188,33 @@ function install_dmg_app () {
         # Some DMGs expose the application bundle itself as the mounted volume.
         source_app_path="${mount_point}"
     else
-        echo "${TEXT_RED}${app_name} was not found in ${disk_image_path}.${TEXT_RESET}"
+        echo "${TEXT_RED}${app_name} was not found in the mounted disk image.${TEXT_RESET}"
         exit_status=1
     fi
 
-    if [ "${exit_status}" -eq 0 ] && ! ditto "${source_app_path}" "${destination_directory}/${app_name}"
-    then
-        exit_status=1
-    fi
-
-    hdiutil detach "${mount_point}" || exit_status=1
-    rmdir "${mount_point}" || exit_status=1
-    return "${exit_status}"
-}
-
-function install_docker_desktop_from_dmg () {
-    local disk_image_path="${1}"
-    local mount_point
-    local installer_path
-    local exit_status=0
-
-    mount_point=$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-darwin.XXXXXX") || return 1
-
-    if ! hdiutil attach -nobrowse -readonly -mountpoint "${mount_point}" "${disk_image_path}"
-    then
-        rmdir "${mount_point}"
-        return 1
-    fi
-
-    installer_path="${mount_point}/Docker.app/Contents/MacOS/install"
-
-    if [ ! -x "${installer_path}" ]
-    then
-        echo "${TEXT_RED}Docker Desktop installer was not found in ${disk_image_path}.${TEXT_RESET}"
-        exit_status=1
-    elif ! sudo "${installer_path}"
-    then
-        exit_status=1
-    fi
+    case "${install_method}" in
+        replace)
+            if [ "${exit_status}" -eq 0 ] && ! replace_app_bundle "${source_app_path}" "${app_name}" "${destination_directory}"
+            then
+                exit_status=1
+            fi
+            ;;
+        installer)
+            installer_path="${source_app_path}/Contents/MacOS/install"
+            if [ "${exit_status}" -eq 0 ] && [ ! -x "${installer_path}" ]
+            then
+                echo "${TEXT_RED}${app_name} installer was not found in the mounted disk image.${TEXT_RESET}"
+                exit_status=1
+            elif [ "${exit_status}" -eq 0 ] && ! sudo "${installer_path}"
+            then
+                exit_status=1
+            fi
+            ;;
+        *)
+            echo "${TEXT_RED}Unsupported DMG installation method: ${install_method}.${TEXT_RESET}"
+            exit_status=1
+            ;;
+    esac
 
     hdiutil detach "${mount_point}" || exit_status=1
     rmdir "${mount_point}" || exit_status=1
@@ -214,7 +279,7 @@ function install_docker_desktop () {
     # Docker supplies an installer that safely replaces Docker.app.  Copying an
     # active application bundle with ditto can be interrupted by processes
     # using Docker and leaves the existing bundle only partially updated.
-    if ! download_file "${url}" "${disk_image_path}" "${sha256}" || ! install_docker_desktop_from_dmg "${disk_image_path}"
+    if ! download_file "${url}" "${disk_image_path}" "${sha256}" || ! install_dmg_app "${disk_image_path}" Docker.app /Applications installer
     then
         echo "${TEXT_RED}Docker Desktop installation failed.${TEXT_RESET}"
         return 1
@@ -258,7 +323,7 @@ function install_monitor_control () {
         return 0
     fi
 
-    if ! download_file "${url}" "${disk_image_path}" '' || ! install_dmg_app "${disk_image_path}" MonitorControl.app ~/Applications
+    if ! download_file "${url}" "${disk_image_path}" '' || ! install_dmg_app "${disk_image_path}" MonitorControl.app "${HOME}/Applications" replace
     then
         echo "${TEXT_RED}MonitorControl installation failed.${TEXT_RESET}"
         return 1
@@ -477,8 +542,8 @@ unset -f \
     is_older_os \
     source_nix \
     download_file \
+    replace_app_bundle \
     install_dmg_app \
-    install_docker_desktop_from_dmg \
     install_app_cleaner \
     install_docker_desktop \
     install_iterm2 \
