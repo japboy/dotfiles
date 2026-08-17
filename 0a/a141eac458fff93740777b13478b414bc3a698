@@ -1,0 +1,21 @@
+common/.codex/AGENTS.md
+  s_f300fad5a3b1ce::t_586964a472a539 44
+common/.claude/CLAUDE.md
+  s_f300fad5a3b1ce::t_586964a472a539 45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0aa141eac458fff93740777b13478b414bc3a698",
+  "prompts": {},
+  "sessions": {
+    "s_f300fad5a3b1ce": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00d9e-cc95-7ec2-8e8f-439e32cc43b3",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": null
+    }
+  }
+}
