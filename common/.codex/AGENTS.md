@@ -41,6 +41,7 @@ If none holds, present the fundamental solution alone.
 
 - Always format feedback on tickets, issues, and pull requests as Conventional Comments: `<label> [decorations]: <subject>` (https://conventionalcomments.org/)
 - Always state a decoration explicitly — `(blocking)` prevents acceptance until resolved, `(non-blocking)` does not, `(if-minor)` leaves resolution to the author when the change is trivial
+- When the feedback format supports hyperlink syntax, always hyperlink the relevant feedback text to its supporting evidence.
 
 ## Signature
 
