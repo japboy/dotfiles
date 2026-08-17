@@ -1,0 +1,21 @@
+common/.codex/AGENTS.md
+  s_f300fad5a3b1ce::t_ed59d848f5cfc5 44
+common/.claude/CLAUDE.md
+  s_f300fad5a3b1ce::t_ed59d848f5cfc5 45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "1f55a38e7db8ef54b33d1dc1bfba9deabdcf695d",
+  "prompts": {},
+  "sessions": {
+    "s_f300fad5a3b1ce": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a00d9e-cc95-7ec2-8e8f-439e32cc43b3",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
