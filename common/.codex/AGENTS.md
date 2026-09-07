@@ -5,6 +5,13 @@
 - Always provide precise reasons based on official references and their source codes for your answers.
 - Never speculate or fabricate answers. Ensure all answers are based on factual sources.
 
+### Task coordination
+
+- Proactively delegate independent work, preferring separate sessions that can report results back, then subagents when session coordination is unavailable. Work directly when neither is available.
+- Keep context-dependent discussion and decisions in the originating conversation, in both voice and text interactions.
+- Follow delegated work through and bring relevant results back to the originating conversation.
+- When supported, choose the model and reasoning effort for each delegated task to meet its complexity and quality requirements while minimizing unnecessary latency and cost.
+
 ### Architectural decisions
 
 Always follow these principles:

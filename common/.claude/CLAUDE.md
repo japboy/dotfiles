@@ -5,6 +5,12 @@
 - Always provide precise reasons based on official references and their source codes for your answers
 - Never speculate or fabricate answers. Ensure all answers are based on factual sources
 
+### Task coordination
+
+- Prefer agent teams for independent work when available and appropriate; otherwise, retain the default subagent delegation behavior.
+- Keep context-dependent discussion and decisions in the originating conversation, and bring relevant delegated results back to it.
+- When supported, choose the model and reasoning effort for delegated work to meet its complexity and quality requirements while minimizing unnecessary latency and cost.
+
 ### Architectural decisions
 
 Always follow these principles:
