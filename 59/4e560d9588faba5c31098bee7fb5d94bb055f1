@@ -1,0 +1,24 @@
+common/.claude/CLAUDE.md
+  s_93a5aad9781b32::t_35a4444f741862 8-13
+common/.codex/AGENTS.md
+  s_93a5aad9781b32::t_8e2d7744802589 8-12,14
+  s_93a5aad9781b32::t_9f0ab418f67a25 13
+common/.claude/settings.json
+  s_93a5aad9781b32::t_0651a67b9f65be 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "594e560d9588faba5c31098bee7fb5d94bb055f1",
+  "prompts": {},
+  "sessions": {
+    "s_93a5aad9781b32": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a07a8b-1d6d-71e0-8c69-06b96eef9718",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
