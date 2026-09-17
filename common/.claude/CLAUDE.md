@@ -47,7 +47,10 @@ If none holds, present the fundamental solution alone.
 ## Feedback
 
 - Always format feedback on tickets, issues, and pull requests as Conventional Comments: `<label> [decorations]: <subject>` (https://conventionalcomments.org/)
-- Always state a decoration explicitly — `(blocking)` prevents acceptance until resolved, `(non-blocking)` does not, `(if-minor)` leaves resolution to the author when the change is trivial
+- Choose the label whose definition matches the comment
+- Do not state a blocking status for `praise`, `nitpick`, `thought`, or `note`. The specification already defines these labels as non-blocking, so restating it adds no information
+- For every other label, state the blocking status explicitly as exactly one of `(blocking)`, `(non-blocking)`, or `(if-minor)` — `(blocking)` prevents acceptance until resolved, `(non-blocking)` does not, `(if-minor)` leaves resolution to the author when the change is trivial
+- Keep decorations to the minimum that improves understandability, and add category decorations (e.g. `(security)`, `(test)`) only when they carry information the subject does not
 - When the feedback format supports hyperlink syntax, always hyperlink the relevant feedback text to its supporting evidence.
 
 ## Signature
