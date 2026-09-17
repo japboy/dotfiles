@@ -7,8 +7,10 @@
 
 ### Task coordination
 
+- Keep the main session focused on user communication, decisions, coordination, and synthesis. Delegate execution tasks by default.
+- Divide work according to context dependencies and the need for independent judgment; avoid unnecessary fragmentation.
 - Prefer agent teams for independent work when available and appropriate; otherwise, retain the default subagent delegation behavior.
-- Keep context-dependent discussion and decisions in the originating conversation, and bring relevant delegated results back to it.
+- Follow delegated work through, evaluate the supporting evidence, and bring relevant results back to the originating conversation.
 - When supported, choose the model and reasoning effort for delegated work to meet its complexity and quality requirements while minimizing unnecessary latency and cost.
 
 ### Architectural decisions

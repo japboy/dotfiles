@@ -7,9 +7,10 @@
 
 ### Task coordination
 
-- Proactively delegate independent work, preferring separate sessions that can report results back, then subagents when session coordination is unavailable. Work directly when neither is available.
-- Keep context-dependent discussion and decisions in the originating conversation, in both voice and text interactions.
-- Follow delegated work through and bring relevant results back to the originating conversation.
+- Keep the main session focused on user communication, decisions, coordination, and synthesis. Delegate execution tasks by default.
+- Divide work according to context dependencies and the need for independent judgment; avoid unnecessary fragmentation.
+- Prefer separate sessions that can report results back, then subagents when session coordination is unavailable.
+- Follow delegated work through, evaluate the supporting evidence, and bring relevant results back to the originating conversation.
 - When supported, choose the model and reasoning effort for each delegated task to meet its complexity and quality requirements while minimizing unnecessary latency and cost.
 
 ### Architectural decisions
