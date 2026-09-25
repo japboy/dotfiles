@@ -9,10 +9,7 @@ with pkgs;
   mise
 
   # AI Agents
-  claude-agent-acp
   claude-code
   codex
-  codex-acp
-  gemini-cli
   github-copilot-cli
 ]

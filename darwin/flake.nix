@@ -7,7 +7,7 @@
       flake = false;
     };
 
-    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs-recent-version-packages.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
@@ -46,42 +46,13 @@
           };
           mcpPackages = import "${commonNix}/packages/mcp-servers.nix" { pkgs = recentVersionPkgs; };
 
-          highway = essentialPkgs.stdenv.mkDerivation rec {
-            pname = "highway";
-            version = "1.1.0";
-
-            src = essentialPkgs.fetchFromGitHub {
-              owner = "tkengo";
-              repo = "highway";
-              rev = "v${version}";
-              hash = "sha256-Vd5ZcZx8z0HWAL5e0zXAM5j8lOwksV969A4YL0u+Yo4=";
-            };
-
-            nativeBuildInputs = with essentialPkgs; [
-              autoreconfHook
-              pkg-config
-            ];
-
-            buildInputs = with essentialPkgs; [
-              gperftools
-            ];
-
-            meta = with essentialPkgs.lib; {
-              description = "High performance source code search tool";
-              homepage = "https://github.com/tkengo/highway/";
-              license = licenses.mit;
-              mainProgram = "hw";
-              platforms = platforms.darwin;
-            };
-          };
-
           glanceChamburr = essentialPkgs.stdenvNoCC.mkDerivation rec {
             pname = "glance-chamburr";
-            version = "1.5.4";
+            version = "1.6.0";
 
             src = essentialPkgs.fetchurl {
               url = "https://github.com/chamburr/glance/releases/download/v${version}/Glance-${version}.dmg";
-              hash = "sha256-8t8RToO4uDTC2p1M+9TTMHqPBWOp5hO/3Yi0s7/+Ya0=";
+              hash = "sha256-wYY5qO6q0V1SB/t3rllXSDn+y9bX9+IEpTpEUVAKIM8=";
             };
 
             sourceRoot = ".";
@@ -102,39 +73,6 @@
               description = "Quick Look previews for files that are not natively supported";
               homepage = "https://github.com/chamburr/glance";
               license = licenses.mit;
-              platforms = platforms.darwin;
-            };
-          };
-
-          thePlatinumSearcher = essentialPkgs.stdenvNoCC.mkDerivation rec {
-            pname = "the_platinum_searcher";
-            version = "2.2.0";
-
-            # Upstream only publishes darwin_amd64 assets for v2.2.0.
-            # Apple Silicon hosts use Rosetta, which bootstrap-darwin.sh installs.
-            src = essentialPkgs.fetchurl {
-              url = "https://github.com/monochromegane/the_platinum_searcher/releases/download/v${version}/pt_darwin_amd64.zip";
-              hash = "sha256-d/LBuIsTuemSRt9rEZ81tY1hfyg0SjQNaJfDbJ0jr3U=";
-            };
-
-            sourceRoot = "pt_darwin_amd64";
-
-            nativeBuildInputs = with essentialPkgs; [
-              unzip
-            ];
-
-            installPhase = ''
-              runHook preInstall
-              mkdir -p "$out/bin"
-              install -m 0755 pt "$out/bin/pt"
-              runHook postInstall
-            '';
-
-            meta = with essentialPkgs.lib; {
-              description = "Code search tool similar to ack and ag";
-              homepage = "https://github.com/monochromegane/the_platinum_searcher";
-              license = licenses.mit;
-              mainProgram = "pt";
               platforms = platforms.darwin;
             };
           };
@@ -161,7 +99,6 @@
             git
             git-extras
             grc
-            highway
             jdk
             libjpeg
             libmcrypt
@@ -185,7 +122,6 @@
             scons
             selenium-server-standalone
             silver-searcher
-            thePlatinumSearcher
             universal-ctags
             unzip
             wget

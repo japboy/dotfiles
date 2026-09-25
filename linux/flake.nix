@@ -7,7 +7,7 @@
       flake = false;
     };
 
-    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-essentials.url = "github:NixOS/nixpkgs/nixos-26.05";
     nixpkgs-recent-version-packages.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 

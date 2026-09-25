@@ -5,25 +5,28 @@ let
 
   pythonPackages = pkgs.python3Packages;
 
-  mcp_1_27_1 = pythonPackages.mcp.overridePythonAttrs (_oldAttrs: rec {
-    version = "1.27.1";
+  mcp_1_28_1 = pythonPackages.mcp.overridePythonAttrs (_oldAttrs: rec {
+    version = "1.28.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "modelcontextprotocol";
       repo = "python-sdk";
       tag = "v${version}";
-      hash = "sha256-LhoLcFC5+7xOCfud23sbHyTMxKYmdeZh0c+UtGdvzCs=";
+      hash = "sha256-8nifuun7ShtniimsFr9gYPpjwZEM/5E51GDmZRxQGEc=";
     };
+
+    # Local HTTP server tests time out nondeterministically under parallel load.
+    doCheck = false;
   });
 
   pyobjc = rec {
-    version = "12.2.1";
+    version = "12.2.2";
 
     src = pkgs.fetchFromGitHub {
       owner = "ronaldoussoren";
       repo = "pyobjc";
       tag = "v${version}";
-      hash = "sha256-8Yv0HtE2ToiuIK/SJbvPCkfJ8ITHBfkZ+4Tb7wLJVTM=";
+      hash = "sha256-jtThPYaKWtIUzcaWxg34QxZc2ejCnSulwsjEUiTfb2Y=";
     };
   };
 
@@ -154,11 +157,11 @@ let
 
   chromeDevtoolsMcp = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "chrome-devtools-mcp";
-    version = "1.2.0";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
       url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-${version}.tgz";
-      hash = "sha512-xHd8hoLZQArDsYhu8OUHvKBIiihx1Co9DgAPHWaM4kzRf41TpZ0IuxKioIWTEGzFKpRqQzIxpFqydY4AKqP5sQ==";
+      hash = "sha512-Klw6HWDqHC/XS1JwZldd2r49aUhbUJN9m9Mvcx4SEueIPXtzuQX+QelxAViobv8YUkDZ7HWDrmViR6LeYK0wAw==";
     };
 
     sourceRoot = "package";
@@ -193,13 +196,13 @@ let
 
   serena = pythonPackages.buildPythonApplication rec {
     pname = "serena-agent";
-    version = "1.5.3";
+    version = "1.7.0";
     pyproject = true;
 
     src = pkgs.fetchPypi {
       pname = "serena_agent";
       inherit version;
-      hash = "sha256-6zhGCOEbdfvCkZbdlC9toolGBgiI7lsi52ryFoJfZ44=";
+      hash = "sha256-HvFdsU7lQm8+PcSP3Xu36GTR81NZEV6qO91ySLFTPOY=";
     };
 
     build-system = [
@@ -216,7 +219,8 @@ let
       jinja2
       joblib
       lsprotocol
-      mcp_1_27_1
+      mcp_1_28_1
+      oslex
       overrides
       pathspec
       psutil
