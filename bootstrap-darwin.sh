@@ -221,6 +221,36 @@ function install_dmg_app () {
     return "${exit_status}"
 }
 
+function install_zip_app () {
+    local archive_path="${1}"
+    local app_name="${2}"
+    local destination_directory="${3}"
+    local extract_directory
+    local exit_status=0
+
+    extract_directory=$(mktemp -d "${TMPDIR:-/tmp}/bootstrap-darwin.XXXXXX") || return 1
+
+    # Extracting over an installed app bundle rewrites it file by file, which
+    # macOS can reject midway and leave the bundle broken.  ditto also folds
+    # the archive's __MACOSX entries back into metadata instead of writing
+    # them as files, so the bundle can be staged like one from a DMG.
+    if ! ditto -x -k "${archive_path}" "${extract_directory}"
+    then
+        echo "${TEXT_RED}Failed to extract ${archive_path}.${TEXT_RESET}"
+        exit_status=1
+    elif [ ! -d "${extract_directory}/${app_name}" ]
+    then
+        echo "${TEXT_RED}${app_name} was not found in ${archive_path}.${TEXT_RESET}"
+        exit_status=1
+    elif ! replace_app_bundle "${extract_directory}/${app_name}" "${app_name}" "${destination_directory}"
+    then
+        exit_status=1
+    fi
+
+    rm -rf "${extract_directory}" || exit_status=1
+    return "${exit_status}"
+}
+
 function install_app_cleaner () {
     local version='3.7.0'
     local release='3.7'
@@ -240,7 +270,7 @@ function install_app_cleaner () {
         return 0
     fi
 
-    if ! download_file "${url}" "${archive_path}" "${sha256}" || ! unzip -o -d ~/Applications/ "${archive_path}"
+    if ! download_file "${url}" "${archive_path}" "${sha256}" || ! install_zip_app "${archive_path}" AppCleaner.app "${HOME}/Applications"
     then
         echo "${TEXT_RED}AppCleaner installation failed.${TEXT_RESET}"
         return 1
@@ -315,7 +345,7 @@ function install_iterm2 () {
         return 0
     fi
 
-    if ! download_file "${url}" "${archive_path}" "${sha256}" || ! unzip -o -d ~/Applications/ "${archive_path}"
+    if ! download_file "${url}" "${archive_path}" "${sha256}" || ! install_zip_app "${archive_path}" iTerm.app "${HOME}/Applications"
     then
         echo "${TEXT_RED}iTerm2 installation failed.${TEXT_RESET}"
         return 1
@@ -463,9 +493,16 @@ then
 fi
 
 # Rosetta (x86_64 compatibility layer)
-if [ "${ARCH}" = 'arm64' ]
+# Probe the translator itself, so an installed Rosetta skips the license
+# prompt that softwareupdate otherwise shows on every run.
+if [ "${ARCH}" = 'arm64' ] && ! arch -x86_64 /usr/bin/true 2>/dev/null
 then
-    softwareupdate --install-rosetta
+    echo "${TEXT_BOLD}Installing Rosetta...${TEXT_RESET}"
+    if ! softwareupdate --install-rosetta --agree-to-license
+    then
+        echo "${TEXT_RED}Rosetta installation failed. Aborted.${TEXT_RESET}"
+        exit 1
+    fi
 fi
 
 # Nix if not exists
@@ -554,6 +591,7 @@ unset -f \
     download_file \
     replace_app_bundle \
     install_dmg_app \
+    install_zip_app \
     install_app_cleaner \
     install_docker_desktop \
     install_iterm2 \
