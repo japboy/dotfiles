@@ -222,16 +222,25 @@ function install_dmg_app () {
 }
 
 function install_app_cleaner () {
-    local version='3.6.8'
-    local url="https://freemacsoft.net/downloads/AppCleaner_${version}.zip"
-    local archive_path="./AppCleaner_${version}.zip"
+    local version='3.7.0'
+    local release='3.7'
+    local minimum_macos_version='15.6'
+    local url="https://github.com/freemacsoft/appcleaner/releases/download/${release}/AppCleaner_${release}.zip"
+    local sha256='3d7fa6146fb57da955dca408587fc658ac14aeb86eda7907763ae66397c9e65e'
+    local archive_path="./AppCleaner_${release}.zip"
+
+    if is_older_os "${minimum_macos_version}"
+    then
+        echo "${TEXT_RED}AppCleaner ${version} requires macOS ${minimum_macos_version} or later. Skipping.${TEXT_RESET}"
+        return 0
+    fi
 
     if ! is_older_app ~/Applications/AppCleaner.app "${version}"
     then
         return 0
     fi
 
-    if ! download_file "${url}" "${archive_path}" '' || ! unzip -o -d ~/Applications/ "${archive_path}"
+    if ! download_file "${url}" "${archive_path}" "${sha256}" || ! unzip -o -d ~/Applications/ "${archive_path}"
     then
         echo "${TEXT_RED}AppCleaner installation failed.${TEXT_RESET}"
         return 1
@@ -239,13 +248,13 @@ function install_app_cleaner () {
 }
 
 function install_docker_desktop () {
-    local version='4.84.0'
+    local version='4.92.0'
     local minimum_macos_version='14.0'
-    local build='234817'
+    local build='240144'
     local arm64_url="https://desktop.docker.com/mac/main/arm64/${build}/Docker.dmg"
-    local arm64_sha256='ed9e93bf2b71c53492eb80ef35e722e131222018cba8157973dfe3bb717952dd'
+    local arm64_sha256='e513bbfeca246165595e2f17cabf6579936f36057f3f4fb689c619e6aac6d188'
     local amd64_url="https://desktop.docker.com/mac/main/amd64/${build}/Docker.dmg"
-    local amd64_sha256='5e42979b75b13d516e3bfe69b93f134c3a48c76943cba068fd814007f922bf87'
+    local amd64_sha256='36ce46dbe9f104d3ab2a78a9f9a468be882deea7481623c3f93e08e480cf1205'
     local url
     local sha256
     local disk_image_path='./Docker.dmg'
@@ -289,10 +298,10 @@ function install_docker_desktop () {
 }
 
 function install_iterm2 () {
-    local version='3.6.11'
-    local minimum_macos_version='12.4'
+    local version='3.7.3'
+    local minimum_macos_version='13.0'
     local url="https://iterm2.com/downloads/stable/iTerm2-${version//./_}.zip"
-    local sha256='36e78c5049560eaa8e122224f6652eb4b229c61cd5e7332d6d25b5c36f7398e7'
+    local sha256='eb7a166061e58602e3d4bdf69d92f2c8cf6a63feed002f6adc07128a71c8dc39'
     local archive_path="./iTerm2-${version//./_}.zip"
 
     if is_older_os "${minimum_macos_version}"
@@ -314,8 +323,9 @@ function install_iterm2 () {
 }
 
 function install_monitor_control () {
-    local version='4.3.3'
+    local version='4.4.0'
     local url="https://github.com/MonitorControl/MonitorControl/releases/download/v${version}/MonitorControl.${version}.dmg"
+    local sha256='e058da598b92f6ca674f4398c0b6fa49b3b5567ccfddccf6c6a5b23c5c625612'
     local disk_image_path="./MonitorControl.${version}.dmg"
 
     if ! is_older_app ~/Applications/MonitorControl.app "${version}"
@@ -323,7 +333,7 @@ function install_monitor_control () {
         return 0
     fi
 
-    if ! download_file "${url}" "${disk_image_path}" '' || ! install_dmg_app "${disk_image_path}" MonitorControl.app "${HOME}/Applications" replace
+    if ! download_file "${url}" "${disk_image_path}" "${sha256}" || ! install_dmg_app "${disk_image_path}" MonitorControl.app "${HOME}/Applications" replace
     then
         echo "${TEXT_RED}MonitorControl installation failed.${TEXT_RESET}"
         return 1
