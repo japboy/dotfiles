@@ -1,0 +1,29 @@
+common/nix/packages/mcp-servers.nix
+  s_f2f8d860a1eb53::t_3d7fd8a4bbdc0f 8,18-19
+  s_f2f8d860a1eb53::t_6d4e0e71fd3e2f 9,15,23,29,160,164,199,205,222-223
+  s_f2f8d860a1eb53::t_ad91b691794149 17
+linux/flake.nix
+  s_f2f8d860a1eb53::t_6d4e0e71fd3e2f 10
+darwin/flake.nix
+  s_f2f8d860a1eb53::t_6d4e0e71fd3e2f 10,51,55
+darwin/flake.lock
+  s_f2f8d860a1eb53::t_3baca047680ce7 17-18,21,26,33-34,37
+linux/flake.lock
+  s_f2f8d860a1eb53::t_1a093209b46959 17-18,21,26,33-34,37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a30d6940441473afd26e6428a561e34c10542aae",
+  "prompts": {},
+  "sessions": {
+    "s_f2f8d860a1eb53": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d0c89106-e8d6-4bae-baf8-939a769ac171",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
