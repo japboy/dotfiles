@@ -36,7 +36,6 @@ If none holds, present the fundamental solution alone.
 
 - Use Context7/MDN for all official references.
 - Use Serena for scanning or modifying code.
-- Use `gh` command for GitHub related tasks
 
 ## Feedback
 

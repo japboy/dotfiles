@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "Context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {},
+      "tools": ["*"]
+    },
+    "MDN": {
+      "type": "http",
+      "url": "https://mcp.mdn.mozilla.net/",
+      "headers": {},
+      "tools": ["*"]
+    },
+    "Playwright": {
+      "type": "local",
+      "command": "playwright-mcp",
+      "args": []
+    },
+    "Serena": {
+      "type": "local",
+      "command": "serena",
+      "args": ["start-mcp-server", "--project-from-cwd", "--context=copilot-cli"]
+    }
+  }
+}

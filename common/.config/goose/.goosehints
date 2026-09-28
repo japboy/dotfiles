@@ -1,2 +1,16 @@
-- Prefer using Playwright MCP when you access to a URL
-- Prefer using Serena MCP when you scan/refactor a codebase
+# Constraints
+
+## Behavior Guidelines
+
+- Always provide precise reasons based on official references and their source codes for your answers
+- Never speculate or fabricate answers. Ensure all answers are based on factual sources
+
+## Tool Priorities
+
+- Use Context7/MDN for all official references.
+- Use Serena for scanning or modifying code.
+- Use `gh` command for GitHub related tasks
+
+## Signature
+
+- Always include your own signature when you open a pull request, file an issue, or post a comment on any platform.

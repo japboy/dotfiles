@@ -1,0 +1,25 @@
+{
+  "auth": {
+    "type": "oauth-personal"
+  },
+  "mcpServers": {
+    "Context7": {
+      "serverUrl": "https://mcp.context7.com/mcp",
+      "headers": {}
+    },
+    "MDN": {
+      "serverUrl": "https://mcp.mdn.mozilla.net/",
+      "headers": {}
+    },
+    "Playwright": {
+      "command": "playwright-mcp",
+      "args": [],
+      "env": {}
+    },
+    "Serena": {
+      "command": "serena",
+      "args": ["start-mcp-server", "--project-from-cwd", "--context=antigravity"],
+      "env": {}
+    }
+  }
+}

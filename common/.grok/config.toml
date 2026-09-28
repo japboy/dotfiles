@@ -1,0 +1,27 @@
+[cli]
+installer = "npm"
+auto_update = true
+
+[ui]
+max_thoughts_width = 120
+fork_secondary_model = "grok-4.6"
+yolo = false
+compact_mode = false
+
+[marketplace]
+default_skills_installs_purged = true
+official_marketplace_auto_installed = true
+
+  [[marketplace.sources]]
+  name = "xAI Official"
+  git = "https://github.com/xai-org/plugin-marketplace.git"
+
+[mcp_servers.Context7]
+url = "https://mcp.context7.com/mcp"
+
+[mcp_servers.MDN]
+url = "https://mcp.mdn.mozilla.net/"
+
+[mcp_servers.Serena]
+command = "serena"
+args = [ "start-mcp-server", "--project-from-cwd", "--context=grok" ]

@@ -1,132 +1,130 @@
-GOOSE_LEAD_MODEL: claude-sonnet-4-0
-GOOSE_ENABLE_ROUTER: 'true'
+active_provider: ollama
+providers:
+  ollama:
+    enabled: true
+    model: qwen3-coder:30b
+    configured: true
 extensions:
+  orchestrator:
+    enabled: false
+    type: platform
+    name: orchestrator
+    description: 'Manage agent sessions: list, view, start, send messages, interrupt, and stop agents'
+    display_name: Orchestrator
+    bundled: true
+  code_execution:
+    enabled: false
+    type: platform
+    name: code_execution
+    description: Goose will make extension calls through code execution, saving tokens
+    display_name: Code Mode
+    bundled: true
+  analyze:
+    enabled: false
+    type: platform
+    name: analyze
+    description: 'Analyze code structure with tree-sitter: directory overviews, file details, symbol call graphs'
+    display_name: Analyze
+    bundled: true
+  chatrecall:
+    enabled: false
+    type: platform
+    name: chatrecall
+    description: Search past conversations and load session summaries for contextual memory
+    display_name: Chat Recall
+    bundled: true
+  scheduler:
+    enabled: false
+    type: platform
+    name: scheduler
+    description: Create and manage scheduled recipe execution
+    display_name: Scheduler
+    bundled: true
+  summarize:
+    enabled: false
+    type: platform
+    name: summarize
+    description: Load files/directories and get an LLM summary in a single call
+    display_name: Summarize
+    bundled: true
   developer:
     enabled: true
-    type: builtin
+    type: platform
     name: developer
+    description: Write and edit files, and execute shell commands
     display_name: Developer
-    description: null
-    timeout: 300
     bundled: true
-    available_tools: []
-  memory:
+  summon:
     enabled: true
-    type: builtin
-    name: memory
-    display_name: Memory
-    description: null
-    timeout: 300
+    type: platform
+    name: summon
+    description: Load knowledge and delegate tasks to subagents
+    display_name: Summon
     bundled: true
-    available_tools: []
-  fetch:
+  tom:
     enabled: false
-    type: stdio
-    name: fetch
-    cmd: mcp-server-fetch
-    args: []
-    envs: {}
-    env_keys: []
-    timeout: 300
-    description: Web content fetching and processing capabilities
-    bundled: null
-    available_tools: []
-  playwright:
+    type: platform
+    name: tom
+    description: Inject custom context into every turn via GOOSE_MOIM_MESSAGE_TEXT and GOOSE_MOIM_MESSAGE_FILE environment variables
+    display_name: Top Of Mind
+    bundled: true
+  skills:
     enabled: true
-    type: stdio
-    name: playwright
-    cmd: playwright-mcp
-    args: []
-    envs: {}
-    env_keys: []
-    timeout: 300
-    description: Playwright MCP Server
-    bundled: null
-    available_tools: []
-  filesystem:
-    enabled: false
-    type: stdio
-    name: filesystem
-    cmd: mcp-server-filesystem
-    args:
-    - /Users
-    envs: {}
-    env_keys: []
-    timeout: 300
-    description: Filesystem MCP Server
-    bundled: null
-    available_tools: []
-  computercontroller:
+    type: platform
+    name: skills
+    description: Discover and provide skill instructions from filesystem and builtins
+    display_name: Skills
+    bundled: true
+  todo:
     enabled: true
-    type: builtin
-    name: computercontroller
-    display_name: Computer Controller
-    description: null
-    timeout: 300
+    type: platform
+    name: todo
+    description: Enable a todo list for goose so it can keep track of what it is doing
+    display_name: Todo
     bundled: true
-    available_tools: []
-  speechinterface:
+  apps:
     enabled: false
-    type: stdio
-    name: speechinterface
-    cmd: speech-mcp
-    args: []
-    envs: {}
-    env_keys:
-    - CFLAGS
-    - LDFLAGS
-    timeout: 300
-    description: Voice interaction with audio visualization for Goose - enables real-time voice interaction, audio/video transcription, text-to-speech conversion, and multi-speaker audio generation
-    bundled: null
-    available_tools: []
-  jetbrains:
-    enabled: false
-    type: builtin
-    name: jetbrains
-    display_name: Jetbrains
-    description: null
-    timeout: 300
+    type: platform
+    name: apps
+    description: Create and manage custom Goose apps through chat. Apps are HTML/CSS/JavaScript and run in sandboxed windows.
+    display_name: Apps
     bundled: true
-    available_tools: []
-  tutorial:
-    enabled: false
-    type: builtin
-    name: tutorial
-    display_name: Tutorial
-    description: null
-    timeout: 300
-    bundled: true
-    available_tools: []
-  figma:
+  extensionmanager:
     enabled: true
-    type: streamable_http
-    name: figma
-    uri: http://127.0.0.1:3845/mcp
-    envs: {}
+    type: platform
+    name: Extension Manager
+    description: Enable extension management tools for discovering, enabling, and disabling extensions
+    display_name: Extension Manager
+    bundled: true
+  context7:
+    enabled: true
     env_keys: []
+    envs: {}
     headers: {}
-    description: ''
+    name: Context7
     timeout: 300
-    bundled: null
-    available_tools: []
-  serena:
+    type: streamable_http
+    uri: https://mcp.context7.com/mcp
+  mdn:
     enabled: true
-    type: stdio
-    name: serena
-    cmd: serena
+    env_keys: []
+    envs: {}
+    headers: {}
+    name: MDN
+    timeout: 300
+    type: streamable_http
+    uri: https://mcp.mdn.mozilla.net/
+  serena:
     args:
     - start-mcp-server
-    envs: {}
+    - --project-from-cwd
+    - --context=ide
+    cmd: serena
+    enabled: true
     env_keys: []
+    envs: {}
+    name: Serena
     timeout: 300
-    description: ''
-    bundled: null
-    available_tools: []
-GOOSE_LEAD_FALLBACK_TURNS: 2
-GOOSE_LEAD_PROVIDER: anthropic
-claude-code_configured: true
-GOOSE_MODEL: claude-sonnet-4-0
-GOOSE_PROVIDER: anthropic
-ANTHROPIC_HOST: https://api.anthropic.com
-GOOSE_LEAD_TURNS: 3
-CLAUDE_CODE_COMMAND: claude
+    type: stdio
+GOOSE_TELEMETRY_ENABLED: true
+OLLAMA_HOST: http://192.168.10.4:11434
