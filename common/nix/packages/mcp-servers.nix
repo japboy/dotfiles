@@ -3,21 +3,139 @@
 let
   inherit (pkgs) lib;
 
-  pythonPackages = pkgs.python3Packages;
+  # Serena's security floor requires urllib3 newer than Nixpkgs provides.
+  # Scope the override so transitive consumers use the same distribution.
+  pythonPackages = pkgs.python3Packages.overrideScope (_final: previous: {
+    anyio = previous.anyio.overridePythonAttrs (oldAttrs: {
+      # The test tracks its own portal threads. Check their shutdown directly;
+      # unrelated background threads can terminate during a global count check.
+      # https://github.com/agronholm/anyio/issues/823
+      postPatch = (oldAttrs.postPatch or "") + ''
+        substituteInPlace tests/test_to_thread.py \
+          --replace-fail '        active_threads_before = threading.active_count()' "" \
+          --replace-fail 'assert threading.active_count() == active_threads_before' \
+            'assert all(not thread.is_alive() for thread in threads)'
+      '';
+    });
 
-  mcp_1_28_1 = pythonPackages.mcp.overridePythonAttrs (_oldAttrs: rec {
-    version = "1.28.1";
+    urllib3 = previous.urllib3.overridePythonAttrs (_oldAttrs: rec {
+      version = "2.8.0";
+      src = pkgs.fetchPypi {
+        pname = "urllib3";
+        inherit version;
+        hash = "sha256-Y78urUyHlCbr8i7yp4HutKo7SueYoENVBvhof9W7m2M=";
+      };
+    });
+  });
 
-    src = pkgs.fetchFromGitHub {
-      owner = "modelcontextprotocol";
-      repo = "python-sdk";
-      tag = "v${version}";
-      hash = "sha256-8nifuun7ShtniimsFr9gYPpjwZEM/5E51GDmZRxQGEc=";
+  # MCP 2 split its wire types into a separate distribution.
+  mcp-types = pythonPackages.buildPythonPackage rec {
+    pname = "mcp-types";
+    version = "2.2.0";
+    pyproject = true;
+
+    src = pkgs.fetchPypi {
+      pname = "mcp_types";
+      inherit version;
+      hash = "sha256-0+1TcD3dENnGOZ8p0yK7ZvP2erQTSKyFVroj4H/t760=";
     };
 
-    # Local HTTP server tests time out nondeterministically under parallel load.
-    doCheck = false;
-  });
+    build-system = with pythonPackages; [
+      hatchling
+      uv-dynamic-versioning
+    ];
+    dependencies = with pythonPackages; [
+      pydantic
+      typing-extensions
+    ];
+    pythonImportsCheck = [ "mcp_types" ];
+
+    meta = {
+      description = "Model Context Protocol wire types";
+      homepage = "https://github.com/modelcontextprotocol/python-sdk";
+      license = lib.licenses.mit;
+    };
+  };
+
+  mcp = pythonPackages.buildPythonPackage rec {
+    pname = "mcp";
+    version = "2.2.0";
+    pyproject = true;
+
+    src = pkgs.fetchPypi {
+      inherit pname version;
+      hash = "sha256-LcN+yxl0vs3Ovb91YefBWgfbvyC6IboWw1k7MDizr70=";
+    };
+
+    build-system = with pythonPackages; [
+      hatchling
+      uv-dynamic-versioning
+    ];
+    dependencies = with pythonPackages; [
+      anyio
+      httpx2
+      jsonschema
+      mcp-types
+      opentelemetry-api
+      pydantic
+      pyjwt
+      python-multipart
+      sse-starlette
+      starlette
+      typing-extensions
+      typing-inspection
+      uvicorn
+    ] ++ pyjwt.optional-dependencies.crypto;
+    pythonImportsCheck = [
+      "mcp"
+      "mcp.server"
+      "mcp.client"
+    ];
+
+    meta = {
+      description = "Official Python SDK for Model Context Protocol servers and clients";
+      homepage = "https://github.com/modelcontextprotocol/python-sdk";
+      license = lib.licenses.mit;
+    };
+  };
+
+  # Serena 2.1 uses the Anthropic 0.x API, rather than the Nixpkgs 1.x API.
+  anthropic = pythonPackages.buildPythonPackage rec {
+    pname = "anthropic";
+    version = "0.117.0";
+    pyproject = true;
+
+    src = pkgs.fetchPypi {
+      inherit pname version;
+      hash = "sha256-mBB/K3ZDlkHgrioXVAh1NLjxeNurmdbrG8S3vIx0RJY=";
+    };
+
+    build-system = with pythonPackages; [
+      hatchling
+      hatch-fancy-pypi-readme
+    ];
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace-fail '"hatchling==1.26.3"' '"hatchling>=1.26.3"'
+    '';
+    dependencies = with pythonPackages; [
+      anyio
+      distro
+      docstring-parser
+      httpx
+      jiter
+      pydantic
+      sniffio
+      typing-extensions
+    ];
+    pythonImportsCheck = [ "anthropic" ];
+
+    meta = {
+      description = "Anthropic Python SDK used by Serena";
+      homepage = "https://github.com/anthropics/anthropic-sdk-python";
+      license = lib.licenses.mit;
+    };
+  };
 
   pyobjc = rec {
     version = "12.2.2";
@@ -141,11 +259,36 @@ let
     pyobjc-framework-WebKit
   ];
 
-  pywebview = pythonPackages.pywebview.overridePythonAttrs (oldAttrs: {
-    dependencies =
-      lib.filter (dependency: !isPyobjcPackage dependency) oldAttrs.dependencies
-      ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin pywebviewDarwinPyobjcDependencies;
-  });
+  # Nixpkgs marks its Darwin package broken. Define the upstream release and
+  # its Darwin PyObjC 12.2.2 dependencies explicitly; use Qt only on Linux.
+  pywebview = pythonPackages.buildPythonPackage rec {
+    pname = "pywebview";
+    version = "6.2";
+    pyproject = true;
+
+    src = pkgs.fetchPypi {
+      inherit pname version;
+      hash = "sha256-9Rv9CVdi/uPreCHGL+LA3dOcn+zY8z1RqHERPxLzZOE=";
+    };
+    build-system = [ pythonPackages.setuptools-scm ];
+    dependencies = with pythonPackages; [
+      bottle
+      proxy-tools
+      typing-extensions
+    ]
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isDarwin pywebviewDarwinPyobjcDependencies
+    ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
+      pyside6
+      qtpy
+    ];
+    pythonImportsCheck = [ "webview" ];
+
+    meta = {
+      description = "Lightweight cross-platform wrapper around a webview";
+      homepage = "https://github.com/r0x0r/pywebview";
+      license = lib.licenses.bsd3;
+    };
+  };
 
   pystray = pythonPackages.pystray.overridePythonAttrs (oldAttrs: {
     propagatedBuildInputs =
@@ -157,11 +300,11 @@ let
 
   chromeDevtoolsMcp = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "chrome-devtools-mcp";
-    version = "1.10.1";
+    version = "1.11.0";
 
     src = pkgs.fetchurl {
       url = "https://registry.npmjs.org/chrome-devtools-mcp/-/chrome-devtools-mcp-${version}.tgz";
-      hash = "sha512-Klw6HWDqHC/XS1JwZldd2r49aUhbUJN9m9Mvcx4SEueIPXtzuQX+QelxAViobv8YUkDZ7HWDrmViR6LeYK0wAw==";
+      hash = "sha512-CytJ/5tnzrS+J/74be2P5aCOsS/mmGRHys/Si+IYC4ucrbnWAmES/dYdxGJjeUCECRcoFUilZAysdjlwqUjXIA==";
     };
 
     sourceRoot = "package";
@@ -196,14 +339,35 @@ let
 
   serena = pythonPackages.buildPythonApplication rec {
     pname = "serena-agent";
-    version = "1.7.0";
+    version = "2.1.0";
     pyproject = true;
 
     src = pkgs.fetchPypi {
       pname = "serena_agent";
       inherit version;
-      hash = "sha256-HvFdsU7lQm8+PcSP3Xu36GTR81NZEV6qO91ySLFTPOY=";
+      hash = "sha256-MSyMfLP6cOP6f+RoXglZTjHpqdfQkNWRNqD68vqTmpE=";
     };
+
+    # Upstream 2.x defaults to uvx for these servers. Use the Nix dependencies
+    # already provided by this package, while preserving explicit user settings.
+    postPatch = ''
+      substituteInPlace src/solidlsp/language_servers/pyright_server.py \
+        --replace-fail '            self._custom_settings,' \
+          '            SolidLSPSettings.CustomLSSettings({
+                      "ls_path": "${lib.getExe' pkgs.pyright "pyright-langserver"}",
+                      **self._custom_settings.settings,
+                  }),'
+      substituteInPlace src/solidlsp/language_servers/fortran_language_server.py \
+        --replace-fail '            self._custom_settings,' \
+          '            SolidLSPSettings.CustomLSSettings({
+                      "ls_path": "${lib.getExe pkgs.fortls}",
+                      **self._custom_settings.settings,
+                  }),'
+      substituteInPlace src/solidlsp/language_servers/fortran_language_server.py \
+        --replace-fail '            version_setting_key="fortls_version",' \
+          '            version_setting_key="fortls_version",
+                  extra_args=("--disable_autoupdate",),'
+    '';
 
     build-system = [
       pythonPackages.hatchling
@@ -212,6 +376,7 @@ let
     dependencies = with pythonPackages; [
       anthropic
       beautifulsoup4
+      click
       cryptography
       docstring-parser
       filelock
@@ -219,7 +384,7 @@ let
       jinja2
       joblib
       lsprotocol
-      mcp_1_28_1
+      mcp
       oslex
       overrides
       pathspec
@@ -243,12 +408,41 @@ let
       werkzeug
     ];
 
-    pythonRelaxDeps = true;
-    pythonRemoveDeps = [
-      "dotenv"
-      "fortls"
-      "pyright"
-      "pythonnet"
+    # Upstream exact-pins its uv environment. Keep major/API migrations and
+    # missing minimum versions explicit above; relax only these Nixpkgs versions.
+    pythonRelaxDeps = [
+      "beautifulsoup4"
+      "click"
+      "cryptography"
+      "docstring-parser"
+      "filelock"
+      "joblib"
+      "pathspec"
+      "psutil"
+      "pydantic"
+      "python-dotenv"
+      "python-multipart"
+      "pyyaml"
+      "regex"
+      "requests"
+      "ruamel.yaml"
+      "sensai-utils"
+      "starlette"
+      "tqdm"
+      "types-pyyaml"
+      "werkzeug"
+    ];
+
+    # Importing MemoryManager creates Serena's global-memory directory.
+    # Keep that state inside the build sandbox, without changing user defaults.
+    preDistPhases = [ "prepareSerenaImportState" ];
+    prepareSerenaImportState = ''
+      export SERENA_HOME="$TMPDIR/serena-import-check"
+      mkdir -p "$SERENA_HOME"
+    '';
+    pythonImportsCheck = [
+      "serena.cli"
+      "serena.mcp"
     ];
 
     makeWrapperArgs = [
@@ -266,7 +460,7 @@ let
     meta = with lib; {
       description = "MCP toolkit for semantic code retrieval and editing";
       homepage = "https://github.com/oraios/serena";
-      license = licenses.mit;
+      license = licenses.gpl3Plus;
       mainProgram = "serena";
       platforms = platforms.unix;
     };

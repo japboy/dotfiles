@@ -64,7 +64,7 @@ Requirements
 
 ### macOS
 
-* macOS Ventura 13.6.3
+* macOS 26 or later
 * [Xcode](http://itunes.apple.com/en/app/xcode/id497799835)
 * [Command Line Tools](http://developer.apple.com/xcode/) (if you prefer to not installing entire Xcode SDK)
 

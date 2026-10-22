@@ -19,7 +19,6 @@
       nixpkgsRecentVersionPackages = inputs."nixpkgs-recent-version-packages";
       systems = [
         "aarch64-darwin"
-        "x86_64-darwin"
       ];
 
       forAllSystems = nixpkgsEssentials.lib.genAttrs systems;

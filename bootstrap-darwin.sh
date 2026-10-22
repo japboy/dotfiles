@@ -9,7 +9,11 @@
 ##
 # Variables
 
-ARCH=$(uname -a | awk '{print $NF}')
+if [ "$(uname -m)" != 'arm64' ]
+then
+    echo 'The macOS bootstrap requires a native Apple Silicon (arm64) shell.' >&2
+    exit 1
+fi
 
 CWD=$(pwd)
 
@@ -278,15 +282,11 @@ function install_app_cleaner () {
 }
 
 function install_docker_desktop () {
-    local version='4.92.0'
+    local version='4.96.2'
     local minimum_macos_version='14.0'
-    local build='240144'
-    local arm64_url="https://desktop.docker.com/mac/main/arm64/${build}/Docker.dmg"
-    local arm64_sha256='e513bbfeca246165595e2f17cabf6579936f36057f3f4fb689c619e6aac6d188'
-    local amd64_url="https://desktop.docker.com/mac/main/amd64/${build}/Docker.dmg"
-    local amd64_sha256='36ce46dbe9f104d3ab2a78a9f9a468be882deea7481623c3f93e08e480cf1205'
-    local url
-    local sha256
+    local build='244353'
+    local url="https://desktop.docker.com/mac/main/arm64/${build}/Docker.dmg"
+    local sha256='8a254f21b9b59c5d5c51c5d1b92fa97ee51d95ae7087b2be12587b424bdb4e25'
     local disk_image_path='./Docker.dmg'
 
     if is_older_os "${minimum_macos_version}"
@@ -299,21 +299,6 @@ function install_docker_desktop () {
     then
         return 0
     fi
-
-    case "${ARCH}" in
-        arm64)
-            url="${arm64_url}"
-            sha256="${arm64_sha256}"
-            ;;
-        x86_64)
-            url="${amd64_url}"
-            sha256="${amd64_sha256}"
-            ;;
-        *)
-            echo "${TEXT_RED}Unsupported Docker Desktop architecture: ${ARCH}.${TEXT_RESET}"
-            return 1
-            ;;
-    esac
 
     # Docker supplies an installer that safely replaces Docker.app.  Copying an
     # active application bundle with ditto can be interrupted by processes
@@ -328,10 +313,10 @@ function install_docker_desktop () {
 }
 
 function install_iterm2 () {
-    local version='3.7.3'
+    local version='3.7.6'
     local minimum_macos_version='13.0'
     local url="https://iterm2.com/downloads/stable/iTerm2-${version//./_}.zip"
-    local sha256='eb7a166061e58602e3d4bdf69d92f2c8cf6a63feed002f6adc07128a71c8dc39'
+    local sha256='bb6102e9f57bbe41979ba7c7b1c25d4112e9a5c2142606eeccbe18dc7ee0706f'
     local archive_path="./iTerm2-${version//./_}.zip"
 
     if is_older_os "${minimum_macos_version}"
@@ -492,19 +477,6 @@ then
     exit 1
 fi
 
-# Rosetta (x86_64 compatibility layer)
-# Probe the translator itself, so an installed Rosetta skips the license
-# prompt that softwareupdate otherwise shows on every run.
-if [ "${ARCH}" = 'arm64' ] && ! arch -x86_64 /usr/bin/true 2>/dev/null
-then
-    echo "${TEXT_BOLD}Installing Rosetta...${TEXT_RESET}"
-    if ! softwareupdate --install-rosetta --agree-to-license
-    then
-        echo "${TEXT_RED}Rosetta installation failed. Aborted.${TEXT_RESET}"
-        exit 1
-    fi
-fi
-
 # Nix if not exists
 source_nix
 
@@ -571,7 +543,6 @@ curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/inst
 
 # Done
 unset \
-    ARCH \
     CWD \
     TEXT_BOLD \
     TEXT_RED \
