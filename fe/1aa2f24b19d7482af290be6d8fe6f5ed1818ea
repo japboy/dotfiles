@@ -1,0 +1,46 @@
+common/nix/README.md
+  s_f467802516c402::t_7c59dfbe70b613 24-40,42-44
+  s_f467802516c402::t_4e1acacd0ea67a 23,41
+common/nix/packages/mcp-servers.nix
+  s_f467802516c402::t_c983cbaf4cda8d 7,19,21-29,416-430
+  s_f467802516c402::t_54ca6ac9439d51 118
+  s_f467802516c402::t_5afc29f967227d 6
+  s_f467802516c402::t_c277171a9281ab 8-10,16-18
+  s_f467802516c402::t_752082ad5337bb 115-117
+  s_f467802516c402::t_5c14dc6447ba20 119-121
+  s_f467802516c402::t_b80b9c712c1bf3 413-415
+  s_f467802516c402::t_76e9c9b2463eae 431-433
+  s_c60fa62d251692::t_d87a873a1f4688 11-15,31-40,43-114,122-138,262-291,303,307,342,348,351-371,379,387,411-412,434-445,463
+bootstrap-darwin.sh
+  s_f467802516c402::t_d6eb576f6cefd6 12-16,285,287-289,316,319
+darwin/flake.lock
+  s_f467802516c402::t_e897d039be2d83 17-18,21,33-34,37
+linux/flake.lock
+  s_f467802516c402::t_cafb2d1e7a9a4e 17-18,21,33-34,37
+README.md
+  s_c60fa62d251692::t_af7f0c4c9dfea4 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fe1aa2f24b19d7482af290be6d8fe6f5ed1818ea",
+  "prompts": {},
+  "sessions": {
+    "s_c60fa62d251692": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1626d-904e-7753-a029-8db7d6362ae9",
+        "model": "unknown"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    },
+    "s_f467802516c402": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1626b-40c4-7242-bc5e-3575bed580f7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Yu I. <84360+japboy@users.noreply.github.com>"
+    }
+  }
+}
