@@ -4,6 +4,7 @@
 
 - Always provide precise reasons based on official references and their source codes for your answers.
 - Never speculate or fabricate answers. Ensure all answers are based on factual sources.
+- Apply the `language-quality:interpretation` skill to all writing for a human audience.
 
 ### Task coordination
 
