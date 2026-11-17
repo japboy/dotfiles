@@ -282,11 +282,11 @@ function install_app_cleaner () {
 }
 
 function install_docker_desktop () {
-    local version='4.96.2'
+    local version='4.99.0'
     local minimum_macos_version='14.0'
-    local build='244353'
+    local build='245822'
     local url="https://desktop.docker.com/mac/main/arm64/${build}/Docker.dmg"
-    local sha256='8a254f21b9b59c5d5c51c5d1b92fa97ee51d95ae7087b2be12587b424bdb4e25'
+    local sha256='0ede7f9917b55c396a17b03c069cadf457a7d21904bc264c6d398fe132da7fb9'
     local disk_image_path='./Docker.dmg'
 
     if is_older_os "${minimum_macos_version}"
@@ -313,10 +313,10 @@ function install_docker_desktop () {
 }
 
 function install_iterm2 () {
-    local version='3.7.6'
+    local version='3.7.7'
     local minimum_macos_version='13.0'
     local url="https://iterm2.com/downloads/stable/iTerm2-${version//./_}.zip"
-    local sha256='bb6102e9f57bbe41979ba7c7b1c25d4112e9a5c2142606eeccbe18dc7ee0706f'
+    local sha256='549eb2b21464d7f4606165e51c36a6b1a252ac9a79958228a240152412759da2'
     local archive_path="./iTerm2-${version//./_}.zip"
 
     if is_older_os "${minimum_macos_version}"
